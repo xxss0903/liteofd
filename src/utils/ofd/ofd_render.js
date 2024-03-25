@@ -508,7 +508,6 @@ export const renderContentTextObject = function (fontResObj, textObject, default
     let textCodeObj = textObject['ofd:TextCode']
     array = array.concat(textCodeObj);
     // 获取查找的内容，进行渲染
-    // console.log("content text array ", textCodeObj, "search keyword=", keyword)
     let currentText = textCodeObj["#text"]
     let addSearchRect = false
     let keywordIndex = -1
@@ -518,7 +517,6 @@ export const renderContentTextObject = function (fontResObj, textObject, default
             addSearchRect = true
         }
     }
-    console.log("show search rect" , addSearchRect, keyword)
 
     const textCodePointList = calTextPoint(array);
     let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
