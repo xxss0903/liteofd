@@ -1,6 +1,6 @@
 {
   "name": "liteofd.js",
-  "version": "0.2.7",
+  "version": "0.0.2",
   "main": "lib/ofd.umd.min.js",
   "author": "xxss0903",
   "description": "based on ofd.js",
