@@ -1,6 +1,6 @@
 # liteofd.js
 
-本项目基于[ofd.js](https://github.com/DLTech21/ofd.js)修改定制开发，目前底层解析和渲染代码使用`ofd.js`，后期将作修改。
+本项目基于 [ofd.js](https://github.com/DLTech21/ofd.js) 修改定制开发，目前底层解析和渲染代码使用`ofd.js`，后期将作修改。
 目前已经修复`ofd.js`部分解析和渲染的bug，将持续进行更新。
 
 ### 修改bug
