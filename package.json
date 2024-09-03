@@ -1,0 +1,29 @@
+{
+  "name": "liteofd",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --mode production",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@lapo/asn1js": "file:./local_modules/@lapo/asn1js",
+    "fast-xml-parser": "^4.4.1",
+    "js-md5": "^0.7.3",
+    "js-sha1": "^0.6.0",
+    "jsrsasign": "^9.1.9",
+    "jsrsasign-util": "^1.0.0",
+    "jszip": "^3.5.0",
+    "jszip-utils": "^0.1.0",
+    "sm-crypto": "^0.2.1",
+    "xmlbuilder2": "^3.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.2",
+    "terser": "^5.31.6",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.2"
+  }
+}

@@ -1,0 +1,381 @@
+{
+    "attrsMap": {},
+    "children": [
+        {
+            "attrsMap": {},
+            "children": [],
+            "tagName": "?xml",
+            "value": "",
+            "fileName": "",
+            "id": "",
+            "signList": []
+        },
+        {
+            "attrsMap": {},
+            "children": [
+                {
+                    "attrsMap": {},
+                    "children": [
+                        {
+                            "attrsMap": {},
+                            "children": [
+                                {
+                                    "attrsMap": {},
+                                    "children": [],
+                                    "tagName": "ofd:Provider",
+                                    "value": "",
+                                    "fileName": "",
+                                    "id": "",
+                                    "signList": []
+                                },
+                                {
+                                    "attrsMap": {},
+                                    "children": [],
+                                    "tagName": "ofd:SignatureMethod",
+                                    "value": "1.2.156.10197.1.501",
+                                    "fileName": "",
+                                    "id": "",
+                                    "signList": []
+                                },
+                                {
+                                    "attrsMap": {},
+                                    "children": [],
+                                    "tagName": "ofd:SignatureDateTime",
+                                    "value": "20201010151120",
+                                    "fileName": "",
+                                    "id": "",
+                                    "signList": []
+                                },
+                                {
+                                    "attrsMap": {},
+                                    "children": [
+                                        {
+                                            "attrsMap": {},
+                                            "children": [
+                                                {
+                                                    "attrsMap": {},
+                                                    "children": [
+                                                        {
+                                                            "attrsMap": {},
+                                                            "children": [
+                                                                {
+                                                                    "attrsMap": {},
+                                                                    "children": [],
+                                                                    "tagName": "ofd:CheckValue",
+                                                                    "value": "xrTLMRwHhKaEXIYvj+tcGGsRTkLj2O4xFtxNg7N7tZg=",
+                                                                    "fileName": "",
+                                                                    "id": "",
+                                                                    "signList": []
+                                                                }
+                                                            ],
+                                                            "tagName": "0",
+                                                            "value": "",
+                                                            "fileName": "",
+                                                            "id": "",
+                                                            "signList": []
+                                                        },
+                                                        {
+                                                            "attrsMap": {},
+                                                            "children": [
+                                                                {
+                                                                    "attrsMap": {},
+                                                                    "children": [],
+                                                                    "tagName": "ofd:CheckValue",
+                                                                    "value": "RTXrKdNJFPMx7EkkYziOxG7bDpChC1RIkhacgIABd00=",
+                                                                    "fileName": "",
+                                                                    "id": "",
+                                                                    "signList": []
+                                                                }
+                                                            ],
+                                                            "tagName": "1",
+                                                            "value": "",
+                                                            "fileName": "",
+                                                            "id": "",
+                                                            "signList": []
+                                                        },
+                                                        {
+                                                            "attrsMap": {},
+                                                            "children": [
+                                                                {
+                                                                    "attrsMap": {},
+                                                                    "children": [],
+                                                                    "tagName": "ofd:CheckValue",
+                                                                    "value": "8xgE4x2yXxfaRtt1PhvglC0NnCBcIFIuPN0n3eB3gwA=",
+                                                                    "fileName": "",
+                                                                    "id": "",
+                                                                    "signList": []
+                                                                }
+                                                            ],
+                                                            "tagName": "2",
+                                                            "value": "",
+                                                            "fileName": "",
+                                                            "id": "",
+                                                            "signList": []
+                                                        },
+                                                        {
+                                                            "attrsMap": {},
+                                                            "children": [
+                                                                {
+                                                                    "attrsMap": {},
+                                                                    "children": [],
+                                                                    "tagName": "ofd:CheckValue",
+                                                                    "value": "1vYtPehyZjzgwseoO/7FO6ZJ5NM6TCvEXi/24TzyUZg=",
+                                                                    "fileName": "",
+                                                                    "id": "",
+                                                                    "signList": []
+                                                                }
+                                                            ],
+                                                            "tagName": "3",
+                                                            "value": "",
+                                                            "fileName": "",
+                                                            "id": "",
+                                                            "signList": []
+                                                        },
+                                                        {
+                                                            "attrsMap": {},
+                                                            "children": [
+                                                                {
+                                                                    "attrsMap": {},
+                                                                    "children": [],
+                                                                    "tagName": "ofd:CheckValue",
+                                                                    "value": "oqLk6jiEpPQCM8JAMH2VePQMtjxd934OvIK/AMuB4KY=",
+                                                                    "fileName": "",
+                                                                    "id": "",
+                                                                    "signList": []
+                                                                }
+                                                            ],
+                                                            "tagName": "4",
+                                                            "value": "",
+                                                            "fileName": "",
+                                                            "id": "",
+                                                            "signList": []
+                                                        },
+                                                        {
+                                                            "attrsMap": {},
+                                                            "children": [
+                                                                {
+                                                                    "attrsMap": {},
+                                                                    "children": [],
+                                                                    "tagName": "ofd:CheckValue",
+                                                                    "value": "5URMEiRjvXp6qi0OtuDO9Isrpv5+KSL7+YHeuoTtrxg=",
+                                                                    "fileName": "",
+                                                                    "id": "",
+                                                                    "signList": []
+                                                                }
+                                                            ],
+                                                            "tagName": "5",
+                                                            "value": "",
+                                                            "fileName": "",
+                                                            "id": "",
+                                                            "signList": []
+                                                        },
+                                                        {
+                                                            "attrsMap": {},
+                                                            "children": [
+                                                                {
+                                                                    "attrsMap": {},
+                                                                    "children": [],
+                                                                    "tagName": "ofd:CheckValue",
+                                                                    "value": "AOg4xMQYkPuUNX7WEvnZzRvyMj4B7EIe3+Anp64o7Po=",
+                                                                    "fileName": "",
+                                                                    "id": "",
+                                                                    "signList": []
+                                                                }
+                                                            ],
+                                                            "tagName": "6",
+                                                            "value": "",
+                                                            "fileName": "",
+                                                            "id": "",
+                                                            "signList": []
+                                                        },
+                                                        {
+                                                            "attrsMap": {},
+                                                            "children": [
+                                                                {
+                                                                    "attrsMap": {},
+                                                                    "children": [],
+                                                                    "tagName": "ofd:CheckValue",
+                                                                    "value": "pjzFciWjflHdjD9Iw1u4rLgft1jkujcaNDnKL7gQj/Q=",
+                                                                    "fileName": "",
+                                                                    "id": "",
+                                                                    "signList": []
+                                                                }
+                                                            ],
+                                                            "tagName": "7",
+                                                            "value": "",
+                                                            "fileName": "",
+                                                            "id": "",
+                                                            "signList": []
+                                                        },
+                                                        {
+                                                            "attrsMap": {},
+                                                            "children": [
+                                                                {
+                                                                    "attrsMap": {},
+                                                                    "children": [],
+                                                                    "tagName": "ofd:CheckValue",
+                                                                    "value": "uLXrsUPMPh9hLaqk8WWwry9Hf0zspj5f1fJ7y2m8yfw=",
+                                                                    "fileName": "",
+                                                                    "id": "",
+                                                                    "signList": []
+                                                                }
+                                                            ],
+                                                            "tagName": "8",
+                                                            "value": "",
+                                                            "fileName": "",
+                                                            "id": "",
+                                                            "signList": []
+                                                        },
+                                                        {
+                                                            "attrsMap": {},
+                                                            "children": [
+                                                                {
+                                                                    "attrsMap": {},
+                                                                    "children": [],
+                                                                    "tagName": "ofd:CheckValue",
+                                                                    "value": "qZvuecDK357JaJAGNoj7TbjY8Z73ZH6a7pRV2Taog0Y=",
+                                                                    "fileName": "",
+                                                                    "id": "",
+                                                                    "signList": []
+                                                                }
+                                                            ],
+                                                            "tagName": "9",
+                                                            "value": "",
+                                                            "fileName": "",
+                                                            "id": "",
+                                                            "signList": []
+                                                        },
+                                                        {
+                                                            "attrsMap": {},
+                                                            "children": [
+                                                                {
+                                                                    "attrsMap": {},
+                                                                    "children": [],
+                                                                    "tagName": "ofd:CheckValue",
+                                                                    "value": "9WnMFuuQpI9non4whC2F2qGGp/H7QBiOlk3KtSoFznE=",
+                                                                    "fileName": "",
+                                                                    "id": "",
+                                                                    "signList": []
+                                                                }
+                                                            ],
+                                                            "tagName": "10",
+                                                            "value": "",
+                                                            "fileName": "",
+                                                            "id": "",
+                                                            "signList": []
+                                                        },
+                                                        {
+                                                            "attrsMap": {},
+                                                            "children": [
+                                                                {
+                                                                    "attrsMap": {},
+                                                                    "children": [],
+                                                                    "tagName": "ofd:CheckValue",
+                                                                    "value": "CfQL2nf2lLaP1PFTgHqGHg9SHtNnXXShv5vwqa5HQ9E=",
+                                                                    "fileName": "",
+                                                                    "id": "",
+                                                                    "signList": []
+                                                                }
+                                                            ],
+                                                            "tagName": "11",
+                                                            "value": "",
+                                                            "fileName": "",
+                                                            "id": "",
+                                                            "signList": []
+                                                        },
+                                                        {
+                                                            "attrsMap": {},
+                                                            "children": [
+                                                                {
+                                                                    "attrsMap": {},
+                                                                    "children": [],
+                                                                    "tagName": "ofd:CheckValue",
+                                                                    "value": "irDUTKhO4arvN+6OVL2oJiRAQs+UTDrvc+kQh6P+PYY=",
+                                                                    "fileName": "",
+                                                                    "id": "",
+                                                                    "signList": []
+                                                                }
+                                                            ],
+                                                            "tagName": "12",
+                                                            "value": "",
+                                                            "fileName": "",
+                                                            "id": "",
+                                                            "signList": []
+                                                        }
+                                                    ],
+                                                    "tagName": "ofd:Reference",
+                                                    "value": "",
+                                                    "fileName": "",
+                                                    "id": "",
+                                                    "signList": []
+                                                }
+                                            ],
+                                            "tagName": "0",
+                                            "value": "",
+                                            "fileName": "",
+                                            "id": "",
+                                            "signList": []
+                                        }
+                                    ],
+                                    "tagName": "ofd:References",
+                                    "value": "",
+                                    "fileName": "",
+                                    "id": "",
+                                    "signList": []
+                                },
+                                {
+                                    "attrsMap": {},
+                                    "children": [
+                                        {
+                                            "attrsMap": {},
+                                            "children": [],
+                                            "tagName": "0",
+                                            "value": "",
+                                            "fileName": "",
+                                            "id": "",
+                                            "signList": []
+                                        }
+                                    ],
+                                    "tagName": "ofd:StampAnnot",
+                                    "value": "",
+                                    "fileName": "",
+                                    "id": "",
+                                    "signList": []
+                                }
+                            ],
+                            "tagName": "ofd:SignedInfo",
+                            "value": "",
+                            "fileName": "",
+                            "id": "",
+                            "signList": []
+                        },
+                        {
+                            "attrsMap": {},
+                            "children": [],
+                            "tagName": "ofd:SignedValue",
+                            "value": "/Doc_0/Signs/Sign_0/SignedValue.dat",
+                            "fileName": "",
+                            "id": "",
+                            "signList": []
+                        }
+                    ],
+                    "tagName": "0",
+                    "value": "",
+                    "fileName": "",
+                    "id": "",
+                    "signList": []
+                }
+            ],
+            "tagName": "ofd:Signature",
+            "value": "",
+            "fileName": "",
+            "id": "",
+            "signList": []
+        }
+    ],
+    "tagName": "",
+    "value": "",
+    "fileName": "Doc_0/Signs/Sign_0/Signature.xml",
+    "id": "",
+    "signList": []
+}

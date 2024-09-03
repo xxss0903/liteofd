@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+	</head>
+  <body>
+    <div id="app" class="app-container">
+			<div class="tool-bar">
+				<div style="background:#F5F5F5;display: flex; flex-direction: row; height: 40px; border: 1px solid #e8e8e8; align-items: center;">
+					<div class="upload-icon" style="flex: 1;">
+						<input id="fileInput" onchange="handleFileChange(event)" type="file" class="hidden" accept=".ofd">
+					</div>
+
+					<div class="btn-save" style="flex: 1;" onclick="handleSaveOFD()">
+						<div>保存</div>
+					</div>
+
+					<div id="downloadContainer" style="display: flex;align-items: center; flex: 1;">
+
+						<div class="scale-icon" style="margin-left: 10px" onclick="plus()">
+							放大
+						</div>
+
+						<div class="scale-icon" onclick="minus()">
+							缩小
+						</div>
+						<div class="scale-icon" onclick="firstPage()">
+							<font-awesome-icon icon="step-backward" />
+						</div>
+
+						<div class="scale-icon" style="font-size: 18px" onclick="prePage()">
+							<font-awesome-icon icon="caret-left" />
+						</div>
+
+						<div class="scale-icon">
+							{{ pageIndex }}/{{ pageCount }}
+						</div>
+
+						<div class="scale-icon" style="font-size: 18px" onclick="nextPage()">
+							<font-awesome-icon icon="caret-right" />
+						</div>
+
+						<div class="scale-icon" onclick="lastPage()">
+							<font-awesome-icon icon="step-forward" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="content" class="content"></div>
+		</div>
+		<script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

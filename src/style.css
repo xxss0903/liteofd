@@ -1,0 +1,16 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
+.tool-bar {
+  display: flex;
+  flex-direction: row;
+}
+
+.content {
+  flex: 1;
+  background-color: #535bf2;
+}

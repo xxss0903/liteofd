@@ -1,0 +1,1 @@
+export function getMetrics(): Record<string, number | (() => Record<string, number>)>;
