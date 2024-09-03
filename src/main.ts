@@ -27,7 +27,8 @@ function parseOfdFile(file: File) {
   let ofdPromise = liteOfd.parseFile(file) as PromiseCapability<OfdDocument>
   ofdPromise.promise.then((data: OfdDocument) => {
     console.log('解析OFD文件成功:', data);
-	liteOfd.renderOfd(appContent)
+	  const ofdDiv = liteOfd.renderOfd()
+	  appContent.appendChild(ofdDiv)
   }).catch((error) => {
     console.error('解析OFD文件失败:', error);
   });
@@ -42,12 +43,12 @@ export function handleSaveOFD() {
 
 export function plus() {
   console.log('放大');
-  // 放大的逻辑
+  liteOfd.zoomIn()
 }
 
 export function minus() {
   console.log('缩小');
-  // 缩小的逻辑
+  liteOfd.zoomOut()
 }
 
 export function firstPage() {

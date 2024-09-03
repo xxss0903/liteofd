@@ -1,8 +1,9 @@
 .app-container {
   display: flex;
   flex-direction: column;
-  width: 100vw;
-  height: 100vh;
+  width: 95vw;
+  height: 95vh;
+  padding: 12rpx;
 }
 
 .tool-bar {
@@ -11,6 +12,15 @@
 }
 
 .content {
-  flex: 1;
-  background-color: #535bf2;
+  width: 100%;
+  overflow: auto;
+  background-color: #f5f5f5; /* 浅灰色背景 */
+  padding: 12px;
+}
+
+/* 当 content 没有子元素时的样式 */
+.content:empty::before {
+  content: '暂无内容';
+  background-color: #f5f5f5; /* 浅灰色背景 */
+  font-size: 16px;
 }
