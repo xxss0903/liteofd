@@ -51,23 +51,56 @@ export default class LiteOfd {
 		return 1
 	}
 
+	/**
+	 * 渲染ofd数据
+	 * @param width 容器宽度，可选参数
+	 * @param height 容器高度，可选参数
+	 */
+	renderOfdWithSize(width: string, height: string, pageWrapStyle: string | null = null): HTMLDivElement {
+		// 创建外层容器div
+		const containerDiv = document.createElement('div');
+		containerDiv.style.cssText = `height: ${height}; width: ${width};`;
+		// 设置默认scale
+		let scale = this.getDefaultScale();
+		this.renderOfdWithScale(containerDiv, scale, pageWrapStyle);
+		return containerDiv
+	}
+
+
+	/**
+	 * 渲染ofd数据，给page页面添加默认的背景色白色和底部margin
+	 */
+	renderOfd(): HTMLDivElement {
+		return this.renderOfdWithSize("", "", "background-color: #ffffff; margin-bottom: 12px;`")
+	}
+
+	/**
+	 * 使用自定义 div 渲染 OFD 数据
+	 * @param customDiv 自定义的 div 元素
+	 */
+	renderOfdWithCustomDiv(customDiv: HTMLDivElement, pageWrapStyle: string | null = null) {
+		// 获取默认缩放比例
+		let scale = this.getDefaultScale()
+		this.renderOfdWithScale(customDiv, scale, pageWrapStyle)
+	}
+
+	changeScale(scale: number){
+		setPageScal(scale)
+	}
 
 	/**
 	 * 渲染ofd数据
+	 * @param rootDiv 
+	 * @param scale 
+	 * @param pageWrapStyle 
+	 * @returns 
 	 */
-	renderOfd(rootDiv: Element): HTMLDivElement {
-		// 设置默认scale
-		let scale = this.getDefaultScale()
-		return this.renderOfdWithScale(rootDiv, scale)
-	}
-
-	renderOfdWithScale(rootDiv: Element, scale: number): HTMLDivElement {
+	renderOfdWithScale(rootDiv: Element, scale: number, pageWrapStyle: string | null = null) {
 		this.ofdRender = new OfdRender(this.ofdDocument)
-		console.log("set render scale", scale)
 		setPageScal(scale)
 		// 新建一个根的div来包裹整个渲染的ofd文档的内容
-		this.ofdDocument.rootContainer = document.createElement("div")
-		return this.ofdRender.render(rootDiv, "background-color: #ffffff; margin-top: 12px;")
+		this.ofdDocument.rootContainer = rootDiv
+		this.ofdRender.render(rootDiv, pageWrapStyle)
 	}
 
 	 /**
