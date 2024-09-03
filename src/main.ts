@@ -71,8 +71,15 @@ export function lastPage() {
   // 跳转到最后一页的逻辑
 }
 
+export function resetZoom() {
+  console.log('还原缩放');
+  liteOfd.resetZoom();
+}
+
+
 // 将函数添加到window对象
 Object.assign(window, {
+  resetZoom,
   uploadFile,
   handleFileChange,
   handleSaveOFD,

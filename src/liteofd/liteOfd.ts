@@ -55,11 +55,19 @@ export default class LiteOfd {
 		this.ofdRender?.zoomOut();
 	}
 
-	 /**
-   * 解析 OFD 文件
-   * @param file OFD 文件（可以是文件路径、File 对象或 ArrayBuffer）
-   * @returns PromiseCapability
-   */
+	zoomTo(scale: number): void {
+		if (this.ofdRender) {
+			// 确保缩放比例在合理范围内
+			const newScale = Math.max(0.1, Math.min(scale, 5)); // 假设最小缩放为 10%，最大缩放为 500%
+			this.ofdRender.applyZoom(newScale);
+		}
+	}
+
+	/**
+	 * 解析 OFD 文件
+	 * @param file OFD 文件（可以是文件路径、File 对象或 ArrayBuffer）
+	 * @returns PromiseCapability
+	 */
 	 parseFile(file: string | File | ArrayBuffer): PromiseCapability<OfdDocument> {
 		try {
 			// 创建一个PromiseCapability对象，用于处理异步操作
@@ -124,7 +132,6 @@ export default class LiteOfd {
 		}
 	  }
 
-
 	/**
 	 * 保存当前ofd文件
 	 * @param path
@@ -132,5 +139,12 @@ export default class LiteOfd {
 	saveOFDDocument(path: string) {
 		let ofdWriter = new OfdWriter(this.ofdDocument)
 		ofdWriter.saveTo(path)
+	}
+
+	/**
+	 * 重置缩放
+	 */
+	resetZoom(): void {
+		this.ofdRender?.resetZoom();
 	}
 }
