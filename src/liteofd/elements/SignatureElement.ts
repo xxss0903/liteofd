@@ -16,7 +16,7 @@ export class SignatureElement {
 	private ofdPage: XmlData // 当前签名所对应的页面数据
 	private ofdDocument: OfdDocument // 能拿到图片资源的公共资源数据节点
 	private viewContainer: HTMLDivElement | SVGSVGElement // svg的包裹的，每个组件都有一个svg包裹，比如path带有一个，而text则是svg包裹text，然后text包裹tspan这样子
-	private viewContainerStyle = "position: absolute;overflow: visible;" // 外层的style
+	private viewContainerStyle = "position: absolute;overflow: visible; cursor: pointer;" // 外层的style
 	private boundaryBox: {
 		x: number,
 		y: number,
@@ -36,6 +36,7 @@ export class SignatureElement {
 
 		if (this.sealObject) {
 			this.initViewContainer()
+			this.addClickListener()
 		}
 	}
 
@@ -211,5 +212,22 @@ export class SignatureElement {
 			}
 		}
 		return null
+	}
+
+	private addClickListener() {
+		if (this.viewContainer) {
+			this.viewContainer.addEventListener('click', (event) => {
+				event.stopPropagation() // 阻止事件冒泡
+				const customEvent = new CustomEvent('signature-element-click', {
+					detail: {
+						nodeData: this.nodeData,
+						sealObject: this.sealObject
+					},
+					bubbles: true,
+					cancelable: true
+				})
+				this.viewContainer.dispatchEvent(customEvent)
+			})
+		}
 	}
 }

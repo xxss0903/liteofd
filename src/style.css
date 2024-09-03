@@ -1,26 +1,107 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 .app-container {
   display: flex;
   flex-direction: column;
-  width: 95vw;
-  height: 95vh;
-  padding: 12rpx;
+  height: 100vh;
+  width: 100vw;
 }
 
 .tool-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
-  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #e0e0e0;
+  z-index: 1000;
+}
+
+.tool-bar-group {
+  display: flex;
+  align-items: center;
+}
+
+.tool-bar-btn {
+  padding: 5px 10px;
+  margin: 0 2px;
+  background-color: #ffffff;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.tool-bar-btn:hover {
+  background-color: #e8e8e8;
+}
+
+.page-info {
+  margin: 0 10px;
+  font-size: 14px;
 }
 
 .content {
-  width: 100%;
+  flex: 1;
   overflow: auto;
-  background-color: #f5f5f5; /* 浅灰色背景 */
-  padding: 12px;
+  background-color: #f5f5f5;
+  margin-top: 60px; /* 调整这个值以匹配工具栏的高度 */
+  height: calc(100vh - 60px); /* 减去工具栏的高度 */
 }
 
-/* 当 content 没有子元素时的样式 */
-.content:empty::before {
-  content: '暂无内容';
-  background-color: #f5f5f5; /* 浅灰色背景 */
-  font-size: 16px;
+/* 隐藏文件输入框 */
+#fileInput {
+  display: none;
+}
+
+.selected-file-name {
+  margin-left: 10px;
+  font-size: 14px;
+  color: #666;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.signature-details {
+  display: none;
+  position: fixed;
+  right: 20px;
+  top: 80px;
+  width: 300px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  font-size: 12px;
+  z-index: 1001;
+}
+
+.signature-details pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
