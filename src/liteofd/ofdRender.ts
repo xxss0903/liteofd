@@ -1,4 +1,3 @@
-
 import { XmlData } from "./ofdData"
 import { OfdDocument } from "./ofdDocument"
 import { OfdPageContainer } from "./elements/ofdPageContainer"
@@ -110,73 +109,87 @@ export class OfdRender {
 		}
 	}
 
+	/**
+	 * 放大文档
+	 * 每次放大 10%
+	 */
 	zoomIn(): void {
 		if (this.rootContainer) {
 			const currentScale = parseFloat(this.rootContainer.dataset.scale || '1');
 			const newScale = currentScale * 1.1; // 每次放大 10%
-	
-			if (!this.rootContainer.dataset.originalWidth) {
-				this.rootContainer.dataset.originalWidth = this.rootContainer.offsetWidth.toString();
-			}
-			const originalWidth = parseFloat(this.rootContainer.dataset.originalWidth);
-	
-			// 应用缩放
-			this.rootContainer.style.transform = `scale(${newScale})`;
-			this.rootContainer.style.transformOrigin = 'top left';
-			this.rootContainer.dataset.scale = newScale.toString();
-	
-			// 调整内容大小，但保持原始尺寸
-			this.rootContainer.style.width = `${originalWidth}px`;
-			this.rootContainer.style.height = 'auto';
-	
-			// 调整父容器
-			if (this.rootContainer.parentElement) {
-				const parentWidth = this.rootContainer.parentElement.offsetWidth;
-				const scaledWidth = originalWidth * newScale;
-				
-				this.rootContainer.style.marginLeft = '0';
-				this.rootContainer.parentElement.style.width = `${Math.max(scaledWidth, parentWidth)}px`;
-				this.rootContainer.parentElement.style.height = `${this.rootContainer.offsetHeight * newScale}px`;
-				this.rootContainer.parentElement.style.overflow = 'auto';
-			}
+			this.applyZoom(newScale);
 		}
 	}
 	
+	/**
+	 * 缩小文档
+	 * 每次缩小 10%，但不小于 0.1
+	 */
 	zoomOut(): void {
 		if (this.rootContainer) {
 			const currentScale = parseFloat(this.rootContainer.dataset.scale || '1');
 			const newScale = Math.max(currentScale * 0.9, 0.1); // 每次缩小 10%，但不小于 0.1
+			this.applyZoom(newScale);
+		}
+	}
 	
-			const originalWidth = parseFloat(this.rootContainer.dataset.originalWidth || this.rootContainer.offsetWidth.toString());
-	
+	/**
+	 * 应用指定的缩放比例
+	 * @param newScale 新的缩放比例
+	 */
+	public applyZoom(newScale: number): void {
+		if (this.rootContainer) {
+			if (!this.rootContainer.dataset.originalWidth) {
+				this.rootContainer.dataset.originalWidth = this.rootContainer.offsetWidth.toString();
+			}
+			const originalWidth = parseFloat(this.rootContainer.dataset.originalWidth);
+
 			// 应用缩放
 			this.rootContainer.style.transform = `scale(${newScale})`;
 			this.rootContainer.style.transformOrigin = 'top left';
 			this.rootContainer.dataset.scale = newScale.toString();
-	
-			// 保持原始尺寸
+
+			// 调整内容大小，但保持原始尺寸
 			this.rootContainer.style.width = `${originalWidth}px`;
 			this.rootContainer.style.height = 'auto';
-	
-			// 调整父容器
-			if (this.rootContainer.parentElement) {
-				const parentWidth = this.rootContainer.parentElement.offsetWidth;
-				const scaledWidth = originalWidth * newScale;
-				
-				if (scaledWidth < parentWidth) {
-					// 如果缩放后的宽度小于父容器宽度，居中显示内容
-					this.rootContainer.style.marginLeft = `${(parentWidth - scaledWidth) / 2}px`;
-					this.rootContainer.parentElement.style.width = '100%';
-				} else {
-					// 否则，设置父容器宽度为缩放后的宽度
-					this.rootContainer.style.marginLeft = '0';
-					this.rootContainer.parentElement.style.width = `${scaledWidth}px`;
-				}
-	
-				this.rootContainer.parentElement.style.height = `${this.rootContainer.offsetHeight * newScale}px`;
-				this.rootContainer.parentElement.style.overflow = 'auto';
-			}
+
+			// 调整父容器和内容位置
+			this.adjustContainerAndPosition(originalWidth, newScale);
 		}
+	}
+	
+	/**
+	 * 调整容器和内容的位置
+	 * @param originalWidth 原始宽度
+	 * @param scale 缩放比例
+	 */
+	private adjustContainerAndPosition(originalWidth: number, scale: number): void {
+		if (this.rootContainer && this.rootContainer.parentElement) {
+			const parentElement = this.rootContainer.parentElement;
+			const scaledWidth = originalWidth * scale;
+			const scaledHeight = this.rootContainer.offsetHeight * scale;
+
+			// 设置父容器大小为缩放后的大小
+			parentElement.style.width = `${scaledWidth}px`;
+			parentElement.style.height = `${scaledHeight}px`;
+
+			// 计算并设置边距以居中内容
+			const marginLeft = Math.max((parentElement.offsetWidth - scaledWidth) / 2, 0);
+			const marginTop = Math.max((parentElement.offsetHeight - scaledHeight) / 2, 0);
+
+			this.rootContainer.style.marginLeft = `${marginLeft}px`;
+			this.rootContainer.style.marginTop = `${marginTop}px`;
+
+			// 确保父容器可以滚动
+			parentElement.style.overflow = 'auto';
+		}
+	}
+
+	/**
+	 * 重置缩放到初始比例
+	 */
+	public resetZoom(): void {
+		this.applyZoom(1);
 	}
 
 }

@@ -47,20 +47,45 @@ export default class LiteOfd {
 		this.ofdRender?.changeScale(scale)
 	}
 
+	/**
+	 * 放大文档
+	 */
 	zoomIn(): void {
 		this.ofdRender?.zoomIn();
 	}
 
+	/**
+	 * 缩小文档
+	 */
 	zoomOut(): void {
 		this.ofdRender?.zoomOut();
 	}
 
+	/**
+	 * 将文档缩放到指定比例
+	 * @param scale 目标缩放比例
+	 */
 	zoomTo(scale: number): void {
 		if (this.ofdRender) {
 			// 确保缩放比例在合理范围内
 			const newScale = Math.max(0.1, Math.min(scale, 5)); // 假设最小缩放为 10%，最大缩放为 500%
 			this.ofdRender.applyZoom(newScale);
 		}
+	}
+
+	/**
+	 * 重置文档缩放到初始比例
+	 */
+	resetZoom(): void {
+		this.ofdRender?.resetZoom();
+	}
+
+	/**
+	 * 获取文档的总页数
+	 * @returns 文档的总页数，如果文档未加载则返回 0
+	 */
+	getTotalPages(): number {
+		return this.ofdDocument.pages ? this.ofdDocument.pages.length : 0;
 	}
 
 	/**
@@ -139,12 +164,5 @@ export default class LiteOfd {
 	saveOFDDocument(path: string) {
 		let ofdWriter = new OfdWriter(this.ofdDocument)
 		ofdWriter.saveTo(path)
-	}
-
-	/**
-	 * 重置缩放
-	 */
-	resetZoom(): void {
-		this.ofdRender?.resetZoom();
 	}
 }
