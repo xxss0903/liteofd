@@ -16,7 +16,7 @@ import { OFD_KEY } from "./attrType"
  * @class LiteOfd
  * @property {OfdDocument} ofdDocument - OFD 文档对象
  * @property {OfdRender | null} ofdRender - OFD 渲染器对象
- *
+ * @property {HTMLDivElement | null} ofdContainer - OFD 内容渲染的容器
  * @method renderOfd - 渲染 OFD 数据
  * @method parseFile - 解析 OFD 文件
  * @method parseFileByArrayBuffer - 解析 OFD 文件的二进制数据
@@ -24,6 +24,7 @@ import { OFD_KEY } from "./attrType"
 export default class LiteOfd {
 	private ofdDocument: OfdDocument
 	private ofdRender: OfdRender | null = null
+	private ofdContainer: HTMLDivElement | null = null // ofd内容渲染的容器
 
 	constructor() {
 		this.ofdDocument = new OfdDocument()
@@ -63,7 +64,80 @@ export default class LiteOfd {
 		// 设置默认scale
 		let scale = this.getDefaultScale();
 		this.renderOfdWithScale(containerDiv, scale, pageWrapStyle);
+		this.ofdContainer = containerDiv
 		return containerDiv
+	}
+
+	/**
+	 * 放大
+	 */
+	zoomIn(): void {
+		if (this.ofdContainer) {
+			const currentScale = parseFloat(this.ofdContainer.dataset.scale || '1');
+			const newScale = currentScale * 1.1; // 每次放大 10%
+
+			if (!this.ofdContainer.dataset.originalWidth) {
+				this.ofdContainer.dataset.originalWidth = this.ofdContainer.offsetWidth.toString();
+			}
+			const originalWidth = parseFloat(this.ofdContainer.dataset.originalWidth);
+
+			// 应用缩放
+			this.ofdContainer.style.transform = `scale(${newScale})`;
+			this.ofdContainer.style.transformOrigin = 'top left';
+			this.ofdContainer.dataset.scale = newScale.toString();
+
+			// 调整内容大小，但保持原始尺寸
+			this.ofdContainer.style.width = `${originalWidth}px`;
+			this.ofdContainer.style.height = 'auto';
+
+			// 调整父容器
+			if (this.ofdContainer.parentElement) {
+				const parentWidth = this.ofdContainer.parentElement.offsetWidth;
+				const scaledWidth = originalWidth * newScale;
+				
+				this.ofdContainer.style.marginLeft = '0';
+				this.ofdContainer.parentElement.style.width = `${Math.max(scaledWidth, parentWidth)}px`;
+				this.ofdContainer.parentElement.style.height = `${this.ofdContainer.offsetHeight * newScale}px`;
+				this.ofdContainer.parentElement.style.overflow = 'auto';
+			}
+		}
+	}
+
+	zoomOut(): void {
+		if (this.ofdContainer) {
+			const currentScale = parseFloat(this.ofdContainer.dataset.scale || '1');
+			const newScale = Math.max(currentScale * 0.9, 0.1); // 每次缩小 10%，但不小于 0.1
+
+			const originalWidth = parseFloat(this.ofdContainer.dataset.originalWidth || this.ofdContainer.offsetWidth.toString());
+
+			// 应用缩放
+			this.ofdContainer.style.transform = `scale(${newScale})`;
+			this.ofdContainer.style.transformOrigin = 'top left';
+			this.ofdContainer.dataset.scale = newScale.toString();
+
+			// 保持原始尺寸
+			this.ofdContainer.style.width = `${originalWidth}px`;
+			this.ofdContainer.style.height = 'auto';
+
+			// 调整父容器
+			if (this.ofdContainer.parentElement) {
+				const parentWidth = this.ofdContainer.parentElement.offsetWidth;
+				const scaledWidth = originalWidth * newScale;
+				
+				if (scaledWidth < parentWidth) {
+					// 如果缩放后的宽度小于父容器宽度，居中显示内容
+					this.ofdContainer.style.marginLeft = `${(parentWidth - scaledWidth) / 2}px`;
+					this.ofdContainer.parentElement.style.width = '100%';
+				} else {
+					// 否则，设置父容器宽度为缩放后的宽度
+					this.ofdContainer.style.marginLeft = '0';
+					this.ofdContainer.parentElement.style.width = `${scaledWidth}px`;
+				}
+
+				this.ofdContainer.parentElement.style.height = `${this.ofdContainer.offsetHeight * newScale}px`;
+				this.ofdContainer.parentElement.style.overflow = 'auto';
+			}
+		}
 	}
 
 
