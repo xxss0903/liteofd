@@ -23,6 +23,7 @@ export default class LiteOfd {
 
 	private ofdDocument: OfdDocument // OFD 文档对象
 	private ofdRender: OfdRender | null = null // OFD 渲染器对象
+	private currentPageIndex = 1; // 当前页面的索引
 
 	constructor() {
 		this.ofdDocument = new OfdDocument()
@@ -45,6 +46,33 @@ export default class LiteOfd {
 
 	changeScale(scale: number){
 		this.ofdRender?.changeScale(scale)
+	}
+
+	getCurrentPageIndex() {
+		return this.currentPageIndex
+	}
+
+	nextPage() {
+		this.scrollToPage(this.currentPageIndex + 1)
+	}
+
+	prevPage() {
+		this.scrollToPage(this.currentPageIndex - 1)
+	}
+
+	scrollToPage(pageIndex: number) {
+		if (pageIndex < 1) {
+			pageIndex = 1
+		}
+		if (pageIndex > this.getTotalPages()) {
+			pageIndex = this.getTotalPages()
+		}
+		this.currentPageIndex = pageIndex
+		let pageId = `ofd-page-${pageIndex}`
+		let pageElement = document.getElementById(pageId)
+		if (pageElement) {
+			pageElement.scrollIntoView({ behavior: 'smooth' });
+		}
 	}
 
 	/**

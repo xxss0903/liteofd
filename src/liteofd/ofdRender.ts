@@ -2,7 +2,7 @@ import { XmlData } from "./ofdData"
 import { OfdDocument } from "./ofdDocument"
 import { OfdPageContainer } from "./elements/ofdPageContainer"
 import { convertToDpiWithScale, setPageScal } from "./utils/utils"
-import { OFD_KEY } from "./attrType"
+import { AttributeKey, OFD_KEY } from "./attrType"
 import * as parser from "./parser"
 
 /**
@@ -96,7 +96,10 @@ export class OfdRender {
 			for (let i = 0; i < this.pages.length; i++) {
 				let pageData = this.pages[i]
 				let pageContainer = new OfdPageContainer(this.ofdDocument, pageData, this.rootContainer)
+				// 为每个页面容器添加一个独特的ID
+				const pageId = `ofd-page-${i + 1}`;
 				let pageView = pageContainer.getPageElement()
+				pageView.setAttribute(AttributeKey.ID, pageId);
 				if (wrapStyle) {
 					let tempStyle = pageView.getAttribute("style") || ""
 					tempStyle += wrapStyle
