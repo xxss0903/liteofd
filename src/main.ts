@@ -113,21 +113,25 @@ export function minus() {
 
 export function firstPage() {
   console.log('第一页');
+  liteOfd.scrollToPage(1)
   updatePageInfo();
 }
 
 export function prePage() {
   console.log('上一页');
+  liteOfd.prevPage()
   updatePageInfo();
 }
 
 export function nextPage() {
   console.log('下一页');
+  liteOfd.nextPage()
   updatePageInfo();
 }
 
 export function lastPage() {
   console.log('最后一页');
+  liteOfd.scrollToPage(liteOfd.getTotalPages())
   updatePageInfo();
 }
 
@@ -141,7 +145,7 @@ function updatePageInfo() {
   // 更新 UI 显示当前页面和总页数
   const pageInfoElement = document.querySelector('.page-info') as HTMLElement;
   if (pageInfoElement) {
-    pageInfoElement.textContent = `${totalPages}`;
+    pageInfoElement.textContent = `${liteOfd.getCurrentPageIndex()} / ${totalPages}`;
   }
 }
 
