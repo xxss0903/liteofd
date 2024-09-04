@@ -114,25 +114,21 @@ export function minus() {
 export function firstPage() {
   console.log('第一页');
   liteOfd.scrollToPage(1)
-  updatePageInfo();
 }
 
 export function prePage() {
   console.log('上一页');
   liteOfd.prevPage()
-  updatePageInfo();
 }
 
 export function nextPage() {
   console.log('下一页');
   liteOfd.nextPage()
-  updatePageInfo();
 }
 
 export function lastPage() {
   console.log('最后一页');
   liteOfd.scrollToPage(liteOfd.getTotalPages())
-  updatePageInfo();
 }
 
 export function resetZoom() {
@@ -161,6 +157,19 @@ export function searchKeyword() {
     console.error('未找到搜索输入框');
   }
 }
+
+export function addOfdPageChangeListener() {
+  console.log('添加OFD页面变化监听器');
+  window.addEventListener('ofdPageChange', (event: CustomEvent) => {
+    const { pageIndex, pageId } = event.detail;
+    console.log(`页面变化: 索引 ${pageIndex}, ID ${pageId}`);
+    updatePageInfo();
+  });
+}
+
+// 在初始化时调用此函数
+addOfdPageChangeListener();
+
 
 
 

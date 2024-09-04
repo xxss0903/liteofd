@@ -16,7 +16,9 @@ import { getDefaultScale } from "./utils/elementUtils"
 export class OfdRender {
 	ofdDocument: OfdDocument
 	pages: XmlData[]
+	scrollContainer: HTMLDivElement = document.createElement('div') // 滚动容器，用于监听滚动事件
 	rootContainer: HTMLDivElement | null = null // 整个渲染的根页面，要放置到这个上面来
+	currentPageIndex: number = 1; // 当前页面索引
 
 	constructor(ofdDocument: OfdDocument) {
 		this.ofdDocument = ofdDocument
@@ -40,7 +42,7 @@ export class OfdRender {
 		let scale = getDefaultScale(this.ofdDocument);
 		let pageWrapStyle = "background-color: #ffffff; margin-bottom: 12px;"
 		this.renderOfdWithScale(containerDiv, scale, pageWrapStyle);
-		return containerDiv
+		return this.scrollContainer
 	}
 
 	renderOfdWithCustomDiv(customDiv: HTMLDivElement, pageWrapStyle: string | null = null) {
@@ -64,7 +66,17 @@ export class OfdRender {
 		this.rootContainer = rootContainer
 		// 渲染页面
 		this.#renderPages(rootContainer, wrapStyle)
-		this.addScrollListener(this.rootContainer)
+		// 给scrollContainer添加滑动的css
+		this.scrollContainer.style.cssText = `
+			overflow-y: auto;
+			overflow-x: hidden;
+			height: 100%;
+			width: 100%;
+			scroll-behavior: smooth;
+		`;
+		this.scrollContainer.appendChild(rootContainer)
+		// 渲染完之后给scrollContainer添加滚动事件
+		this.addScrollListener(this.scrollContainer)
 	}
 
 	/**
@@ -175,25 +187,38 @@ export class OfdRender {
 		this.rootContainer && this.applyZoom(this.rootContainer, 1);
 	}
 
+	public getScrollContainer(): HTMLDivElement {
+		return this.scrollContainer
+	}
+
 	private addScrollListener(rootContainer: HTMLDivElement): void {
 		console.log("addScrollListener", rootContainer)
-		rootContainer.setAttribute(AttributeKey.ID, "ofd-container")
-		window.addEventListener('scroll', (event) => {
-			console.log("containerRect", event)
-			const pages = rootContainer.querySelectorAll('[id^="ofd-page-"]');
+		rootContainer.setAttribute(AttributeKey.ID, "ofd-scroll-container")
+		const pages = rootContainer.querySelectorAll('[id^="ofd-page-"]');
+		rootContainer.addEventListener('scroll', (event) => {
 			const containerRect = rootContainer.getBoundingClientRect();
 			pages.forEach((page, index) => {
+				
 				const pageRect = page.getBoundingClientRect();
-				if (pageRect.top <= containerRect.top && pageRect.bottom >= containerRect.top) {
-					// 创建并分发自定义事件
-					const event = new CustomEvent('ofdPageScroll', {
-						detail: { pageIndex: index, pageId: page.id }
-					});
-					rootContainer.dispatchEvent(event);
-					return; // 找到第一个可见页面后退出循环
+				// 判断页面是否刚开始出现在视图中
+				// 判断页面是否至少有一半在视图中
+				const pageVisibleHeight = Math.min(pageRect.bottom, containerRect.bottom) - Math.max(pageRect.top, containerRect.top);
+				const pageHalfHeight = pageRect.height / 2;
+				if (pageVisibleHeight >= pageHalfHeight) {
+					let tempPageIndex = index + 1;
+					if (tempPageIndex !== this.currentPageIndex) {
+						this.currentPageIndex = tempPageIndex;
+						// 创建并分发自定义事件
+						const event = new CustomEvent('ofdPageChange', {
+							detail: { pageIndex: tempPageIndex, pageId: page.id }
+						});
+						window.dispatchEvent(event);
+						return; // 找到第一个满足条件的页面后退出循环
+					}
 				}
 			});
 		});
 	}
-
 }
+
+

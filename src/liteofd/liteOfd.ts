@@ -23,7 +23,6 @@ export default class LiteOfd {
 
 	private ofdDocument: OfdDocument // OFD 文档对象
 	private ofdRender: OfdRender | null = null // OFD 渲染器对象
-	private currentPageIndex = 1; // 当前页面的索引
 
 	constructor() {
 		this.ofdDocument = new OfdDocument()
@@ -31,13 +30,11 @@ export default class LiteOfd {
 
 	renderOfd(): HTMLDivElement {
 		this.ofdRender = new OfdRender(this.ofdDocument)
-		this.addPageScrollListener();
 		return this.ofdRender.renderOfd()
 	}
 
 	renderOfdWithCustomDiv(customDiv: HTMLDivElement, pageWrapStyle: string | null = null) {
 		this.ofdRender = new OfdRender(this.ofdDocument)
-		this.addPageScrollListener();
 		this.ofdRender.renderOfdWithCustomDiv(customDiv, pageWrapStyle)
 	}
 
@@ -46,15 +43,15 @@ export default class LiteOfd {
 	}
 
 	getCurrentPageIndex() {
-		return this.currentPageIndex
+		return this.ofdRender?.currentPageIndex || 1
 	}
 
 	nextPage() {
-		this.scrollToPage(this.currentPageIndex + 1)
+		this.ofdRender && this.scrollToPage(this.ofdRender.currentPageIndex + 1)
 	}
 
 	prevPage() {
-		this.scrollToPage(this.currentPageIndex - 1)
+		this.ofdRender && this.scrollToPage(this.ofdRender.currentPageIndex - 1)
 	}
 
 	scrollToPage(pageIndex: number) {
@@ -64,7 +61,7 @@ export default class LiteOfd {
 		if (pageIndex > this.getTotalPages()) {
 			pageIndex = this.getTotalPages()
 		}
-		this.currentPageIndex = pageIndex
+		this.ofdRender && (this.ofdRender.currentPageIndex = pageIndex)
 		let pageId = `ofd-page-${pageIndex}`
 		let pageElement = document.getElementById(pageId)
 		if (pageElement) {
@@ -77,7 +74,7 @@ export default class LiteOfd {
 	 * @param keyword 要搜索的关键词
 	 */
 	searchText(keyword: string) {
-		
+
 	}
 
 	/**
@@ -197,16 +194,5 @@ export default class LiteOfd {
 	saveOFDDocument(path: string) {
 		let ofdWriter = new OfdWriter(this.ofdDocument)
 		ofdWriter.saveTo(path)
-	}
-
-	private addPageScrollListener(): void {
-		const rootContainer = this.ofdRender?.rootContainer;
-		if (rootContainer) {
-			rootContainer.addEventListener('ofdPageScroll', (event: CustomEvent) => {
-				const { pageIndex, pageId } = event.detail;
-				console.log(`滚动到页面：索引 ${pageIndex}，ID ${pageId}`);
-				// 在这里处理页面滚动，例如更新UI或触发其他操作
-			});
-		}
 	}
 }
