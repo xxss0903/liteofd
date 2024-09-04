@@ -1,7 +1,8 @@
 import * as parser from "../parser"
 import { AttributeKey, OFD_KEY } from "../attrType"
-import { calPathPoint, convertPathAbbreviatedDatatoPoint, convertToBox, convertToDpi } from "./utils"
+import { convertToDpi, convertToDpiWithScale } from "./utils"
 import { XmlData } from "../ofdData"
+import { OfdDocument } from "../ofdDocument"
 
 const domParser = new DOMParser()
 
@@ -275,3 +276,26 @@ export const getOFDFilePath = (path: string) => {
 	}
 	return path
 }
+
+
+	/**
+	 * 获取默认的缩放比例
+	 * @returns {number} 默认的缩放比例
+	 */
+	export const getDefaultScale = (ofdDocument: OfdDocument): number => {
+		let screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+		let physicalBoxObj = parser.findValueByTagName(ofdDocument.document, OFD_KEY.PhysicalBox)
+		console.log("physicalBoxObj", physicalBoxObj);
+		if(physicalBoxObj){
+			let physicalBox = physicalBoxObj.value.split(" ")
+			let ofdWidth = parseFloat(physicalBox[2])
+
+			let newofdWidth = convertToDpiWithScale(ofdWidth, 1)
+			console.log("ofdWidth", ofdWidth, newofdWidth, screenWidth);
+			// 计算缩放比例
+			let scale = (screenWidth - 100) / ofdWidth   
+			return scale
+		}
+		// 如果物理盒不存在，则返回1
+		return 1
+	}

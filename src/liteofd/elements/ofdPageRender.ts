@@ -52,7 +52,6 @@ export class OfdPageRender {
 				// 遍历ofdPage的子元素，找到Page标签，然后调用#renderLayers方法进行实际的渲染
 				const pageData = Array.from(this.ofdPage.children).find(child => child.tagName === OFD_KEY.Page) as XmlData
 				if (!pageData) throw new Error("Page data not found")
-				console.log(" before renderLayers #1", pageData)
 				// 渲染页面
 				this.#renderLayers(pageData, this.pageContainer)
 				this.renderPromise.resolve(this.ofdPage)

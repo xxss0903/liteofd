@@ -29,18 +29,15 @@ export default class LiteOfd {
 		this.ofdDocument = new OfdDocument()
 	}
 
-	renderOfdWithSize(width: string, height: string, pageWrapStyle: string | null = null): HTMLDivElement {
-		this.ofdRender = new OfdRender(this.ofdDocument)
-		return this.ofdRender.renderOfdWithSize(width, height, pageWrapStyle)
-	}
-
 	renderOfd(): HTMLDivElement {
 		this.ofdRender = new OfdRender(this.ofdDocument)
+		this.addPageScrollListener();
 		return this.ofdRender.renderOfd()
 	}
 
 	renderOfdWithCustomDiv(customDiv: HTMLDivElement, pageWrapStyle: string | null = null) {
 		this.ofdRender = new OfdRender(this.ofdDocument)
+		this.addPageScrollListener();
 		this.ofdRender.renderOfdWithCustomDiv(customDiv, pageWrapStyle)
 	}
 
@@ -192,5 +189,16 @@ export default class LiteOfd {
 	saveOFDDocument(path: string) {
 		let ofdWriter = new OfdWriter(this.ofdDocument)
 		ofdWriter.saveTo(path)
+	}
+
+	private addPageScrollListener(): void {
+		const rootContainer = this.ofdRender?.rootContainer;
+		if (rootContainer) {
+			rootContainer.addEventListener('ofdPageScroll', (event: CustomEvent) => {
+				const { pageIndex, pageId } = event.detail;
+				console.log(`滚动到页面：索引 ${pageIndex}，ID ${pageId}`);
+				// 在这里处理页面滚动，例如更新UI或触发其他操作
+			});
+		}
 	}
 }

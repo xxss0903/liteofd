@@ -1,9 +1,9 @@
 import { XmlData } from "./ofdData"
 import { OfdDocument } from "./ofdDocument"
 import { OfdPageContainer } from "./elements/ofdPageContainer"
-import { convertToDpiWithScale, setPageScal } from "./utils/utils"
-import { AttributeKey, OFD_KEY } from "./attrType"
-import * as parser from "./parser"
+import { setPageScal } from "./utils/utils"
+import { AttributeKey } from "./attrType"
+import { getDefaultScale } from "./utils/elementUtils"
 
 /**
  * OfdRender 类用于渲染 OFD 文档。
@@ -11,41 +11,16 @@ import * as parser from "./parser"
  * @class OfdRender
  * @property {OfdDocument} ofdDocument - OFD 文档对象
  * @property {XmlData[]} pages - 文档的页面数据
- * @property {any} publicRes - 公共资源，包含字体等
- * @property {any} documentRes - 文档资源，包含多媒体数据等
  * @property {HTMLDivElement | null} rootContainer - 整个渲染的根容器
  */
-
 export class OfdRender {
 	ofdDocument: OfdDocument
 	pages: XmlData[]
-	publicRes = null // 公共资源，包含字体等
-	documentRes = null // 文档资源，包含多媒体数据mediafile等
 	rootContainer: HTMLDivElement | null = null // 整个渲染的根页面，要放置到这个上面来
 
 	constructor(ofdDocument: OfdDocument) {
 		this.ofdDocument = ofdDocument
 		this.pages = this.ofdDocument.pages
-		this.publicRes = this.ofdDocument.publicRes
-		this.documentRes = this.ofdDocument.documentRes
-	}
-
-	getDefaultScale(): number {
-		let screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-		let physicalBoxObj = parser.findValueByTagName(this.ofdDocument.document, OFD_KEY.PhysicalBox)
-		console.log("physicalBoxObj", physicalBoxObj);
-		if(physicalBoxObj){
-			let physicalBox = physicalBoxObj.value.split(" ")
-			let ofdWidth = parseFloat(physicalBox[2])
-
-			let newofdWidth = convertToDpiWithScale(ofdWidth, 1)
-			console.log("ofdWidth", ofdWidth, newofdWidth, screenWidth);
-			// 计算缩放比例
-			let scale = (screenWidth - 100) / ofdWidth   
-			return scale
-		}
-		// 如果物理盒不存在，则返回1
-		return 1
 	}
 
 	renderOfdWithSize(width: string, height: string, pageWrapStyle: string | null = null): HTMLDivElement {
@@ -53,19 +28,24 @@ export class OfdRender {
 		const containerDiv = document.createElement('div');
 		containerDiv.style.cssText = `height: ${height}; width: ${width};`;
 		// 设置默认scale
-		let scale = this.getDefaultScale();
+		let scale = getDefaultScale(this.ofdDocument);
 		this.renderOfdWithScale(containerDiv, scale, pageWrapStyle);
-		this.rootContainer = containerDiv
 		return containerDiv
 	}
 
 	renderOfd(): HTMLDivElement {
-		return this.renderOfdWithSize("", "", "background-color: #ffffff; margin-bottom: 12px;")
+		// 创建外层容器div
+		const containerDiv = document.createElement('div');
+		// 设置默认scale
+		let scale = getDefaultScale(this.ofdDocument);
+		let pageWrapStyle = "background-color: #ffffff; margin-bottom: 12px;"
+		this.renderOfdWithScale(containerDiv, scale, pageWrapStyle);
+		return containerDiv
 	}
 
 	renderOfdWithCustomDiv(customDiv: HTMLDivElement, pageWrapStyle: string | null = null) {
 		// 获取默认缩放比例
-		let scale = this.getDefaultScale()
+		let scale = getDefaultScale(this.ofdDocument);
 		this.renderOfdWithScale(customDiv, scale, pageWrapStyle)
 	}
 
@@ -73,29 +53,29 @@ export class OfdRender {
 		setPageScal(scale)
 	}
 
-	renderOfdWithScale(rootDiv: Element, scale: number, pageWrapStyle: string | null = null) {
+	renderOfdWithScale(rootDiv: HTMLDivElement, scale: number, pageWrapStyle: string | null = null) {
 		setPageScal(scale)
 		// 新建一个根的div来包裹整个渲染的ofd文档的内容
 		this.ofdDocument.rootContainer = rootDiv
 		this.render(rootDiv, pageWrapStyle)
 	}
 
-	render(rootContainer: Element, wrapStyle: string | null): Element {
-		this.rootContainer = rootContainer as HTMLDivElement
+	render(rootContainer: HTMLDivElement, wrapStyle: string | null) {
+		this.rootContainer = rootContainer
 		// 渲染页面
-		this.#renderPages(wrapStyle)
-		return this.rootContainer
+		this.#renderPages(rootContainer, wrapStyle)
+		this.addScrollListener(this.rootContainer)
 	}
 
 	/**
 	 * 渲染页面内容，这里是根据每个page数据来渲染，而每个page包含了content和模板等
 	 * @private
 	 */
-	#renderPages(wrapStyle: string | null) {
+	#renderPages(rootContainer: HTMLDivElement, wrapStyle: string | null) {
 		try {
 			for (let i = 0; i < this.pages.length; i++) {
 				let pageData = this.pages[i]
-				let pageContainer = new OfdPageContainer(this.ofdDocument, pageData, this.rootContainer)
+				let pageContainer = new OfdPageContainer(this.ofdDocument, pageData, rootContainer)
 				// 为每个页面容器添加一个独特的ID
 				const pageId = `ofd-page-${i + 1}`;
 				let pageView = pageContainer.getPageElement()
@@ -105,7 +85,7 @@ export class OfdRender {
 					tempStyle += wrapStyle
 					pageView.setAttribute("style", tempStyle)
 				}
-				this.rootContainer!.appendChild(pageView)
+				rootContainer!.appendChild(pageView)
 			}
 		} catch (error) {
 			console.log("render error", error)
@@ -120,7 +100,7 @@ export class OfdRender {
 		if (this.rootContainer) {
 			const currentScale = parseFloat(this.rootContainer.dataset.scale || '1');
 			const newScale = currentScale * 1.1; // 每次放大 10%
-			this.applyZoom(newScale);
+			this.applyZoom(this.rootContainer, newScale);
 		}
 	}
 	
@@ -132,7 +112,7 @@ export class OfdRender {
 		if (this.rootContainer) {
 			const currentScale = parseFloat(this.rootContainer.dataset.scale || '1');
 			const newScale = Math.max(currentScale * 0.9, 0.1); // 每次缩小 10%，但不小于 0.1
-			this.applyZoom(newScale);
+			this.applyZoom(this.rootContainer, newScale);
 		}
 	}
 	
@@ -140,24 +120,24 @@ export class OfdRender {
 	 * 应用指定的缩放比例
 	 * @param newScale 新的缩放比例
 	 */
-	public applyZoom(newScale: number): void {
-		if (this.rootContainer) {
-			if (!this.rootContainer.dataset.originalWidth) {
-				this.rootContainer.dataset.originalWidth = this.rootContainer.offsetWidth.toString();
+	public applyZoom(rootContainer: HTMLDivElement, newScale: number): void {
+		if (rootContainer) {
+			if (!rootContainer.dataset.originalWidth) {
+				rootContainer.dataset.originalWidth = rootContainer.offsetWidth.toString();
 			}
-			const originalWidth = parseFloat(this.rootContainer.dataset.originalWidth);
+			const originalWidth = parseFloat(rootContainer.dataset.originalWidth);
 
 			// 应用缩放
-			this.rootContainer.style.transform = `scale(${newScale})`;
-			this.rootContainer.style.transformOrigin = 'top left';
-			this.rootContainer.dataset.scale = newScale.toString();
+			rootContainer.style.transform = `scale(${newScale})`;
+			rootContainer.style.transformOrigin = 'top left';
+			rootContainer.dataset.scale = newScale.toString();
 
 			// 调整内容大小，但保持原始尺寸
-			this.rootContainer.style.width = `${originalWidth}px`;
-			this.rootContainer.style.height = 'auto';
+			rootContainer.style.width = `${originalWidth}px`;
+			rootContainer.style.height = 'auto';
 
 			// 调整父容器和内容位置
-			this.adjustContainerAndPosition(originalWidth, newScale);
+			this.adjustContainerAndPosition(rootContainer, originalWidth, newScale);
 		}
 	}
 	
@@ -166,11 +146,11 @@ export class OfdRender {
 	 * @param originalWidth 原始宽度
 	 * @param scale 缩放比例
 	 */
-	private adjustContainerAndPosition(originalWidth: number, scale: number): void {
-		if (this.rootContainer && this.rootContainer.parentElement) {
-			const parentElement = this.rootContainer.parentElement;
+	private adjustContainerAndPosition(rootContainer: HTMLDivElement, originalWidth: number, scale: number): void {
+		if (rootContainer && rootContainer.parentElement) {
+			const parentElement = rootContainer.parentElement;
 			const scaledWidth = originalWidth * scale;
-			const scaledHeight = this.rootContainer.offsetHeight * scale;
+			const scaledHeight = rootContainer.offsetHeight * scale;
 
 			// 设置父容器大小为缩放后的大小
 			parentElement.style.width = `${scaledWidth}px`;
@@ -180,8 +160,8 @@ export class OfdRender {
 			const marginLeft = Math.max((parentElement.offsetWidth - scaledWidth) / 2, 0);
 			const marginTop = Math.max((parentElement.offsetHeight - scaledHeight) / 2, 0);
 
-			this.rootContainer.style.marginLeft = `${marginLeft}px`;
-			this.rootContainer.style.marginTop = `${marginTop}px`;
+			rootContainer.style.marginLeft = `${marginLeft}px`;
+			rootContainer.style.marginTop = `${marginTop}px`;
 
 			// 确保父容器可以滚动
 			parentElement.style.overflow = 'auto';
@@ -192,7 +172,28 @@ export class OfdRender {
 	 * 重置缩放到初始比例
 	 */
 	public resetZoom(): void {
-		this.applyZoom(1);
+		this.rootContainer && this.applyZoom(this.rootContainer, 1);
+	}
+
+	private addScrollListener(rootContainer: HTMLDivElement): void {
+		console.log("addScrollListener", rootContainer)
+		rootContainer.setAttribute(AttributeKey.ID, "ofd-container")
+		window.addEventListener('scroll', (event) => {
+			console.log("containerRect", event)
+			const pages = rootContainer.querySelectorAll('[id^="ofd-page-"]');
+			const containerRect = rootContainer.getBoundingClientRect();
+			pages.forEach((page, index) => {
+				const pageRect = page.getBoundingClientRect();
+				if (pageRect.top <= containerRect.top && pageRect.bottom >= containerRect.top) {
+					// 创建并分发自定义事件
+					const event = new CustomEvent('ofdPageScroll', {
+						detail: { pageIndex: index, pageId: page.id }
+					});
+					rootContainer.dispatchEvent(event);
+					return; // 找到第一个可见页面后退出循环
+				}
+			});
+		});
 	}
 
 }

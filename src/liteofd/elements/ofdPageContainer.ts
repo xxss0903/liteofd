@@ -48,7 +48,6 @@ export class OfdPageContainer {
 		// 这里是页面page获取到的模板的页面的id，然后根据模板的id去document中查找对应的模板数据
 
 		let templateLayer = parser.findValueByTagName(pageData, OFD_KEY.Template)
-		console.log("render templateLayer", templateLayer)
 		if (templateLayer){
 			let templateId = parser.findAttributeValueByKey(pageData, AttributeKey.TemplateID)
 			let zOrder = parser.findAttributeValueByKey(pageData, AttributeKey.ZOrder)
@@ -159,7 +158,6 @@ export class OfdPageContainer {
 	 * @private
 	 */
 	#renderSingleStampAnot(sign: XmlData, pageContainer: Element) {
-		console.log("render sign obj", sign)
 		if (sign.sealObject) {
 			let signSvg = new SignatureElement(this.ofdDocument, this.pageData, sign)
 			let signView = signSvg.getContainerSvg()
