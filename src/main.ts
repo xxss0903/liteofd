@@ -150,6 +150,20 @@ function updatePageInfo() {
 }
 
 
+export function searchKeyword() {
+  const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+  if (searchInput) {
+    const keyword = searchInput.value;
+    console.log('搜索关键词:', keyword);
+    // 在这里添加搜索逻辑
+    liteOfd.searchText(keyword);
+  } else {
+    console.error('未找到搜索输入框');
+  }
+}
+
+
+
 // 将函数添加到window对象
 Object.assign(window, {
   resetZoom,
@@ -162,6 +176,7 @@ Object.assign(window, {
   prePage,
   nextPage,
   updatePageInfo,
+  searchKeyword,
   lastPage
 });
 

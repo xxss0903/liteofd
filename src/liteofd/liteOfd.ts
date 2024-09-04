@@ -73,6 +73,14 @@ export default class LiteOfd {
 	}
 
 	/**
+	 * 搜索文本
+	 * @param keyword 要搜索的关键词
+	 */
+	searchText(keyword: string) {
+		
+	}
+
+	/**
 	 * 放大文档
 	 */
 	zoomIn(): void {
