@@ -17,7 +17,7 @@ export class OfdRender {
 	ofdDocument: OfdDocument
 	pages: XmlData[]
 	scrollContainer: HTMLDivElement = document.createElement('div') // 滚动容器，用于监听滚动事件
-	rootContainer: HTMLDivElement | null = null // 整个渲染的根页面，要放置到这个上面来
+	rootContainer: HTMLDivElement = document.createElement('div') // 整个渲染的根页面，要放置到这个上面来
 	currentPageIndex: number = 1; // 当前页面索引
 
 	constructor(ofdDocument: OfdDocument) {
@@ -200,10 +200,9 @@ export class OfdRender {
 			pages.forEach((page, index) => {
 				
 				const pageRect = page.getBoundingClientRect();
-				// 判断页面是否刚开始出现在视图中
 				// 判断页面是否至少有一半在视图中
 				const pageVisibleHeight = Math.min(pageRect.bottom, containerRect.bottom) - Math.max(pageRect.top, containerRect.top);
-				const pageHalfHeight = pageRect.height / 2;
+				const pageHalfHeight = pageRect.height / 5;
 				if (pageVisibleHeight >= pageHalfHeight) {
 					let tempPageIndex = index + 1;
 					if (tempPageIndex !== this.currentPageIndex) {

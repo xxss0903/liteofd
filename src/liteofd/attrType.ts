@@ -7,9 +7,9 @@ export const AttributeKey = {
 	DeltaX: "DeltaX", // x的位置
 	DeltaY: "DeltaY", // y的位置
 	FontSize: "Size", // 字体大小
-	LineWidth: "LineWidth",
-	Stroke: "Stroke",
-	Fill: "Fill",
+	LineWidth: "LineWidth", // path的线条宽度
+	Stroke: "Stroke", // 线条
+	Fill: "Fill", // 填充
 	Value: "Value",
 	ColorSpace: "ColorSpace",
 	DrawParam: "DrawParam",
@@ -22,15 +22,17 @@ export const AttributeKey = {
 	StartPoint: "StartPoint",
 	EndPoint: "EndPoint",
 	Position: "Position",
-	ResourceID: "ResourceID",
-	FontName: "FontName",
-	FamilyName: "FamilyName",
-	HScale: "HScale",
-	VScale: "VScale",
-	WScale: "WScale",
-	Weight: "Weight",
-	PageRef: "PageRef",
-	Clip: "Clip",
+	ResourceID: "ResourceID", // 引用资源ID
+	FontName: "FontName", // 字体名称
+	FamilyName: "FamilyName", // 字体名称
+	HScale: "HScale", // 字体的横向压缩
+	VScale: "VScale", // 字体的纵向压缩
+	WScale: "WScale", // 字体的宽度
+	Weight: "Weight", // 字体粗细
+	PageRef: "PageRef", // 签章的页面引用
+	Clip: "Clip", // 裁剪
+	Title: "Title", // 大纲的标题
+	PageNum: "PageNum", // 大纲的页面位置
 }
 
 // ofd的xml标签中的标签名tagName
@@ -93,6 +95,7 @@ export const OFD_KEY = {
 	PageBlock: "ofd:PageBlock",
 	Reference: "ofd:Reference",
 	Action: "ofd:Action",
+	OutlineElem: "ofd:OutlineElem",
 }
 
 // 包含了子节点的tag的名称，用来xml进行解析时候只有一个子节点时候的解析成数组，是可能包含多个的才加入到这里面，比如TextObject可能再content中有多个，那么就加TextObject而不是Content
@@ -116,4 +119,5 @@ export const MultiChildTagName = [
 	OFD_KEY.StampAnnot,
 	OFD_KEY.Clip,
 	OFD_KEY.TemplatePage,
+	OFD_KEY.OutlineElem,
 ]

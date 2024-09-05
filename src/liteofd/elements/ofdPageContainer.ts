@@ -20,7 +20,6 @@ export class OfdPageContainer {
 	private ofdDocument: OfdDocument // ofd的文档数据
 	private pageData: XmlData // 当前页面的数据
 	private contentLayer: ContentLayer // 渲染的内容层，包含textcode和模板等
-	private pageContainer: HTMLDivElement // 当前页面的容器div
 
 	/**
 	 * 初始化页面
@@ -80,7 +79,7 @@ export class OfdPageContainer {
 							if (templateFileData && templateFileData instanceof XmlData) {
 								// 根据模板页面的数据拿到Page，其他就跟普通的页面一样的渲染了
 								let pageData = parser.findValueByTagName(templateFileData, OFD_KEY.Page)
-								this.#renderContentLayer(pageData, pageContainer, zOrderValue)
+								pageData && this.#renderContentLayer(pageData, pageContainer, zOrderValue)
 								console.log("template file data", templateFileData, templatePath, this.ofdDocument.files)
 							}
 						}
@@ -97,12 +96,12 @@ export class OfdPageContainer {
 			physicsBoxObj = parser.findValueByTagName(this.ofdDocument.document, OFD_KEY.PhysicalBox)
 		}
 
-		let physicBox = convertToBox(physicsBoxObj.value)
+		let physicBox = convertToBox(physicsBoxObj!!.value)
 		let pageStyle = `width: ${physicBox.width}px; height: ${physicBox.height}px; position: relative;`
 		return pageStyle
 	}
 
-	#createPageContainer(pageData: XmlData){
+	#createPageContainer(pageData: XmlData): HTMLDivElement{
 		let pageContainer = document.createElement("div")
 		pageContainer.setAttribute("class", "page-container")
 		let pageStyle = this.#getPageBox(pageData)
@@ -146,7 +145,6 @@ export class OfdPageContainer {
 		}
 		// 首先添加div，然后页面的内容使用也不进行渲染
 		let pageContainer = this.#createPageContainer(this.pageData)
-		this.pageContainer = pageContainer
 		this.#renderPageAsync(this.pageData, pageContainer)
 
 		return pageContainer

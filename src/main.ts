@@ -161,8 +161,6 @@ export function searchKeyword() {
 export function addOfdPageChangeListener() {
   console.log('添加OFD页面变化监听器');
   window.addEventListener('ofdPageChange', (event: CustomEvent) => {
-    const { pageIndex, pageId } = event.detail;
-    console.log(`页面变化: 索引 ${pageIndex}, ID ${pageId}`);
     updatePageInfo();
   });
 }

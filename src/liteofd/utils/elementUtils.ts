@@ -271,7 +271,7 @@ export const getNodeAttributeMaxAndMinID = (node: XmlData, idObj: { max: number,
 
 // 去掉以/开头的路径
 export const getOFDFilePath = (path: string) => {
-		if (path.startsWith("/")) {
+	if (path.startsWith("/")) {
 		return path.substring(1, path.length)
 	}
 	return path

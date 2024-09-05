@@ -11,8 +11,6 @@ import { TextSvg } from "./elements/TextSvg"
 import { ImageSvg } from "./elements/ImageSvg"
 
 export class ContentLayer extends Layer {
-	private pages: XmlData // 页面数据'
-	private contentData: XmlData // 页面的content的数据
 	private ofdDocument: OfdDocument
 	private setDefaultZOrder = false // 是否使用默认的zorder的值设置zindex
 	private defaultZorderValue = -1 // 默认的zindex的值
@@ -37,9 +35,11 @@ export class ContentLayer extends Layer {
 	render(pageData: XmlData, pageContainer: Element) {
 		try {
 			let contentData = parser.findValueByTagName(pageData, OFD_KEY.Content)
-			// 渲染内容层
-			this.#initPageContainer()
-			this.#renderPageContent(contentData, pageContainer)
+			if(contentData) {	
+				// 渲染内容层
+				this.#initPageContainer()
+				this.#renderPageContent(contentData, pageContainer)	
+			}
 		} catch (e) {
 			console.log("render page content error", e, pageData)
 			return null

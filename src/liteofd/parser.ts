@@ -144,22 +144,35 @@ export const parseOFDPages = async (ofdDocument: OfdDocument, pages: XmlData) =>
 	let files = ofdDocument.files
 	let signList = ofdDocument.signatureList
 	let pageSubPages = findValueByTagName(pages, OFD_KEY.Page)
-	let ofdPages = []
+	let ofdPages: XmlData[] = []
+	if (!pageSubPages) {
+		return ofdPages
+	}
 	// 多页面
 	for (let i = 0; i < pageSubPages.children.length; i++) {
 		let page = pageSubPages.children[i]
+		if (!page) {
+			continue
+		}
 		let pageLoc = findAttributeValueByKey(page, AttributeKey.BaseLoc)
 		// 签名需要根据页面id和对应的pageRef进行匹配，一样的就给页面添加一个签名
 		let pageID = findAttributeValueByKey(page, AttributeKey.ID)
 		let pagePath = `${RootDocPath}/${pageLoc}`
 		// 解析单个页面
 		let pageData = await parseXmlByFileName(files, pagePath)
-		pageData.id = pageID
-		await parseSignatureData(ofdDocument, signList, pageID, pageData)
-
-		ofdPages.push(pageData)
+		if (pageData) {
+			pageID && (pageData.id = pageID)
+			await parseSignatureData(ofdDocument, signList, pageID, pageData)
+			ofdPages.push(pageData)
+		}
+	
 	}
 	return ofdPages
+}
+
+// 解析大纲数据
+export const parseOFDOutlines = async (ofdDocument: OfdDocument, outlinesObj: XmlData) => {
+
 }
 
 /**
@@ -167,7 +180,7 @@ export const parseOFDPages = async (ofdDocument: OfdDocument, pages: XmlData) =>
  * @param files
  * @param fileName
  */
-export const parseXmlByFileName = async (files: any, fileName: string): Promise<XmlData> => {
+export const parseXmlByFileName = async (files: any, fileName: string): Promise<XmlData | undefined> => {
 	try {
 		let pathKeys = Object.keys(files)
 		let upperFileName = fileName.toUpperCase()
@@ -191,7 +204,7 @@ export const parseXmlByFileName = async (files: any, fileName: string): Promise<
 }
 
 // 根据tagname来查找对应xml中的值
-export const findValueByTagName = (xmlData:XmlData, tagName: string): XmlData => {
+export const findValueByTagName = (xmlData:XmlData, tagName: string): XmlData | undefined => {
 	if (!xmlData) {
 		console.warn("xmlData 为空，无法查找标签");
 	} else {
@@ -236,7 +249,7 @@ export const findNodeListByTagName = (xmlData:XmlData, tagName: string): XmlData
 		return [xmlData]
 	}
 	if (xmlData.children && xmlData.children.length > 0) {
-		let subNodeList = []
+		let subNodeList: XmlData[] = []
 		for (let i = 0; i < xmlData.children.length; i++) {
 			let subNode = xmlData.children[i]
 			let findData = findValueByTagName(subNode, tagName)
@@ -250,7 +263,7 @@ export const findNodeListByTagName = (xmlData:XmlData, tagName: string): XmlData
 }
 
 // 查找ofd节点的属性值
-export const findAttributeValueByKey = (xmlData:XmlData, key: string) => {
+export const findAttributeValueByKey = (xmlData:XmlData, key: string): string | undefined => {
 	let findKey = key
 	if (!findKey.startsWith("@_")) {
 		findKey = `@_${key}`
@@ -277,7 +290,7 @@ export const findAttributeValueByKey = (xmlData:XmlData, key: string) => {
 /**
  * 根据id查找节点，可能是单节点，可能多节点
  */
-export const findNodeByAttributeKeyValue = (targetValue: any, attrKey: string, node: XmlData) => {
+export const findNodeByAttributeKeyValue = (targetValue: any, attrKey: string, node: XmlData): XmlData | undefined => {
 	let nodeID = findAttributeValueByKey(node, AttributeKey.ID)
 	if (nodeID === targetValue) {
 		return node
@@ -290,7 +303,5 @@ export const findNodeByAttributeKeyValue = (targetValue: any, attrKey: string, n
 			}
 		}
 	}
-	return null
+	return undefined
 }
-
-

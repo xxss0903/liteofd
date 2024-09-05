@@ -99,7 +99,7 @@ export default class LiteOfd {
 		if (this.ofdRender) {
 			// 确保缩放比例在合理范围内
 			const newScale = Math.max(0.1, Math.min(scale, 5)); // 假设最小缩放为 10%，最大缩放为 500%
-			this.ofdRender.applyZoom(newScale);
+			this.ofdRender.applyZoom(this.ofdRender.rootContainer, newScale);
 		}
 	}
 

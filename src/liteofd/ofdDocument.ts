@@ -7,17 +7,18 @@ import { XmlData } from "./ofdData"
  */
 export class OfdDocument {
 	files: any // ofd解析出来的所有文件，也就是zip解压缩之后的原始文件，包含了文件路径
-	data: null // 解析的ofd的数据，xmldata
-	pages: XmlData[] // ofd的页面数据
-	ofdXml: XmlData // OFD.xml文件
-	document: XmlData // document.xml文件
-	publicRes: XmlData // publicres.xml文件
-	documentRes: XmlData // documentRes.xml文件
-	rootContainer: Element // 根的容器
+	data: any = null // 解析的ofd的数据，xmldata
+	pages: XmlData[] = []// ofd的页面数据
+	ofdXml: XmlData = new XmlData() // OFD.xml文件
+	document: XmlData = new XmlData() // document.xml文件
+	publicRes: XmlData = new XmlData() // publicres.xml文件
+	documentRes: XmlData = new XmlData() // documentRes.xml文件
+	rootContainer: Element = document.createElement("div") // 根的容器
 	loadedMediaFile: Map<string, any> // 已经加载了的资源图片/包括图片等
 	mediaFileList: any // 多媒体文件列表
-	signatures: XmlData // 签名数据，这个是signatures.xml文件的数据
-	signatureList: XmlData[] // 签名数据列表，包含了signatures.xml里面所有签名组成的xmldata的数组
+	signatures: XmlData = new XmlData() // 签名数据，这个是signatures.xml文件的数据
+	signatureList: XmlData[] = [] // 签名数据列表，包含了signatures.xml里面所有签名组成的xmldata的数组
+	outlines: XmlData = new XmlData() // 大纲数据列表，包含了ofd:Outlines里面所有大纲数据
 
 	constructor() {
 		this.loadedMediaFile = new Map()

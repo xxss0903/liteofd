@@ -58,13 +58,15 @@ export class OfdWriter {
 		if (mockRemovePage) {
 			// 值取第一页，首先需要从document中去掉其他页面
 			let pagesNode = parser.findValueByTagName(this.ofdDocument.document, OFD_KEY.Pages)
-			let firstPage = pagesNode.children[0].children[0]
-			pagesNode.children[0].children = [firstPage]
+			if(pagesNode) {
+				let firstPage = pagesNode.children[0].children[0]
+				pagesNode.children[0].children = [firstPage]
+			}
 		}
 		if (mockEditText) {
 			// 值取第一页，首先需要从document中去掉其他页面
 			let textCode = parser.findValueByTagName(this.ofdDocument.pages[0], OFD_KEY.TextCode)
-			textCode.value = "Mock Edit"
+			textCode && (textCode.value = "Mock Edit")
 		}
 		console.log("editd document data", this.ofdDocument.document)
 	}
@@ -118,11 +120,11 @@ export class OfdWriter {
 
 	#mockEditPage(pageData: XmlData){
 		let textCode = parser.findValueByTagName(pageData, OFD_KEY.TextCode)
-		textCode.value = "edit this page"
+		textCode && (textCode.value = "edit this page")
 	}
 
 	#convertPagesXmlDataToXml(pages: XmlData[]) {
-		let pagesXmlStrs = []
+		let pagesXmlStrs: string[] = []
 		for (let i = 0; i < pages.length; i++) {
 			let pageData = pages[i]
 			let pageXmlStr = this.#convertXmlDataToXml(pageData)
@@ -131,7 +133,7 @@ export class OfdWriter {
 		}
 	}
 
-	#convertXmlDataToXml(node: XmlData) {
+	#convertXmlDataToXml(node: XmlData): string {
 		let str = XmlDataToXmlStr(node)
 		console.log("convert xmldata", str)
 		return str
