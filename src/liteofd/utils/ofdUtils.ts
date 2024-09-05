@@ -61,7 +61,7 @@ export const parseOFDFiles = async (zipData: any) => {
 			// 解析OFD的document文件
 			let docRootPath = getOFDFilePath(docRoot.value)
 			documentData = await parser.parseXmlByFileName(ofdFiles, docRootPath)
-			documentData && (ofdDocument.document = documentData)
+			documentData && (ofdDocument.documentData = documentData)
 		}
 
 		// 解析签名signatures

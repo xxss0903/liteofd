@@ -64,7 +64,7 @@ export class OfdPageContainer {
 					zOrderValue = idObj.max + 1
 				}
 				// 根据模板id来设置页面
-				let templateObj = parser.findValueByTagName(this.ofdDocument.document, OFD_KEY.TemplatePage)
+				let templateObj = parser.findValueByTagName(this.ofdDocument.documentData, OFD_KEY.TemplatePage)
 				console.log("render templateObj 2", templateObj)
 				if (templateObj && templateObj.children.length > 0) {
 					for (let i = 0; i < templateObj.children.length; i++) {
@@ -93,7 +93,7 @@ export class OfdPageContainer {
 		let physicsBoxObj = parser.findValueByTagName(pageData, OFD_KEY.PhysicalBox)
 		// 如果页面的宽度为空，那么使用整体的页面布局
 		if (!physicsBoxObj) {
-			physicsBoxObj = parser.findValueByTagName(this.ofdDocument.document, OFD_KEY.PhysicalBox)
+			physicsBoxObj = parser.findValueByTagName(this.ofdDocument.documentData, OFD_KEY.PhysicalBox)
 		}
 
 		let physicBox = convertToBox(physicsBoxObj!!.value)

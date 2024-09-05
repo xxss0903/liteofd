@@ -284,7 +284,7 @@ export const getOFDFilePath = (path: string) => {
 	 */
 	export const getDefaultScale = (ofdDocument: OfdDocument): number => {
 		let screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-		let physicalBoxObj = parser.findValueByTagName(ofdDocument.document, OFD_KEY.PhysicalBox)
+		let physicalBoxObj = parser.findValueByTagName(ofdDocument.documentData, OFD_KEY.PhysicalBox)
 		console.log("physicalBoxObj", physicalBoxObj);
 		if(physicalBoxObj){
 			let physicalBox = physicalBoxObj.value.split(" ")

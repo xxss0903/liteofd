@@ -57,7 +57,7 @@ export class OfdWriter {
 		let mockEditText = false
 		if (mockRemovePage) {
 			// 值取第一页，首先需要从document中去掉其他页面
-			let pagesNode = parser.findValueByTagName(this.ofdDocument.document, OFD_KEY.Pages)
+			let pagesNode = parser.findValueByTagName(this.ofdDocument.documentData, OFD_KEY.Pages)
 			if(pagesNode) {
 				let firstPage = pagesNode.children[0].children[0]
 				pagesNode.children[0].children = [firstPage]
@@ -68,7 +68,7 @@ export class OfdWriter {
 			let textCode = parser.findValueByTagName(this.ofdDocument.pages[0], OFD_KEY.TextCode)
 			textCode && (textCode.value = "Mock Edit")
 		}
-		console.log("editd document data", this.ofdDocument.document)
+		console.log("editd document data", this.ofdDocument.documentData)
 	}
 
 	// 将ofd的文档document重新构建成xml的文件
@@ -81,8 +81,8 @@ export class OfdWriter {
 		this.#mockRemovePage()
 
 		// 将document.xml组合
-		let documentXmlStr = this.#convertXmlDataToXml(this.ofdDocument.document)
-		this.#saveXmlDataFile(documentXmlStr, this.ofdDocument.document.fileName)
+		let documentXmlStr = this.#convertXmlDataToXml(this.ofdDocument.documentData)
+		this.#saveXmlDataFile(documentXmlStr, this.ofdDocument.documentData.fileName)
 		// documentres.xml组合
 		debugger
 		let documentResXmlStr = this.#convertXmlDataToXml(this.ofdDocument.documentRes)

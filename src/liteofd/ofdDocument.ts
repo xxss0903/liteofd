@@ -10,7 +10,7 @@ export class OfdDocument {
 	data: any = null // 解析的ofd的数据，xmldata
 	pages: XmlData[] = []// ofd的页面数据
 	ofdXml: XmlData = new XmlData() // OFD.xml文件
-	document: XmlData = new XmlData() // document.xml文件
+	documentData: XmlData = new XmlData() // document.xml文件
 	publicRes: XmlData = new XmlData() // publicres.xml文件
 	documentRes: XmlData = new XmlData() // documentRes.xml文件
 	rootContainer: Element = document.createElement("div") // 根的容器
