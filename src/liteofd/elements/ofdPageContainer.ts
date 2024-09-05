@@ -117,7 +117,7 @@ export class OfdPageContainer {
 	 * @private
 	 */
 	async #renderPageAsync(pageData: XmlData, pageContainer: HTMLDivElement){
-		let pageRender = new OfdPageRender(this.ofdDocument, this.pageData)
+		let pageRender = new OfdPageRender(this.ofdDocument, pageData)
 		// 开启异步渲染页面内容，内容层
 		let renderPromise = pageRender.render(pageContainer)
 		renderPromise.promise
@@ -129,20 +129,15 @@ export class OfdPageContainer {
 			})
 		// 模板层
 		this.#renderTemplateLayer(pageData, pageContainer)
+		debugger
 		// 需要用page外层的signlist数据
-		this.#renderSignatures(this.pageData, pageContainer)
+		this.#renderSignatures(pageData, pageContainer)
 	}
 
 	/**
 	 * 首先创建页面的框架，然后再异步渲染内容
 	 */
 	getPageElement(): HTMLDivElement {
-		let pageData: XmlData;
-		for (let i = 0; i < this.pageData.children.length; i++) {
-			if (this.pageData.children[i].tagName === OFD_KEY.Page) {
-				pageData = this.pageData.children[i]
-			}
-		}
 		// 首先添加div，然后页面的内容使用也不进行渲染
 		let pageContainer = this.#createPageContainer(this.pageData)
 		this.#renderPageAsync(this.pageData, pageContainer)
@@ -156,6 +151,7 @@ export class OfdPageContainer {
 	 * @private
 	 */
 	#renderSingleStampAnot(sign: XmlData, pageContainer: Element) {
+		console.log("render single stamp anot", sign)
 		if (sign.sealObject) {
 			let signSvg = new SignatureElement(this.ofdDocument, this.pageData, sign)
 			let signView = signSvg.getContainerSvg()

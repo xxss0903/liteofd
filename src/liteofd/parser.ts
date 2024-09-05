@@ -187,7 +187,7 @@ export const parseOFDOutlines = async (ofdDocument: OfdDocument, outlinesObj: Xm
  * @param files
  * @param fileName
  */
-export const parseXmlByFileName = async (files: any, fileName: string): Promise<XmlData | undefined> => {
+export const parseXmlByFileName = async (files: any, fileName: string): Promise<XmlData> => {
 	try {
 		let pathKeys = Object.keys(files)
 		let upperFileName = fileName.toUpperCase()
@@ -206,8 +206,8 @@ export const parseXmlByFileName = async (files: any, fileName: string): Promise<
 		}
 	} catch (e) {
 		console.log("parse file err", e, fileName, files)
-		throw new Error("Parse OFD file error " + fileName)
 	}
+	return new XmlData()
 }
 
 // 根据tagname来查找对应xml中的值
@@ -270,7 +270,7 @@ export const findNodeListByTagName = (xmlData:XmlData, tagName: string): XmlData
 }
 
 // 查找ofd节点的属性值
-export const findAttributeValueByKey = (xmlData:XmlData, key: string): string | undefined => {
+export const findAttributeValueByKey = (xmlData:XmlData, key: string): string => {
 	let findKey = key
 	if (!findKey.startsWith("@_")) {
 		findKey = `@_${key}`
@@ -292,6 +292,7 @@ export const findAttributeValueByKey = (xmlData:XmlData, key: string): string | 
 			}
 		}
 	}
+	return ""
 }
 
 /**

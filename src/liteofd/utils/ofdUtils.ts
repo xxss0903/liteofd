@@ -121,8 +121,7 @@ export const parseOFDSignatures = async (ofdDocument: OfdDocument, ofdData: XmlD
 		// 签名文件的包含文件路径
 		let signaturesPath = getOFDFilePath(signaturesObj.value)
 		let signaturesDir = signaturesPath.substring(0, signaturesPath.lastIndexOf("/"))
-		let signatures = await parser.parseXmlByFileName(ofdFiles, signaturesPath)
-		signatures && (ofdDocument.signatures = signatures)
+		ofdDocument.signatures = await parser.parseXmlByFileName(ofdFiles, signaturesPath)
 		// 将signatures中的签名xml全部提取出来
 		let signatureFileObj = parser.findValueByTagName(ofdDocument.signatures, OFD_KEY.Signature)
 		if (signatureFileObj && signatureFileObj.children.length > 0) {
@@ -132,18 +131,14 @@ export const parseOFDSignatures = async (ofdDocument: OfdDocument, ofdData: XmlD
 				let signatureFile = signatureFileObj.children[i]
 				let signID = parser.findAttributeValueByKey(signatureFile, AttributeKey.ID)
 				let tempPath = parser.findAttributeValueByKey(signatureFile, AttributeKey.BaseLoc)
-				tempPath && (tempPath = getOFDFilePath(tempPath))
-				if (tempPath && !tempPath.startsWith(signaturesDir)) {
+				tempPath = getOFDFilePath(tempPath)
+				if (!tempPath.startsWith(signaturesDir)) {
 					tempPath = `${signaturesDir}/${tempPath}`;
-				} else {
-					tempPath = ""
 				}
 				let signFilePath = getOFDFilePath(tempPath)
 				let signatureObj = await parser.parseXmlByFileName(ofdFiles, signFilePath)
-				if(signatureObj) {	
-					signID && (signatureObj.id = signID)
-					signObjList.push(signatureObj)
-				}
+				signID && (signatureObj.id = signID)
+				signObjList.push(signatureObj)
 			}
 			ofdDocument.signatureList = signObjList
 		}
