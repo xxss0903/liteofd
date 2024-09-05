@@ -63,6 +63,11 @@ body {
   padding: 10px;
   overflow-y: auto;
   padding-top: 120px;
+  display: none; /* 默认隐藏大纲 */
+}
+
+.outlines.show {
+  display: block; /* 当添加 'show' 类时显示大纲 */
 }
 
 .content {
@@ -71,6 +76,11 @@ body {
   background-color: #f5f5f5;
   margin-top: 80px; /* 调整这个值以匹配工具栏的高度 */
   height: calc(100vh - 60px); /* 减去工具栏的高度 */
+  transition: margin-left 0.3s ease; /* 添加过渡效果 */
+}
+
+.content.with-outlines {
+  margin-left: 200px; /* 当显示大纲时，为内容添加左边距 */
 }
 
 /* 隐藏文件输入框 */

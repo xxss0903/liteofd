@@ -52,7 +52,7 @@ function initOfdEventListeners() {
     displaySignatureDetails(nodeData, sealObject);
   });
 
-  // 添加点击其他地方关闭弹窗的监听器
+  // 添加点击��他地方关闭弹窗的监听器
   document.addEventListener('click', (event) => {
     const detailsContainer = document.getElementById('signature-details');
     const overlay = document.getElementById('overlay');
@@ -110,10 +110,11 @@ function renderOutlines(outlines: XmlData) {
   }
 
   outlinesContainer.innerHTML = '';
-  if (outlines && outlines.children) {
+  if (outlines && outlines.children && outlines.children.length > 0) {
     outlines.children.forEach(outline => {
       outlinesContainer.appendChild(createOutlineElement(outline));
     });
+    toggleOutlines(); // 如果有大纲数据，初始显示大纲
   }
 }
 
@@ -229,6 +230,16 @@ Object.assign(window, {
   nextPage,
   updatePageInfo,
   searchKeyword,
-  lastPage
+  lastPage,
+  toggleOutlines  // 添加 toggleOutlines 到这里
 });
 
+export function toggleOutlines() {
+  const outlinesElement = document.getElementById('outlines');
+  const contentElement = document.getElementById('content');
+  
+  if (outlinesElement && contentElement) {
+    outlinesElement.classList.toggle('show');
+    contentElement.classList.toggle('with-outlines');
+  }
+}
