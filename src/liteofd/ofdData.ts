@@ -20,7 +20,7 @@ export class XmlData implements IXmlData{
 	value: string = ""
 	fileName = ""
 	id = ""
-	signList = []
+	signList: XmlData[] = []
 	sealObject = null
 	sealData: OfdDocument | string | null = null
 }

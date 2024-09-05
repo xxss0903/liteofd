@@ -6,6 +6,8 @@ import { getOFDFilePath } from "./utils/elementUtils"
 import { XMLParser } from "fast-xml-parser"
 import { decodeSignatureStringData } from "./utils/signatureUtil"
 import { parseOFDFiles } from "./utils/ofdUtils"
+import PromiseCapability from "./promiseCapability"
+import * as JSZipUtils from "jszip-utils"
 
 export const RootDocPath = "Doc_0"
 
@@ -125,7 +127,7 @@ const parseSignatureData = async (ofdDocument: OfdDocument, signList: XmlData[],
 }
 
 // 将签名的ofd进行解压解析出来
-const parseSignatureOFDData = async (sealObj: { ofdArray: any; verifyRet: any; SES_Signature: any; type: string } | {}, tempSign: XmlData) => {
+const parseSignatureOFDData = async (sealObj: any, tempSign: XmlData) => {
 	// 签章的ofd数据，是一个zip的数据，需要解压和其他的ofd一样处理
 	let ofdData = sealObj.ofdArray
 	let sealOFDObj = await unzipOfd(ofdData)
@@ -313,3 +315,69 @@ export const findNodeByAttributeKeyValue = (targetValue: any, attrKey: string, n
 	}
 	return undefined
 }
+
+
+export const parseOFDFile = (file: string | File | ArrayBuffer): PromiseCapability<OfdDocument> => {
+	try {
+		console.log("parseOFDFile", file)
+		let promiseCap = new PromiseCapability<OfdDocument>()
+		// 判断file是文件还是二进制数据
+		file instanceof File || file instanceof ArrayBuffer
+			? parseFileByArrayBuffer(file, promiseCap)
+			: parseFileByPath(file, promiseCap)
+
+		return promiseCap
+	} catch (e) {
+		console.error("解析文件错误", e)
+		throw e
+	}
+}
+
+	  /**
+	   * 解析OFD文件二进制数据
+	   * @param file
+	   * @param promiseCap
+	   */
+	  export const  parseFileByArrayBuffer = async(file: File | ArrayBuffer, promiseCap: PromiseCapability<OfdDocument>) => {
+		console.log("parseFileByArrayBuffer", file)
+		const data = file instanceof File ? await file.arrayBuffer() : file
+		const ofdDoc = await processOfdData(data)
+		promiseCap.resolve(ofdDoc)
+	  }
+
+	  /**
+	   * 解析OFD文件路径
+	   * @param file
+	   * @param promiseCap
+	   */
+	  const parseFileByPath = (file: string, promiseCap: PromiseCapability<OfdDocument>) => {
+		console.log("parseFileByPath", file)
+		JSZipUtils.getBinaryContent(file, async (err: any, data: any) => {
+		  if (err) {
+			promiseCap.reject(err)
+		  } else {
+			try {
+			  const ofdDoc = await processOfdData(data)
+			  promiseCap.resolve(ofdDoc)
+			} catch (error) {
+			  promiseCap.reject(error)
+			}
+		  }
+		})
+	  }
+
+	  /**
+	   * 处理OFD数据
+	   * @param data ofd文件的二进制数据
+	   * @returns
+	   */
+	  const  processOfdData = async (data: ArrayBuffer): Promise<OfdDocument> => {
+		try {
+			const zipData = await unzipOfd(data)
+			const ofdDoc = await parseOFDFiles(zipData)
+			return ofdDoc
+		} catch (e) {
+			console.log("processOfdData err", e)
+			throw e
+		}
+	  }

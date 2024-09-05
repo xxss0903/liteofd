@@ -25,6 +25,13 @@ export class OfdRender {
 		this.pages = this.ofdDocument.pages
 	}
 
+	/**
+	 * 使用自定义的div来渲染OFD文档
+	 * @param width 宽度
+	 * @param height 高度
+	 * @param pageWrapStyle 页面的样式
+	 * @returns 
+	 */
 	renderOfdWithSize(width: string, height: string, pageWrapStyle: string | null = null): HTMLDivElement {
 		// 创建外层容器div
 		const containerDiv = document.createElement('div');
@@ -35,20 +42,16 @@ export class OfdRender {
 		return containerDiv
 	}
 
-	renderOfd(): HTMLDivElement {
-		// 创建外层容器div
-		const containerDiv = document.createElement('div');
-		// 设置默认scale
-		let scale = getDefaultScale(this.ofdDocument);
-		let pageWrapStyle = "background-color: #ffffff; margin-bottom: 12px;"
-		this.renderOfdWithScale(containerDiv, scale, pageWrapStyle);
-		return this.scrollContainer
-	}
-
+	/**
+	 * 使用自定义的div来渲染OFD文档
+	 * @param customDiv 自定义的div
+	 * @param pageWrapStyle 页面的样式
+	 */
 	renderOfdWithCustomDiv(customDiv: HTMLDivElement, pageWrapStyle: string | null = null) {
 		// 获取默认缩放比例
 		let scale = getDefaultScale(this.ofdDocument);
 		this.renderOfdWithScale(customDiv, scale, pageWrapStyle)
+		return this.scrollContainer
 	}
 
 	changeScale(scale: number){

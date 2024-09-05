@@ -129,7 +129,6 @@ export class OfdPageContainer {
 			})
 		// 模板层
 		this.#renderTemplateLayer(pageData, pageContainer)
-		debugger
 		// 需要用page外层的signlist数据
 		this.#renderSignatures(pageData, pageContainer)
 	}
