@@ -9,7 +9,6 @@ import { XmlData } from "./ofdData"
 import * as ofdActions from "./ofdActions"
 
 /**
-/**
  * LiteOfd 类是一个用于处理 OFD 文件的轻量级库。
  * 它提供了渲染 OFD 数据和解析 OFD 文件的功能。
  *

@@ -51,6 +51,20 @@ body {
   font-size: 14px;
 }
 
+.content-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.outlines {
+  width: 200px;
+  min-width: 200px;
+  border-right: 1px solid #ccc;
+  padding: 10px;
+  overflow-y: auto;
+  padding-top: 120px;
+}
+
 .content {
   padding: 12px;
   flex: 1;

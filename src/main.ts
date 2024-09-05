@@ -3,6 +3,8 @@ import LiteOfd from "./liteofd/liteOfd"
 import PromiseCapability from './liteofd/promiseCapability';
 import { OfdDocument } from './liteofd/ofdDocument';
 import { XmlData } from './liteofd/ofdData';
+import * as parser from './liteofd/parser'
+import { AttributeKey, OFD_KEY } from './liteofd/attrType';
 
 const appContent = document.getElementById('content') as HTMLElement
 
@@ -75,6 +77,47 @@ function displaySignatureDetails(nodeData: XmlData, sealObject: any) {
   }
 }
 
+function renderOutlines(outlines: XmlData) {
+  const outlinesContainer = document.getElementById('outlines');
+  if (!outlinesContainer) return;
+
+  function createOutlineElement(outlineData: XmlData): HTMLElement {
+    const outlineElement = document.createElement('div');
+    outlineElement.className = 'outline-item';
+
+    const titleElement = document.createElement('span');
+    titleElement.textContent = parser.findAttributeValueByKey(outlineData, AttributeKey.Title) || "无标题";
+    titleElement.className = 'outline-title';
+    outlineElement.appendChild(titleElement);
+
+
+    // 查找actions
+    let actions = parser.findValueByTagName(outlineData, OFD_KEY.Actions)
+    if (actions) {
+      console.log("actions", actions)
+    }
+    let actionListObj = actions?.children[0]
+    if (actionListObj) {
+      console.log("actionListObj", actionListObj)
+    }
+    actionListObj?.children.forEach(action => {
+      titleElement.addEventListener('click', () => {
+        liteOfd.executeAction(action)
+      });
+    })
+
+    return outlineElement;
+  }
+
+  outlinesContainer.innerHTML = '';
+  if (outlines && outlines.children) {
+    outlines.children.forEach(outline => {
+      outlinesContainer.appendChild(createOutlineElement(outline));
+    });
+  }
+}
+
+
 function parseOfdFile(file: File) {
 	appContent.innerHTML = ''
   let ofdPromise = liteOfd.parseFile(file) as PromiseCapability<OfdDocument>
@@ -84,6 +127,8 @@ function parseOfdFile(file: File) {
 	  const ofdDiv = liteOfd.renderOfd()
 	  appContent.appendChild(ofdDiv)
 	  initOfdEventListeners(); // 在渲染完成后初始化事件监听器
+    // 添加大纲
+    renderOutlines(data.outlines);
   }).catch((error) => {
     console.error('解析OFD文件失败:', error);
     alert('解析OFD文件失败，请检查文件是否正确');
