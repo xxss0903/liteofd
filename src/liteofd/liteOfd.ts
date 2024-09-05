@@ -5,6 +5,8 @@ import * as parser from "./parser"
 import PromiseCapability from "./promiseCapability"
 import { OfdWriter } from "./ofdWriter"
 import { parseOFDFiles } from "./utils/ofdUtils"
+import { XmlData } from "./ofdData"
+import * as ofdActions from "./ofdActions"
 
 /**
 /**
@@ -101,6 +103,10 @@ export default class LiteOfd {
 			const newScale = Math.max(0.1, Math.min(scale, 5)); // 假设最小缩放为 10%，最大缩放为 500%
 			this.ofdRender.applyZoom(this.ofdRender.rootContainer, newScale);
 		}
+	}
+
+	executeAction(action: XmlData) {
+		ofdActions.executeAction(this, this.ofdDocument, action)
 	}
 
 	/**

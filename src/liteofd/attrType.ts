@@ -33,6 +33,7 @@ export const AttributeKey = {
 	Clip: "Clip", // 裁剪
 	Title: "Title", // 大纲的标题
 	PageNum: "PageNum", // 大纲的页面位置
+	Event: "Event", // 点击事件，比如大纲中的action的事件Click
 }
 
 // ofd的xml标签中的标签名tagName
@@ -96,6 +97,8 @@ export const OFD_KEY = {
 	Reference: "ofd:Reference",
 	Action: "ofd:Action",
 	OutlineElem: "ofd:OutlineElem",
+	Goto: "ofd:Goto",
+	Dest: "ofd:Dest",
 }
 
 // 包含了子节点的tag的名称，用来xml进行解析时候只有一个子节点时候的解析成数组，是可能包含多个的才加入到这里面，比如TextObject可能再content中有多个，那么就加TextObject而不是Content
@@ -121,3 +124,7 @@ export const MultiChildTagName = [
 	OFD_KEY.TemplatePage,
 	OFD_KEY.OutlineElem,
 ]
+
+export const OFD_ACTION = {
+	CLICK: "CLICK",
+}

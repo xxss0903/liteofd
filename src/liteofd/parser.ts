@@ -172,6 +172,13 @@ export const parseOFDPages = async (ofdDocument: OfdDocument, pages: XmlData) =>
 
 // 解析大纲数据
 export const parseOFDOutlines = async (ofdDocument: OfdDocument, outlinesObj: XmlData) => {
+	if(outlinesObj && outlinesObj.children.length > 0) {
+		let outlineElems = outlinesObj.children[0]
+		if(outlineElems && outlineElems.children.length > 0) {
+			ofdDocument.outlines = outlineElems
+		}
+	}
+	console.log("parseOFDOutlines", outlinesObj, ofdDocument.outlines)
 
 }
 
