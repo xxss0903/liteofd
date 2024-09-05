@@ -99,6 +99,12 @@ export const OFD_KEY = {
 	OutlineElem: "ofd:OutlineElem",
 	Goto: "ofd:Goto",
 	Dest: "ofd:Dest",
+	Bookmarks: "ofd:Bookmarks",
+	Bookmark: "ofd:Bookmark",
+	FileLoc: "ofd:FileLoc",
+	Parameters: "ofd:Parameters",
+	Parameter: "ofd:Parameter",
+	Appearance: "ofd:Appearance",
 }
 
 // 包含了子节点的tag的名称，用来xml进行解析时候只有一个子节点时候的解析成数组，是可能包含多个的才加入到这里面，比如TextObject可能再content中有多个，那么就加TextObject而不是Content
@@ -123,6 +129,8 @@ export const MultiChildTagName = [
 	OFD_KEY.Clip,
 	OFD_KEY.TemplatePage,
 	OFD_KEY.OutlineElem,
+	OFD_KEY.Parameter,
+	OFD_KEY.Annot,
 ]
 
 export const OFD_ACTION = {

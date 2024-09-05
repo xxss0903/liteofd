@@ -20,6 +20,7 @@ export class OfdDocument {
 	signatures: XmlData = new XmlData() // 签名数据，这个是signatures.xml文件的数据
 	signatureList: XmlData[] = [] // 签名数据列表，包含了signatures.xml里面所有签名组成的xmldata的数组
 	outlines: XmlData = new XmlData() // 大纲数据列表，包含了ofd:Outlines里面所有大纲数据
+	annots: XmlData = new XmlData() // 注释数据列表，包含了ofd:Annotations
 
 	constructor() {
 		this.loadedMediaFile = new Map()

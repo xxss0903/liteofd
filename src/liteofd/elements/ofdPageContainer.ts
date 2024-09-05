@@ -20,6 +20,7 @@ export class OfdPageContainer {
 	private ofdDocument: OfdDocument // ofd的文档数据
 	private pageData: XmlData // 当前页面的数据
 	private contentLayer: ContentLayer // 渲染的内容层，包含textcode和模板等
+	private annotLayer: AnnotLayer // 注释页面
 
 	/**
 	 * 初始化页面
