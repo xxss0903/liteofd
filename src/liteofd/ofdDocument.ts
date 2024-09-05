@@ -1,11 +1,12 @@
 import * as parser from "./parser"
-import { AttributeKey } from "./attrType"
+import { AttributeKey, OFD_KEY } from "./attrType"
 import { XmlData } from "./ofdData"
 
 /**
  * ofd的文档数据，解析之后的
  */
 export class OfdDocument {
+
 	files: any // ofd解析出来的所有文件，也就是zip解压缩之后的原始文件，包含了文件路径
 	data: any = null // 解析的ofd的数据，xmldata
 	pages: XmlData[] = []// ofd的页面数据
@@ -64,5 +65,44 @@ export class OfdDocument {
 
 	getMinContentID(){
 
+	}
+
+	/**
+	 * 获取内容文本
+	 * @param page 页码，如果为null，则获取全部文本
+	 * @returns 
+	 */
+	getContentText(page: number | null) {
+		if(page == null){
+			// 获取全部文本
+			return this.getAllContentText()
+		} else {
+			// 获取指定页面全部文本
+			return this.getContentTextByPageByIndex(page)
+		}
+	}
+
+	private getAllContentText(){
+		let content = ""
+		this.pages.forEach(page => {
+			content += this.getContentTextByPageByData(page)
+		})
+		return content
+	}
+
+	private getContentTextByPageByIndex(pageIndex: number){
+		let page = this.pages[pageIndex - 1]
+		return this.getContentTextByPageByData(page)
+	}
+
+	private getContentTextByPageByData(page: XmlData){
+		let content = ""
+		let textCodeList = parser.findAllNodesByTagName(page, OFD_KEY.TextCode)
+		console.log("textCodeList", textCodeList)
+		textCodeList.forEach(textCode => {
+			content += textCode.value
+		})
+
+		return content
 	}
 }

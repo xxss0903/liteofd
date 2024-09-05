@@ -78,8 +78,11 @@ export class OfdRender {
 			scroll-behavior: smooth;
 		`;
 		this.scrollContainer.appendChild(rootContainer)
-		// 渲染完之后给scrollContainer添加滚动事件
-		this.addScrollListener(this.scrollContainer)
+		// 只有当页面数量大于1时才添加滚动页面监听
+		if (this.pages.length > 1) {
+			// 渲染完之后给scrollContainer添加滚动事件
+			this.addScrollListener(this.scrollContainer);
+		}
 	}
 
 	/**
@@ -190,10 +193,18 @@ export class OfdRender {
 		this.rootContainer && this.applyZoom(this.rootContainer, 1);
 	}
 
+	/**
+	 * 获取滚动容器
+	 * @returns 
+	 */
 	public getScrollContainer(): HTMLDivElement {
 		return this.scrollContainer
 	}
 
+	/**
+	 * 添加滚动页面监听
+	 * @param rootContainer 
+	 */
 	private addScrollListener(rootContainer: HTMLDivElement): void {
 		console.log("addScrollListener", rootContainer)
 		rootContainer.setAttribute(AttributeKey.ID, "ofd-scroll-container")

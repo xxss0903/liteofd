@@ -202,6 +202,9 @@ export function searchKeyword() {
   } else {
     console.error('未找到搜索输入框');
   }
+
+  let content = liteOfd.getContentText(null)
+  console.log("get content", content)
 }
 
 export function addOfdPageChangeListener() {

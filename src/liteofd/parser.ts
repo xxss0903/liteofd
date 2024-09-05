@@ -11,6 +11,8 @@ import * as JSZipUtils from "jszip-utils"
 
 export const RootDocPath = "Doc_0"
 
+// TODO 将parser方法进行包保护，不暴露
+
 export const unzipOfd = async function (file: ArrayBuffer) {
 	try {
 		let zip = await JsZip.loadAsync(file)
@@ -167,7 +169,7 @@ export const parseOFDPages = async (ofdDocument: OfdDocument, pages: XmlData) =>
 			await parseSignatureData(ofdDocument, signList, pageID, pageData)
 			ofdPages.push(pageData)
 		}
-	
+
 	}
 	return ofdPages
 }
@@ -248,6 +250,33 @@ export const findValueByTagNameOfFirstNode = (xmlData:XmlData, tagName: string):
 	return undefined
 }
 
+
+/**
+ * 查找所有节点包含子节点的方法
+ * @param xmlData 要搜索的XML数据
+ * @param tagName 要查找的标签名
+ * @returns 包含所有匹配节点的数组
+ */
+export const findAllNodesByTagName = (xmlData: XmlData, tagName: string): XmlData[] => {
+  let result: XmlData[] = [];
+
+  // 检查当前节点
+  if (xmlData.tagName === tagName) {
+    result.push(xmlData);
+  }
+
+  // 递归搜索子节点
+  if (xmlData.children && xmlData.children.length > 0) {
+    for (let child of xmlData.children) {
+      result = result.concat(findAllNodesByTagName(child, tagName));
+    }
+  }
+
+  return result;
+}
+
+
+
 /**
  * 根据tagname查找所有的子节点
  * @param xmlData
@@ -294,7 +323,6 @@ export const findAttributeValueByKey = (xmlData:XmlData, key: string): string =>
 			}
 		}
 	}
-	return ""
 }
 
 /**

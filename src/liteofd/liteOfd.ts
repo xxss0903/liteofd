@@ -184,4 +184,14 @@ export default class LiteOfd {
 		let ofdWriter = new OfdWriter(this.ofdDocument)
 		ofdWriter.saveTo(path)
 	}
+
+	/**
+	 * 获取内容文本
+	 * @param page 页码，如果为null，则获取全部文本
+	 * @returns 
+	 */
+	getContentText(page: number | null): string {
+		let content = this.ofdDocument.getContentText(page)
+		return content
+	}
 }
