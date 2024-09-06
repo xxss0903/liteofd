@@ -1,9 +1,7 @@
-import { BaseSvg } from "./BaseSvg"
 import { XmlData } from "../ofdData"
 import * as parser from "../parser"
 import { ANNOT_TYPE, AttributeKey, OFD_KEY } from "../attrType"
-import { calPathPoint, convertPathAbbreviatedDatatoPoint, convertToBox, convertToDpi } from "../utils/utils"
-import { getCTM, parseColor } from "../utils/elementUtils"
+import { convertToBox } from "../utils/utils"
 import { OfdDocument } from "../ofdDocument"
 import { PathSvg } from "./PathSvg"
 
@@ -25,7 +23,7 @@ export class AnnotationPathSvg {
 		width: number,
 		height: number,
 	} =  { x: 0, y: 0, width: 0, height: 0 }
-	private zIndex = 0 // 根据不同的子类型需要设置不同的zIndex
+	private zIndex = 1 // 根据不同的子类型需要设置不同的zIndex
 
 	// 初始化传入xmldata构建一个path的数据
 	constructor(ofdDocument: OfdDocument, nodeData: XmlData) {
@@ -52,10 +50,10 @@ export class AnnotationPathSvg {
 			this.zIndex = 1; // 在文本层的index上面
 			break;
 			case ANNOT_TYPE.Path.subType.Squiggly:
-			this.zIndex = -1; // 在文本下面
+			this.zIndex = 1; // 在文本下面
 			break;
 			default:
-			this.zIndex = 0; // 默认值
+			this.zIndex = 1; // 默认值
 		}
 	}
 

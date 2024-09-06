@@ -42,8 +42,129 @@ const millimetersToPixel = function (mm: number, dpi: number) {
 	return ((mm * dpi / 25.4));
 }
 
-
 export const convertPathAbbreviatedDatatoPoint = (abbreviatedData: string) => {
+	let array = abbreviatedData.split(' ');
+	let pointList = [];
+	let i = 0;
+	while (i < array.length) {
+	  let command = array[i];
+	  switch (command) {
+		case 'M':
+		case 'm':
+		case 'L':
+		case 'l':
+		  pointList.push({
+			'type': command,
+			'x': parseFloat(array[i + 1]),
+			'y': parseFloat(array[i + 2])
+		  });
+		  i += 3;
+		  break;
+		case 'H':
+		case 'h':
+		  pointList.push({
+			'type': command,
+			'x': parseFloat(array[i + 1])
+		  });
+		  i += 2;
+		  break;
+		case 'V':
+		case 'v':
+		  pointList.push({
+			'type': command,
+			'y': parseFloat(array[i + 1])
+		  });
+		  i += 2;
+		  break;
+		case 'C':
+		case 'c':
+		  pointList.push({
+			'type': command,
+			'x1': parseFloat(array[i + 1]),
+			'y1': parseFloat(array[i + 2]),
+			'x2': parseFloat(array[i + 3]),
+			'y2': parseFloat(array[i + 4]),
+			'x': parseFloat(array[i + 5]),
+			'y': parseFloat(array[i + 6])
+		  });
+		  i += 7;
+		  break;
+		case 'S':
+		case 's':
+		  pointList.push({
+			'type': command,
+			'x2': parseFloat(array[i + 1]),
+			'y2': parseFloat(array[i + 2]),
+			'x': parseFloat(array[i + 3]),
+			'y': parseFloat(array[i + 4])
+		  });
+		  i += 5;
+		  break;
+		case 'Q':
+		case 'q':
+			debugger
+		  pointList.push({
+			'type': command,
+			'x1': parseFloat(array[i + 1]),
+			'y1': parseFloat(array[i + 2]),
+			'x': parseFloat(array[i + 3]),
+			'y': parseFloat(array[i + 4])
+		  });
+		  i += 5;
+		  break;
+		case 'T':
+		case 't':
+		  pointList.push({
+			'type': command,
+			'x': parseFloat(array[i + 1]),
+			'y': parseFloat(array[i + 2])
+		  });
+		  i += 3;
+		  break;
+		case 'A':
+		case 'a':
+		  pointList.push({
+			'type': command,
+			'rx': parseFloat(array[i + 1]),
+			'ry': parseFloat(array[i + 2]),
+			'xAxisRotation': parseFloat(array[i + 3]),
+			'largeArcFlag': parseInt(array[i + 4]),
+			'sweepFlag': parseInt(array[i + 5]),
+			'x': parseFloat(array[i + 6]),
+			'y': parseFloat(array[i + 7])
+		  });
+		  i += 8;
+		  break;
+		case 'B': // 贝塞尔曲线
+		  pointList.push({
+			'type': command,
+			'x1': parseFloat(array[i + 1]),
+			'y1': parseFloat(array[i + 2]),
+			'x2': parseFloat(array[i + 3]),
+			'y2': parseFloat(array[i + 4]),
+			'x3': parseFloat(array[i + 5]),
+			'y3': parseFloat(array[i + 6])
+		  });
+		  i += 7;
+		  break;
+		case 'Z':
+		case 'z':
+		  pointList.push({
+			'type': command
+		  });
+		  i++;
+		  break;
+		default:
+		  // 如果遇到未知命令，跳过
+		  i++;
+		  break;
+	  }
+	}
+	return pointList;
+  }
+
+
+export const convertPathAbbreviatedDatatoPoint2 = (abbreviatedData: string) => {
 	let array = abbreviatedData.split(' ');
 	let pointList = [];
 	let i = 0;
@@ -93,6 +214,147 @@ export const convertPathAbbreviatedDatatoPoint = (abbreviatedData: string) => {
 }
 
 export const calPathPoint = function (abbreviatedPoint: any) {
+	let pointList = [];
+	let currentX = 0, currentY = 0;
+  
+	for (let i = 0; i < abbreviatedPoint.length; i++) {
+	  let point = abbreviatedPoint[i];
+	  switch (point.type) {
+		case 'M':
+		case 'L':
+		  point.x = convertToDpi(point.x);
+		  point.y = convertToDpi(point.y);
+		  currentX = point.x;
+		  currentY = point.y;
+		  pointList.push(point);
+		  break;
+		case 'm':
+		case 'l':
+		  point.x = convertToDpi(point.x) + currentX;
+		  point.y = convertToDpi(point.y) + currentY;
+		  currentX = point.x;
+		  currentY = point.y;
+		  pointList.push(point);
+		  break;
+		case 'H':
+		  point.x = convertToDpi(point.x);
+		  point.y = currentY;
+		  currentX = point.x;
+		  pointList.push(point);
+		  break;
+		case 'h':
+		  point.x = convertToDpi(point.x) + currentX;
+		  point.y = currentY;
+		  currentX = point.x;
+		  pointList.push(point);
+		  break;
+		case 'V':
+		  point.x = currentX;
+		  point.y = convertToDpi(point.y);
+		  currentY = point.y;
+		  pointList.push(point);
+		  break;
+		case 'v':
+		  point.x = currentX;
+		  point.y = convertToDpi(point.y) + currentY;
+		  currentY = point.y;
+		  pointList.push(point);
+		  break;
+		case 'C':
+		  point.x1 = convertToDpi(point.x1);
+		  point.y1 = convertToDpi(point.y1);
+		  point.x2 = convertToDpi(point.x2);
+		  point.y2 = convertToDpi(point.y2);
+		  point.x = convertToDpi(point.x);
+		  point.y = convertToDpi(point.y);
+		  currentX = point.x;
+		  currentY = point.y;
+		  pointList.push(point);
+		  break;
+		case 'c':
+		  point.x1 = convertToDpi(point.x1) + currentX;
+		  point.y1 = convertToDpi(point.y1) + currentY;
+		  point.x2 = convertToDpi(point.x2) + currentX;
+		  point.y2 = convertToDpi(point.y2) + currentY;
+		  point.x = convertToDpi(point.x) + currentX;
+		  point.y = convertToDpi(point.y) + currentY;
+		  currentX = point.x;
+		  currentY = point.y;
+		  pointList.push(point);
+		  break;
+		case 'S':
+		case 'Q':
+		  point.x1 = convertToDpi(point.x1);
+		  point.y1 = convertToDpi(point.y1);
+		  point.x = convertToDpi(point.x);
+		  point.y = convertToDpi(point.y);
+		  currentX = point.x;
+		  currentY = point.y;
+		  pointList.push(point);
+		  break;
+		case 's':
+		case 'q':
+		  point.x1 = convertToDpi(point.x1) + currentX;
+		  point.y1 = convertToDpi(point.y1) + currentY;
+		  point.x = convertToDpi(point.x) + currentX;
+		  point.y = convertToDpi(point.y) + currentY;
+		  currentX = point.x;
+		  currentY = point.y;
+		  pointList.push(point);
+		  break;
+		case 'T':
+		  point.x = convertToDpi(point.x);
+		  point.y = convertToDpi(point.y);
+		  currentX = point.x;
+		  currentY = point.y;
+		  pointList.push(point);
+		  break;
+		case 't':
+		  point.x = convertToDpi(point.x) + currentX;
+		  point.y = convertToDpi(point.y) + currentY;
+		  currentX = point.x;
+		  currentY = point.y;
+		  pointList.push(point);
+		  break;
+		case 'A':
+		  point.rx = convertToDpi(point.rx);
+		  point.ry = convertToDpi(point.ry);
+		  point.x = convertToDpi(point.x);
+		  point.y = convertToDpi(point.y);
+		  currentX = point.x;
+		  currentY = point.y;
+		  pointList.push(point);
+		  break;
+		case 'a':
+		  point.rx = convertToDpi(point.rx);
+		  point.ry = convertToDpi(point.ry);
+		  point.x = convertToDpi(point.x) + currentX;
+		  point.y = convertToDpi(point.y) + currentY;
+		  currentX = point.x;
+		  currentY = point.y;
+		  pointList.push(point);
+		  break;
+		case 'B':
+		  point.x1 = convertToDpi(point.x1);
+		  point.y1 = convertToDpi(point.y1);
+		  point.x2 = convertToDpi(point.x2);
+		  point.y2 = convertToDpi(point.y2);
+		  point.x3 = convertToDpi(point.x3);
+		  point.y3 = convertToDpi(point.y3);
+		  currentX = point.x3;
+		  currentY = point.y3;
+		  pointList.push(point);
+		  break;
+		case 'Z':
+		case 'z':
+		  pointList.push(point);
+		  break;
+	  }
+	}
+	return pointList;
+  }
+
+export const calPathPoint2 = function (abbreviatedPoint: any) {
 	let pointList = [];
 
 	for (let i = 0; i < abbreviatedPoint.length; i++) {

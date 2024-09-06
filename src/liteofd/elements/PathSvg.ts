@@ -57,23 +57,76 @@ export class PathSvg extends BaseSvg {
 			return
 		}
 		// 查找node的ID属性值
-		const pathId = parser.findAttributeValueByKey(node, AttributeKey.ID);
-		if (pathId === "1299" || pathId === "1435") {
-			debugger
-		}
 		const points = calPathPoint(convertPathAbbreviatedDatatoPoint(abbreviatedData.value))
 		// path的路径
 		let pathD = ""
 		for (const point of points) {
-			if (point.type === 'M') {
-				pathD += `M${point.x} ${point.y} `
-			} else if (point.type === 'L') {
-				pathD += `L${point.x} ${point.y} `
-			} else if (point.type === 'B') {
-				pathD += `C${point.x1} ${point.y1} ${point.x2} ${point.y2} ${point.x3} ${point.y3} `
-			} else if (point.type === 'C') {
-				pathD += `Z`
-			}
+			switch (point.type) {
+				case 'B':
+					pathD += `C${point.x1} ${point.y1} ${point.x2} ${point.y2} ${point.x3} ${point.y3} `
+					break
+				case 'C':
+					pathD += `Z`
+					break
+				case 'M': // 移动到
+				  pathD += `M${point.x} ${point.y} `
+				  break
+				case 'm': // 相对移动
+				  pathD += `m${point.dx} ${point.dy} `
+				  break
+				case 'L': // 画线到
+				  pathD += `L${point.x} ${point.y} `
+				  break
+				case 'l': // 相对画线
+				  pathD += `l${point.dx} ${point.dy} `
+				  break
+				case 'H': // 水平线到
+				  pathD += `H${point.x} `
+				  break
+				case 'h': // 相对水平线
+				  pathD += `h${point.dx} `
+				  break
+				case 'V': // 垂直线到
+				  pathD += `V${point.y} `
+				  break
+				case 'v': // 相对垂直线
+				  pathD += `v${point.dy} `
+				  break
+				case 'C': // 三次贝塞尔曲线
+				  pathD += `C${point.x1} ${point.y1} ${point.x2} ${point.y2} ${point.x} ${point.y} `
+				  break
+				case 'c': // 相对三次贝塞尔曲线
+				  pathD += `c${point.dx1} ${point.dy1} ${point.dx2} ${point.dy2} ${point.dx} ${point.dy} `
+				  break
+				case 'S': // 平滑三次贝塞尔曲线
+				  pathD += `S${point.x2} ${point.y2} ${point.x} ${point.y} `
+				  break
+				case 's': // 相对平滑三次贝塞尔曲线
+				  pathD += `s${point.dx2} ${point.dy2} ${point.dx} ${point.dy} `
+				  break
+				case 'Q': // 二次贝塞尔曲线
+				  pathD += `Q${point.x1} ${point.y1} ${point.x} ${point.y} `
+				  break
+				case 'q': // 相对二次贝塞尔曲线
+				  pathD += `q${point.dx1} ${point.dy1} ${point.dx} ${point.dy} `
+				  break
+				case 'T': // 平滑二次贝塞尔曲线
+				  pathD += `T${point.x} ${point.y} `
+				  break
+				case 't': // 相对平滑二次贝塞尔曲线
+				  pathD += `t${point.dx} ${point.dy} `
+				  break
+				case 'A': // 椭圆弧
+				  pathD += `A${point.rx} ${point.ry} ${point.xAxisRotation} ${point.largeArcFlag} ${point.sweepFlag} ${point.x} ${point.y} `
+				  break
+				case 'a': // 相对椭圆弧
+				  pathD += `a${point.rx} ${point.ry} ${point.xAxisRotation} ${point.largeArcFlag} ${point.sweepFlag} ${point.dx} ${point.dy} `
+				  break
+				case 'Z': // 闭合路径
+				case 'z':
+				  pathD += `Z`
+				  break
+			  }
 		}
 		pathSvg.setAttribute('d', pathD)
 	}
