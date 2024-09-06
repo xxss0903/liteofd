@@ -222,6 +222,57 @@ export const parseColor = function (color: string) {
 	}
 }
 
+
+export const parseColorToHex = function (color: string, alpha: number | undefined) {
+	if (color) {
+		if(alpha || alpha === 0){
+			if (color.indexOf('#') !== -1) {
+				color = color.replace(/#/g, '');
+				color = color.replace(/ /g, '');
+				color = '#' + color.toString();
+				return color;
+			}
+			let array = color.split(' ');
+			let hexColor = rgbToHexWithAlpha(
+				parseInt(array[0]),
+				parseInt(array[1]),
+				parseInt(array[2]),
+				alpha
+			);
+			return hexColor
+		} else {
+			return (parseColor)
+		}
+	} else {
+		return `rgb(0, 0, 0)`
+	}
+}
+
+/**
+ * 将RGB颜色转换为带alpha的16进制颜色值
+ * @param r 红色分量 (0-255)
+ * @param g 绿色分量 (0-255)
+ * @param b 蓝色分量 (0-255)
+ * @param alpha 透明度 (0-255)
+ * @returns 带alpha的16进制颜色值
+ */
+export const rgbToHexWithAlpha = (r: number, g: number, b: number, alpha: number): string => {
+	// 确保输入值在有效范围内
+	r = Math.max(0, Math.min(255, r));
+	g = Math.max(0, Math.min(255, g));
+	b = Math.max(0, Math.min(255, b));
+	alpha = Math.max(0, Math.min(255, alpha));
+	
+	// 转换为16进制并补零
+	const hexR = r.toString(16).padStart(2, '0');
+	const hexG = g.toString(16).padStart(2, '0');
+	const hexB = b.toString(16).padStart(2, '0');
+	const hexAlpha = alpha.toString(16).padStart(2, '0');
+	
+	// 返回带alpha的16进制颜色值
+	return `#${hexR}${hexG}${hexB}${hexAlpha}`;
+}
+
 /**
  * 根据节点的属性值来查找到对应的节点
  */

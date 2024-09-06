@@ -61,8 +61,8 @@ export class AnnotationPathSvg {
 			let pathObjectData = parser.findValueByTagName(this.appearanceData, OFD_KEY.PathObject)
 			if(pathObjectData && pathObjectData.children.length > 0){
 				pathObjectData.children.forEach(child => {
-					let childPath = new PathSvg(this.ofdDocument, child)
-					let childSvg = childPath.createContainerSvg()
+					let childPath = new PathSvg(this.ofdDocument, child, false)
+					let childSvg = childPath.getContainerSvg()
 					pathContainer.appendChild(childSvg)
 				})
 			}

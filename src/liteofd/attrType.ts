@@ -11,6 +11,7 @@ export const AttributeKey = {
 	Stroke: "Stroke", // 线条
 	Fill: "Fill", // 填充
 	Value: "Value",
+	Alpha: "Alpha", // 颜色透明度
 	ColorSpace: "ColorSpace",
 	DrawParam: "DrawParam",
 	Cap: "Cap",

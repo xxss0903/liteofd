@@ -3,7 +3,7 @@ import { XmlData } from "../ofdData"
 import * as parser from "../parser"
 import { AttributeKey, OFD_KEY } from "../attrType"
 import { calPathPoint, convertPathAbbreviatedDatatoPoint, convertToBox, convertToDpi } from "../utils/utils"
-import { getCTM, parseColor } from "../utils/elementUtils"
+import { getCTM, parseColor, parseColorToHex } from "../utils/elementUtils"
 import { OfdDocument } from "../ofdDocument"
 
 export class PathSvg extends BaseSvg {
@@ -21,13 +21,18 @@ export class PathSvg extends BaseSvg {
 	private svgDefs: SVGElement =document.createElementNS('http://www.w3.org/2000/svg', 'defs')// 引用的svg
 	private pathId = "" // 路径的id
 	private ofdDocument: OfdDocument
+	private showDefaultStrokeColor = true // 默认显示stroke的颜色为黑色
 
 	// 初始化传入xmldata构建一个path的数据
-	constructor(ofdDocument: OfdDocument, nodeData: XmlData) {
+	constructor(ofdDocument: OfdDocument, nodeData: XmlData, showDefaultStrokeColor = true) {
 		super()
 		this.ofdDocument = ofdDocument
 		this.nodeData = nodeData
 		this.pathId = parser.findAttributeValueByKey(nodeData, AttributeKey.ID)
+		this.showDefaultStrokeColor = showDefaultStrokeColor
+		if(this.pathId === "1321"){
+			debugger
+		}
 		this.svgContainer = this.createContainerSvg()
 		this.svgContainer.setAttribute("style", this.svgContainerStyle)
 	}
@@ -84,14 +89,16 @@ export class PathSvg extends BaseSvg {
 		let fillColorObj = parser.findValueByTagName(nodeData, OFD_KEY.FillColor)
 		let fillColorBoolean = parser.findAttributeValueByKey(nodeData, AttributeKey.Fill)
 		let fillColorStr = fillColorObj && parser.findAttributeValueByKey(fillColorObj, AttributeKey.Value)
+		let colorAlpha = fillColorObj && parseInt(parser.findAttributeValueByKey(fillColorObj, AttributeKey.Alpha)) || 255
+	
 		if (fillColorBoolean) {
-			if (fillColorObj) {
-				let fillColorValue = parseColor(fillColorStr)
+			if (fillColorObj && fillColorStr) {
+				let fillColorValue = parseColorToHex(fillColorStr, colorAlpha)
 				pathStyle += `fill: ${fillColorValue};`
 			}
 		} else {
 			if (fillColorStr) {
-				let fillColorValue = parseColor(fillColorStr)
+				let fillColorValue = parseColorToHex(fillColorStr, colorAlpha)
 				pathStyle += `fill: ${fillColorValue};`
 			}
 		}
@@ -136,7 +143,7 @@ export class PathSvg extends BaseSvg {
 			if (strokeColorStr) {
 				let fillColorValue = parseColor(strokeColorStr)
 				pathStyle += `stroke: ${fillColorValue};`
-			} else {
+			} else if(this.showDefaultStrokeColor){
 				pathStyle = `stroke: rgb(0, 0, 0);`
 			}
 		}
