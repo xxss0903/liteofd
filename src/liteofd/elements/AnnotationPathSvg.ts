@@ -1,7 +1,7 @@
 import { BaseSvg } from "./BaseSvg"
 import { XmlData } from "../ofdData"
 import * as parser from "../parser"
-import { AttributeKey, OFD_KEY } from "../attrType"
+import { ANNOT_TYPE, AttributeKey, OFD_KEY } from "../attrType"
 import { calPathPoint, convertPathAbbreviatedDatatoPoint, convertToBox, convertToDpi } from "../utils/utils"
 import { getCTM, parseColor } from "../utils/elementUtils"
 import { OfdDocument } from "../ofdDocument"
@@ -25,6 +25,7 @@ export class AnnotationPathSvg {
 		width: number,
 		height: number,
 	} =  { x: 0, y: 0, width: 0, height: 0 }
+	private zIndex = 0 // 根据不同的子类型需要设置不同的zIndex
 
 	// 初始化传入xmldata构建一个path的数据
 	constructor(ofdDocument: OfdDocument, nodeData: XmlData) {
@@ -36,6 +37,26 @@ export class AnnotationPathSvg {
 
 		this.pathContainer = this.createContainerSvg()
 		this.pathContainer.setAttribute("style", this.pathContainerStyle)
+	}
+
+
+	#setZIndexBySubtype(){
+		let subType = parser.findAttributeValueByKey(this.nodeData, AttributeKey.Subtype)
+		  switch (subType) {
+			case ANNOT_TYPE.Path.subType.Watercolor:
+			case ANNOT_TYPE.Path.subType.Fluorescent:
+			case ANNOT_TYPE.Path.subType.Pen:
+			this.zIndex = 9999; // 在文本层上面
+			break;
+			case ANNOT_TYPE.Path.subType.Strikeout:
+			this.zIndex = 1; // 在文本层的index上面
+			break;
+			case ANNOT_TYPE.Path.subType.Squiggly:
+			this.zIndex = -1; // 在文本下面
+			break;
+			default:
+			this.zIndex = 0; // 默认值
+		}
 	}
 
 	/**
@@ -54,11 +75,15 @@ export class AnnotationPathSvg {
 	createContainerSvg(): HTMLDivElement {
 		let pathContainer = document.createElement("div")
 
+		// 根据subtype设置zindex类型
+		this.#setZIndexBySubtype()
+
 		this.#addSvgIDAndZIndex(this.nodeData, pathContainer)
 		this.appearanceData && this.#addBoundary(this.appearanceData)
 		// 添加外层的boundary
 		if(this.appearanceData){
 			let pathObjectData = parser.findValueByTagName(this.appearanceData, OFD_KEY.PathObject)
+			console.log("pathObjectData list render", pathObjectData)
 			if(pathObjectData && pathObjectData.children.length > 0){
 				pathObjectData.children.forEach(child => {
 					let childPath = new PathSvg(this.ofdDocument, child, false)
@@ -80,7 +105,7 @@ export class AnnotationPathSvg {
 		let svgID = parser.findAttributeValueByKey(nodeData, AttributeKey.ID)
 		if (svgID) {
 			container.setAttribute("SVG_ID", svgID)
-			this.pathContainerStyle += `z-index: ${svgID};`
+			this.pathContainerStyle += `z-index: ${this.zIndex};`
 		}
 
 	}

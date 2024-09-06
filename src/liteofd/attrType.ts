@@ -37,6 +37,7 @@ export const AttributeKey = {
 	Event: "Event", // 点击事件，比如大纲中的action的事件Click
 	PageID: "PageID", // 
 	Type: "Type", // 
+	Subtype: "Subtype", // 注释的子类型
 }
 
 // ofd的xml标签中的标签名tagName
@@ -151,11 +152,11 @@ export const ANNOT_TYPE = {
 	Path: {
 		value: "Path",
 		subType: {
-			Watercolor: "Watercolor", // 
-			Fluorescent: "Fluorescent", // 
-			Pen: "Pen", // 笔触
-			Strikeout: "Strikeout", // 
-			Squiggly: "Squiggly", // 
+			Watercolor: "Watercolor", // 水印，需要在文本层上面
+			Fluorescent: "Fluorescent", // 荧光笔，在文本层上面 
+			Pen: "Pen", // 笔触，在文本层上面
+			Strikeout: "Strikeout", // 删除线，要在文本层的index上面
+			Squiggly: "Squiggly", // 下划线的弯弯曲曲类型，放在文本底部的，要在文本下面把
 		}
 	}, 
 	

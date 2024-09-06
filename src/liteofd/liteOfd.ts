@@ -38,7 +38,7 @@ export default class LiteOfd {
 		this.ofdRender = new OfdRender(this.ofdDocument)
 		// 创建外层容器div
 		const containerDiv = document.createElement('div');
-		let pageWrapStyle = "background-color: #ffffff; margin-bottom: 12px;"
+		let pageWrapStyle = "background-color: #ffffff; margin-bottom: 44px;"
 		return this.renderOfdWithCustomDiv(containerDiv, pageWrapStyle)
 	}
 

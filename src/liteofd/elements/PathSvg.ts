@@ -30,7 +30,7 @@ export class PathSvg extends BaseSvg {
 		this.nodeData = nodeData
 		this.pathId = parser.findAttributeValueByKey(nodeData, AttributeKey.ID)
 		this.showDefaultStrokeColor = showDefaultStrokeColor
-		if(this.pathId === "1321"){
+		if(this.pathId === "1332"){
 			debugger
 		}
 		this.svgContainer = this.createContainerSvg()

@@ -86,6 +86,7 @@ export class OfdAnnotationElement {
 
 	private renderHightLightAnnot(annotNode: XmlData) {
 		// 实现高亮注释的渲染逻辑
-		console.log('渲染高亮注释');
+		let pathSvg = new AnnotationPathSvg(this.ofdDocument, annotNode)
+		this.viewContainer.appendChild(pathSvg.getContainerSvg())
 	}
 }
