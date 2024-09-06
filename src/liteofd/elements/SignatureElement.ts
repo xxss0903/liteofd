@@ -23,7 +23,7 @@ export class SignatureElement {
 		width: number,
 		height: number,
 	}
-	private signZIndex = 9999 // 最高的
+	private signZIndex = 9998 // 最高的
 	private mediaNodeList: XmlData[] // 多媒体节点的数组
 	private sealObject: any // 签名数据
 

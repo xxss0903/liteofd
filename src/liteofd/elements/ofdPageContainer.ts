@@ -11,6 +11,7 @@ import { ContentLayer } from "../contentLayer"
 import { getNodeAttributeMaxAndMinID } from "../utils/elementUtils"
 import { RootDocPath } from "../parser"
 import { SignatureElement } from "../elements/SignatureElement"
+import { OfdAnnotationElement } from "./ofdAnnotationElement"
 
 /**
  * OFD的页面渲染容器，里面有一个pageRender用来调用页面的渲染功能进行 内容的渲染
@@ -20,7 +21,6 @@ export class OfdPageContainer {
 	private ofdDocument: OfdDocument // ofd的文档数据
 	private pageData: XmlData // 当前页面的数据
 	private contentLayer: ContentLayer // 渲染的内容层，包含textcode和模板等
-	private annotLayer: AnnotLayer // 注释页面
 
 	/**
 	 * 初始化页面
@@ -132,6 +132,8 @@ export class OfdPageContainer {
 		this.#renderTemplateLayer(pageData, pageContainer)
 		// 需要用page外层的signlist数据
 		this.#renderSignatures(pageData, pageContainer)
+		// 渲染注释层
+		this.#renderAnnotLayer(pageData, pageContainer)
 	}
 
 	/**
@@ -169,6 +171,18 @@ export class OfdPageContainer {
 				let sign = signList[i] // 单个签名的数据
 				this.#renderSingleStampAnot(sign, pageContainer)
 			}
+		}
+	}
+
+	// 渲染注释层
+	#renderAnnotLayer(pageData: XmlData, pageContainer: HTMLDivElement) {
+		if (pageData.annots) {
+			console.log("render annot layer", pageData)
+			const annotationElement = new OfdAnnotationElement(this.ofdDocument, pageData, pageContainer);
+			// 注释层通常应该放在最上层
+			annotationElement.render()
+		} else {
+			console.log("该页面没有注释数据");
 		}
 	}
 }

@@ -34,6 +34,8 @@ export const AttributeKey = {
 	Title: "Title", // 大纲的标题
 	PageNum: "PageNum", // 大纲的页面位置
 	Event: "Event", // 点击事件，比如大纲中的action的事件Click
+	PageID: "PageID", // 
+	Type: "Type", // 
 }
 
 // ofd的xml标签中的标签名tagName
@@ -135,4 +137,25 @@ export const MultiChildTagName = [
 
 export const OFD_ACTION = {
 	CLICK: "CLICK",
+}
+
+export const ANNOT_TYPE = {
+	Highlight: {
+		value: "Highlight",
+		subType: {
+			Underline: "Underline",
+			Highlight: "Highlight",
+		}
+	}, // 高亮注释
+	Path: {
+		value: "Path",
+		subType: {
+			Watercolor: "Watercolor", // 
+			Fluorescent: "Fluorescent", // 
+			Pen: "Pen", // 笔触
+			Strikeout: "Strikeout", // 
+			Squiggly: "Squiggly", // 
+		}
+	}, 
+	
 }

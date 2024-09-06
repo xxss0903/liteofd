@@ -69,6 +69,10 @@ export const parseOFDFiles = async (zipData: any) => {
 	}
 
 	if(documentData) {
+		// 解析pages页面数据
+		let pagesObj = parser.findValueByTagName(documentData, OFD_KEY.Pages)
+		pagesObj && (ofdDocument.pages = await parser.parseOFDPages(ofdDocument, pagesObj))
+
 		// 解析OFD的documentres文件
 		let documentResObj = parser.findValueByTagName(documentData, OFD_KEY.DocumentRes)
 		if (documentResObj) {
@@ -93,14 +97,19 @@ export const parseOFDFiles = async (zipData: any) => {
 			}
 		}
 
-		// 解析pages页面数据
-		let pagesObj = parser.findValueByTagName(documentData, OFD_KEY.Pages)
-		pagesObj && (ofdDocument.pages = await parser.parseOFDPages(ofdDocument, pagesObj))
-
 		// 解析大纲数据
 		let outlinesObj = parser.findValueByTagName(documentData, OFD_KEY.Outlines)
 		if(outlinesObj) {
 			await parser.parseOFDOutlines(ofdDocument, outlinesObj)
+		}
+
+		// 解析注释数据，需要在解析pages之后获取
+		let annotationsObj = parser.findValueByTagName(documentData, OFD_KEY.Annotations)
+		if (annotationsObj) {
+			let annotePath = `${RootDocPath}/${annotationsObj.value}`
+			let annoteRes = await parser.parseXmlByFileName(ofdFiles, annotePath)
+			ofdDocument.annots = annoteRes
+			await loadAnnots(ofdFiles, ofdDocument, annoteRes)			
 		}
 	}
 
@@ -144,3 +153,44 @@ export const parseOFDSignatures = async (ofdDocument: OfdDocument, ofdData: XmlD
 		}
 	}
 }
+
+
+/**
+ * 解析注释数据
+ * @param ofdDocument 
+ * @param annoteRes 
+ */
+const loadAnnots = async (ofdFiles: any, ofdDocument: OfdDocument, annoteRes: XmlData) => {
+	console.log("annoteRes", annoteRes, ofdDocument.pages)
+	let pageObj = parser.findValueByTagName(annoteRes, OFD_KEY.Page)
+	let annotDir = annoteRes.fileName.substring(0, annoteRes.fileName.lastIndexOf("/"))
+	console.log("annot page ", pageObj)
+	if(pageObj && pageObj.children.length > 0) {
+		for(let i = 0; i < pageObj.children.length; i++) {
+			let pageAnnotObj = pageObj.children[i]
+			console.log("page annotObj", pageAnnotObj)
+			let annotPageId = parser.findAttributeValueByKey(pageAnnotObj, AttributeKey.PageID)
+			console.log("pageId", annotPageId)
+			let fileLocObj = parser.findValueByTagName(pageAnnotObj, OFD_KEY.FileLoc)
+			console.log("fileLocObj location", fileLocObj)
+			if(fileLocObj) {
+				let annotFilePath = fileLocObj.value
+				if(!annotFilePath.startsWith(annotDir)) {
+					annotFilePath = `${annotDir}/${annotFilePath}`
+				}
+				console.log("annotFilePath", annotFilePath, annotPageId)
+				let annotPageObj = await parser.parseXmlByFileName(ofdFiles, annotFilePath)
+				// 将带有注释的page数据添加到ofdDocument对应的page页面数据中
+				for(let j = 0; j < ofdDocument.pages.length; j++) {
+					let pageId = ofdDocument.pages[j].id
+					if(pageId == annotPageId) {
+						ofdDocument.pages[j].annots = annotPageObj
+						console.log("load annotPageObj data", ofdDocument.pages[j])
+					}
+				}
+			}
+		}
+	}
+
+}
+

@@ -361,24 +361,23 @@ export const parseOFDFile = (file: string | File | ArrayBuffer): PromiseCapabili
 	}
 }
 
-	  /**
+/**
 	   * 解析OFD文件二进制数据
 	   * @param file
 	   * @param promiseCap
 	   */
-	  export const  parseFileByArrayBuffer = async(file: File | ArrayBuffer, promiseCap: PromiseCapability<OfdDocument>) => {
+export const  parseFileByArrayBuffer = async(file: File | ArrayBuffer, promiseCap: PromiseCapability<OfdDocument>) => {
 		console.log("parseFileByArrayBuffer", file)
 		const data = file instanceof File ? await file.arrayBuffer() : file
 		const ofdDoc = await processOfdData(data)
 		promiseCap.resolve(ofdDoc)
-	  }
-
-	  /**
+}
+/**
 	   * 解析OFD文件路径
 	   * @param file
 	   * @param promiseCap
 	   */
-	  const parseFileByPath = (file: string, promiseCap: PromiseCapability<OfdDocument>) => {
+const parseFileByPath = (file: string, promiseCap: PromiseCapability<OfdDocument>) => {
 		console.log("parseFileByPath", file)
 		JSZipUtils.getBinaryContent(file, async (err: any, data: any) => {
 		  if (err) {
@@ -392,14 +391,13 @@ export const parseOFDFile = (file: string | File | ArrayBuffer): PromiseCapabili
 			}
 		  }
 		})
-	  }
-
-	  /**
+}
+/**
 	   * 处理OFD数据
 	   * @param data ofd文件的二进制数据
 	   * @returns
 	   */
-	  const  processOfdData = async (data: ArrayBuffer): Promise<OfdDocument> => {
+const  processOfdData = async (data: ArrayBuffer): Promise<OfdDocument> => {
 		try {
 			const zipData = await unzipOfd(data)
 			const ofdDoc = await parseOFDFiles(zipData)
@@ -408,4 +406,38 @@ export const parseOFDFile = (file: string | File | ArrayBuffer): PromiseCapabili
 			console.log("processOfdData err", e)
 			throw e
 		}
-	  }
+}
+
+// /**
+//  * 解析OFD文件中的注释数据
+//  * @param ofdDocument document.xml的数据
+//  * @param ofdFiles 所有OFD文件
+//  * @returns 解析后的注释数据
+//  */
+// export const parseAnnotations = async (ofdDocument: OfdDocument, annotData: XmlData): Promise<XmlData> => {
+//   try {
+// 	// 注释的文件路径
+// 	let annotsPath = annotData.value
+// 	let files = ofdDocument.files
+	
+
+//     const annotationsFilePath = findAttributeValueByKey(annotations, AttributeKey.FileLoc)
+//     if (!annotationsFilePath) {
+//       return new XmlData()
+//     }
+
+//     const fullPath = `${RootDocPath}/${annotationsFilePath}`
+//     const annotationsFileData = await parseXmlByFileName(ofdFiles, fullPath)
+
+//     if (!(anno tationsFileData instanceof XmlData)) {
+//       console.error("解析注释文件失败")
+//       return new XmlData()
+//     }
+
+//     return annotationsFileData
+//   } catch (e) {
+//     console.error("解析注释数据时出错", e)
+//     return new XmlData()
+//   }
+// }
+
