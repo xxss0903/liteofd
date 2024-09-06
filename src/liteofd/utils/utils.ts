@@ -102,7 +102,6 @@ export const convertPathAbbreviatedDatatoPoint = (abbreviatedData: string) => {
 		  break;
 		case 'Q':
 		case 'q':
-			debugger
 		  pointList.push({
 			'type': command,
 			'x1': parseFloat(array[i + 1]),

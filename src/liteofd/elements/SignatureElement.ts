@@ -4,7 +4,6 @@ import { AttributeKey, OFD_KEY } from "../attrType"
 import { convertToBox, convertToDpi } from "../utils/utils"
 import { OfdDocument } from "../ofdDocument"
 import PromiseCapability from "../promiseCapability"
-import { getOFDFilePath } from "../utils/elementUtils"
 import { OfdRender } from "../ofdRender"
 
 /**
@@ -77,7 +76,6 @@ export class SignatureElement {
 	#addBoundary(node: XmlData) {
 		// 每个对应的是一个数组
 		let stampAnnotList = parser.findValueByTagName(node, OFD_KEY.StampAnnot)
-		debugger
 		for (let i = 0; i < stampAnnotList.children.length; i++) {
 			let tempData = stampAnnotList.children[i]
 			let pageRefId = parser.findAttributeValueByKey(tempData, AttributeKey.PageRef)

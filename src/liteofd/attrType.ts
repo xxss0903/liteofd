@@ -159,5 +159,12 @@ export const ANNOT_TYPE = {
 			Squiggly: "Squiggly", // 下划线的弯弯曲曲类型，放在文本底部的，要在文本下面把
 		}
 	}, 
+	Stamp: {
+		value: "Stamp",
+		subType: {
+			Stamp: "Stamp", // 印章
+			SignatureInFile: "SignatureInFile", // 印章
+		}
+	}
 	
 }

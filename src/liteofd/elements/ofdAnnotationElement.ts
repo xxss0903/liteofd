@@ -70,11 +70,30 @@ export class OfdAnnotationElement {
 			case ANNOT_TYPE.Path.value:
 				this.renderPathAnnot(annotNode);
 				break;
-			case ANNOT_TYPE.Highlight.value:
-				this.renderHightLightAnnot(annotNode);
+				case ANNOT_TYPE.Highlight.value:
+					this.renderHightLightAnnot(annotNode);
+					break;
+			case ANNOT_TYPE.Stamp.value:
+				this.renderStampAnnot(annotNode);
 				break;
 			default:
 				console.log(`未知的注释类型: ${annotType}`);
+		}
+	}
+
+	/**
+	 * 渲染印章注释
+	 * @param annotNode 注释节点
+	 */
+	renderStampAnnot(annotNode: XmlData) {
+		let stampType = parser.findAttributeValueByKey(annotNode, AttributeKey.SubType)
+		switch (stampType) {
+			case ANNOT_TYPE.Stamp.subType.Stamp.value:
+				this.renderStamp(annotNode);
+				break;
+			case ANNOT_TYPE.Stamp.subType.SignatureInFile.value:
+				this.renderSignatureInFile(annotNode);
+				break;
 		}
 	}
 

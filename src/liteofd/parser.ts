@@ -119,6 +119,7 @@ const parseSignatureData = async (ofdDocument: OfdDocument, signList: XmlData[],
 			for (let k = 0; k < tempStampAnnotObj.children.length; k++) {
 				let tempStampAnnot = tempStampAnnotObj.children[k]
 				let pageRefID = findAttributeValueByKey(tempStampAnnot, AttributeKey.PageRef)
+				console.log("get pagerefid", pageRefID, pageID)
 				// 页面id和签章上面的引用id匹配就可以
 				if (pageRefID === pageID) {
 					pageData.signList.push(tempSign)
