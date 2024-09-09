@@ -326,6 +326,13 @@ export const findAttributeValueByKey = (xmlData:XmlData, key: string): string =>
 	}
 }
 
+export const setAttributeToNode = (node: XmlData, key: string, value: string) => {
+	if (!key.startsWith("@_")) {
+		key = `@_${key}`
+	}
+	node.attrsMap.set(key, value)
+}
+
 /**
  * 根据id查找节点，可能是单节点，可能多节点
  */

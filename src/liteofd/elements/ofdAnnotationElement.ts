@@ -4,6 +4,7 @@ import { ANNOT_TYPE, AttributeKey, OFD_KEY } from "../attrType"
 import { convertToBox, convertToDpi } from "../utils/utils"
 import { OfdDocument } from "../ofdDocument"
 import { AnnotationPathSvg } from "./AnnotationPathSvg"
+import { ImageSvg } from "./ImageSvg"
 
 /**
  * 注释组件
@@ -86,14 +87,35 @@ export class OfdAnnotationElement {
 	 * @param annotNode 注释节点
 	 */
 	renderStampAnnot(annotNode: XmlData) {
-		let stampType = parser.findAttributeValueByKey(annotNode, AttributeKey.SubType)
+		let stampType = parser.findAttributeValueByKey(annotNode, AttributeKey.Subtype)
+		console.log("stamp subtype", stampType)
 		switch (stampType) {
-			case ANNOT_TYPE.Stamp.subType.Stamp.value:
+			case ANNOT_TYPE.Stamp.subType.Stamp:
 				this.renderStamp(annotNode);
 				break;
-			case ANNOT_TYPE.Stamp.subType.SignatureInFile.value:
+			case ANNOT_TYPE.Stamp.subType.SignatureInFile:
 				this.renderSignatureInFile(annotNode);
 				break;
+		}
+	}
+
+	renderSignatureInFile(annotNode: XmlData) {
+
+	}
+
+
+	renderStamp(annotNode: XmlData) {
+		console.log("render stamp", annotNode)
+		let imgAppearance = parser.findValueByTagName(annotNode, OFD_KEY.Appearance)
+		let imageObj = parser.findValueByTagName(annotNode, OFD_KEY.ImageObject)
+		if(imageObj && imgAppearance){
+			let boundary = parser.findAttributeValueByKey(imgAppearance, AttributeKey.Boundary)
+			if(boundary){
+				parser.setAttributeToNode(imageObj, AttributeKey.Boundary, boundary)
+			}
+
+			let imgSvg = new ImageSvg(this.ofdDocument, imageObj)
+			this.viewContainer.appendChild(imgSvg.getContainerSvg())
 		}
 	}
 
