@@ -19,9 +19,7 @@ const loadOFDFonts = async (files: any, fonts: XmlData) => {
 			let fontName = parser.findAttributeValueByKey(fontData, AttributeKey.FontName)
 			let familyName = parser.findAttributeValueByKey(fontData, AttributeKey.FamilyName)
 			let fontFile = parser.findValueByTagName(fontData, OFD_KEY.FontFile)
-			console.log("parse fontData", fontData)
 			if (fontFile && fontFile.value) {
-				console.log("fontFile data", fontData, fontFile)
 				let fileName = fontFile.value
 				let fontFilePath = fontDefaultDir + "/" + fileName
 				let realFilePath = getOFDFilePath(fontFilePath)

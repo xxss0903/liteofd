@@ -2610,7 +2610,6 @@ class Font {
       tables = readTables(font, header.numTables);
     }
     console.log("read tables", tables)
-    debugger
     let cff, cffFile;
 
     const isTrueType = !tables["CFF "];

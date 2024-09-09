@@ -38,6 +38,7 @@ export const AttributeKey = {
 	PageID: "PageID", // 
 	Type: "Type", // 
 	Subtype: "Subtype", // 注释的子类型
+	DashPattern: "DashPattern", // 
 }
 
 // ofd的xml标签中的标签名tagName

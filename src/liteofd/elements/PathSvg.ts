@@ -30,9 +30,7 @@ export class PathSvg extends BaseSvg {
 		this.nodeData = nodeData
 		this.pathId = parser.findAttributeValueByKey(nodeData, AttributeKey.ID)
 		this.showDefaultStrokeColor = showDefaultStrokeColor
-		if(this.pathId === "1332"){
-			debugger
-		}
+	
 		this.svgContainer = this.createContainerSvg()
 		this.svgContainer.setAttribute("style", this.svgContainerStyle)
 	}
@@ -128,8 +126,17 @@ export class PathSvg extends BaseSvg {
 				break
 			}
 		}
-		console.log("render svg pathD", pathD)
 		pathSvg.setAttribute('d', pathD)
+	}
+
+	#addDashPattern(nodeData: XmlData) {
+		let pathStyle = "";
+		const dashPattern = parser.findAttributeValueByKey(nodeData, AttributeKey.DashPattern);
+		if (dashPattern) {
+			const dashArray = dashPattern.split(' ').map(value => convertToDpi(parseFloat(value)));
+			pathStyle = `stroke-dasharray: ${dashArray.join(' ')};`;
+		}
+		return pathStyle;
 	}
 
 
@@ -353,6 +360,8 @@ export class PathSvg extends BaseSvg {
 		this.#addLinearGradientDefs(nodeData, pathSvg)
 		// 添加裁剪
 		this.#addClip(nodeData, pathSvg)
+		// 添加虚线模式
+		pathStyle += this.#addDashPattern(nodeData);
 		// 添加绘制参数
 		pathStyle += this.#addDrawParam(nodeData, pathSvg)
 		// 填充颜色
