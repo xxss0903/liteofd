@@ -206,30 +206,40 @@ export class OfdRender {
 	 * @param rootContainer 
 	 */
 	private addScrollListener(rootContainer: HTMLDivElement): void {
-		console.log("addScrollListener", rootContainer)
-		rootContainer.setAttribute(AttributeKey.ID, "ofd-scroll-container")
+		console.log("addScrollListener", rootContainer);
+		rootContainer.setAttribute(AttributeKey.ID, "ofd-scroll-container");
 		const pages = rootContainer.querySelectorAll('[id^="ofd-page-"]');
-		rootContainer.addEventListener('scroll', (event) => {
-			const containerRect = rootContainer.getBoundingClientRect();
-			pages.forEach((page, index) => {
-				
-				const pageRect = page.getBoundingClientRect();
-				// 判断页面是否至少有一半在视图中
-				const pageVisibleHeight = Math.min(pageRect.bottom, containerRect.bottom) - Math.max(pageRect.top, containerRect.top);
-				const pageHalfHeight = pageRect.height / 5;
-				if (pageVisibleHeight >= pageHalfHeight) {
-					let tempPageIndex = index + 1;
-					if (tempPageIndex !== this.currentPageIndex) {
-						this.currentPageIndex = tempPageIndex;
-						// 创建并分发自定义事件
-						const event = new CustomEvent('ofdPageChange', {
-							detail: { pageIndex: tempPageIndex, pageId: page.id }
-						});
-						window.dispatchEvent(event);
-						return; // 找到第一个满足条件的页面后退出循环
+		
+		let debounceTimer: number | null = null;
+		const debounceDelay = 200; // 200毫秒的防抖延迟
+
+		rootContainer.addEventListener('scroll', () => {
+			if (debounceTimer) {
+				clearTimeout(debounceTimer);
+			}
+
+			debounceTimer = setTimeout(() => {
+				const containerRect = rootContainer.getBoundingClientRect();
+				for (let index = 0; index < pages.length; index++) {
+					const page = pages[index] as HTMLElement;
+					const pageRect = page.getBoundingClientRect();
+					// 判断页面是否至少有1/5在视图中
+					const pageVisibleHeight = Math.min(pageRect.bottom, containerRect.bottom) - Math.max(pageRect.top, containerRect.top);
+					const pageOneFilthHeight = pageRect.height / 5;
+					if (pageVisibleHeight >= pageOneFilthHeight) {
+						let tempPageIndex = index + 1;
+						if (tempPageIndex !== this.currentPageIndex) {
+							this.currentPageIndex = tempPageIndex;
+							// 创建并分发自定义事件
+							const event = new CustomEvent('ofdPageChange', {
+								detail: { pageIndex: tempPageIndex, pageId: page.id }
+							});
+							window.dispatchEvent(event);
+						}
+						break; // 找到第一个满足条件的页面后退出循环
 					}
 				}
-			});
+			}, debounceDelay);
 		});
 	}
 }

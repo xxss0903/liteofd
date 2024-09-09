@@ -225,7 +225,6 @@ export class PathSvg extends BaseSvg {
 		let clipList = parser.findValueByTagName(nodeData, OFD_KEY.Clip)
 		if (clipList && clipList.children && clipList.children.length > 0) {
 			let nodeID = parser.findAttributeValueByKey(nodeData, AttributeKey.ID)
-			console.log("path svg add clip", clipList)
 			let clipPathEle = document.createElementNS("http://www.w3.org/2000/svg", "clipPath")
 			let clipPathId = `CLIP_PATH_${nodeID}`
 			clipPathEle.setAttribute("id", clipPathId)

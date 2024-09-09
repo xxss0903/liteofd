@@ -91,7 +91,7 @@ export const parseOFDFiles = async (zipData: any) => {
 			// 解析publicres中的字体
 			let ofdFonts = parser.findValueByTagName(ofdDocument.publicRes, OFD_KEY.Font)
 			if (ofdFonts) {
-				loadOFDFonts(ofdFiles, ofdFonts)
+				await loadOFDFonts(ofdFiles, ofdFonts)
 			}
 		}
 

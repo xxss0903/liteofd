@@ -83,11 +83,9 @@ export class ContentLayer extends Layer {
 	 * @private
 	 */
 	#renderPageBlock(dataObj: XmlData, pageContainer: Element) {
-		console.log('开始渲染PageBlock:', dataObj);
 		if (dataObj.children && dataObj.children.length > 0) {
 			for (let i = 0; i < dataObj.children.length; i++) {
 				const childObj = dataObj.children[i].children[0];
-				console.log('渲染PageBlock的子元素:', childObj);
 				this.#renderLayerDataObject(childObj, pageContainer);
 			}
 		} else {
