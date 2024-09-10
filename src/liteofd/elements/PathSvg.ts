@@ -30,7 +30,7 @@ export class PathSvg extends BaseSvg {
 		this.nodeData = nodeData
 		this.pathId = parser.findAttributeValueByKey(nodeData, AttributeKey.ID)
 		this.showDefaultStrokeColor = showDefaultStrokeColor
-	
+
 		this.svgContainer = this.createContainerSvg()
 		this.svgContainer.setAttribute("style", this.svgContainerStyle)
 	}
@@ -151,7 +151,7 @@ export class PathSvg extends BaseSvg {
 		let fillColorBoolean = parser.findAttributeValueByKey(nodeData, AttributeKey.Fill)
 		let fillColorStr = fillColorObj && parser.findAttributeValueByKey(fillColorObj, AttributeKey.Value)
 		let colorAlpha = fillColorObj && parseInt(parser.findAttributeValueByKey(fillColorObj, AttributeKey.Alpha)) || 255
-	
+
 		if (fillColorBoolean) {
 			if (fillColorObj && fillColorStr) {
 				let fillColorValue = parseColorToHex(fillColorStr, colorAlpha)
@@ -180,6 +180,8 @@ export class PathSvg extends BaseSvg {
 		if (lineWidthStr) {
 			let lineWidth = convertToDpi(parseFloat(lineWidthStr))
 			pathStyle = `stroke-width: ${lineWidth}px;`
+			// 如果有宽度，那么就添加stroke的颜色
+			pathStyle += this.#addStrokeColor(nodeData)
 		}
 
 		return pathStyle
@@ -328,6 +330,9 @@ export class PathSvg extends BaseSvg {
 
 			this.svgDefs.appendChild(linearGradient)
 			pathSvg.setAttribute("fill", `url(#${gradientId})`)
+			return true
+		} else {
+			return false
 		}
 	}
 
@@ -356,18 +361,19 @@ export class PathSvg extends BaseSvg {
 		// 添加矩阵变换
 		this.#addCTM(nodeData, pathSvg)
 		// 添加渐变色
-		this.#addLinearGradientDefs(nodeData, pathSvg)
+		let addLinearGradient = this.#addLinearGradientDefs(nodeData, pathSvg)
 		// 添加裁剪
 		this.#addClip(nodeData, pathSvg)
 		// 添加虚线模式
 		pathStyle += this.#addDashPattern(nodeData);
 		// 添加绘制参数
 		pathStyle += this.#addDrawParam(nodeData, pathSvg)
-		// 填充颜色
-		pathStyle += this.#addFilLColor(nodeData)
+		if (!addLinearGradient) {
+			// 填充颜色
+			pathStyle += this.#addFilLColor(nodeData)
+		}
 		// 添加线宽度和线条颜色
 		pathStyle += this.#addStrokeWidth(this.nodeData)
-		pathStyle += this.#addStrokeColor(this.nodeData)
 
 		pathSvg.setAttribute("style", pathStyle)
 		return pathSvg
@@ -396,7 +402,6 @@ export class PathSvg extends BaseSvg {
 		// svg下面添加path
 		let pathSvg = this.#addPathSvg(this.nodeData)
 		svg.appendChild(pathSvg)
-
 		svg.appendChild(this.svgDefs)
 		return svg
 	}
@@ -424,7 +429,6 @@ export class PathSvg extends BaseSvg {
 				pathStyle += this.#addFilLColor(drawParamNode)
 				// 添加线宽度和线条颜色
 				pathStyle += this.#addStrokeWidth(drawParamNode)
-				pathStyle += this.#addStrokeColor(drawParamNode)
 				return pathStyle
 			}
 		}
