@@ -1054,7 +1054,7 @@ class Font {
       );
     }
     // 根据传入的字体信息，获取字体的数据
-    if ( name === "TACTGM+NimbusRomNo9L-Medi" ) debugger
+    if ( file.length === 18872 ) debugger
     let data;
     try {
       switch (type) {
@@ -1303,7 +1303,7 @@ class Font {
     this.loadedName = fontName.split("-", 1)[0];
   }
 
-  checkAndRepair(name, font) {
+  checkAndRepair(name, font, properties) {
     const VALID_TABLES = [
       "OS/2",
       "cmap",
@@ -2190,7 +2190,7 @@ class Font {
       };
     }
 
-    function readPostScriptTable(post, maxpNumGlyphs) {
+    function readPostScriptTable(post, propertiesObj, maxpNumGlyphs) {
       const start = (font.start || 0) + post.offset;
       font.pos = start;
 
@@ -2251,12 +2251,12 @@ class Font {
         default:
           warn("Unknown/unsupported post table version " + version);
           valid = false;
-          // if (propertiesObj.defaultEncoding) {
-          //   glyphNames = propertiesObj.defaultEncoding;
-          // }
+          if (propertiesObj.defaultEncoding) {
+            glyphNames = propertiesObj.defaultEncoding;
+          }
           break;
       }
-      // propertiesObj.glyphNames = glyphNames;
+      propertiesObj.glyphNames = glyphNames;
       return valid;
     }
 
@@ -2596,10 +2596,11 @@ class Font {
       return ttContext.hintsValid;
     }
 
-    // debugger
     // The following steps modify the original font data, making copy
-    font = new Stream(font.buffer);
+    // 这里先对原始数据做一个拷贝
+    font = new Stream(new Uint8Array(font.getBytes()));
 
+    if ( font.length === 18872 ) debugger
     let header, tables;
     if (isTrueTypeCollectionFile(font)) {
       const ttcData = readTrueTypeCollectionData(font, this.name);
@@ -2609,28 +2610,31 @@ class Font {
       header = readOpenTypeHeader(font);
       tables = readTables(font, header.numTables);
     }
-    console.log("read tables", tables)
+    console.log("read tables", tables);
     let cff, cffFile;
 
     const isTrueType = !tables["CFF "];
     if (!isTrueType) {
-      const isComposite = true;
+      const isComposite =
+        properties.composite &&
+        (properties.cidToGidMap?.length > 0 ||
+          !(properties.cMap instanceof IdentityCMap));
       // OpenType font (skip composite fonts with non-default glyph mapping).
-      // if (
-      //   (header.version === "OTTO" && !isComposite) ||
-      //   !tables.head ||
-      //   !tables.hhea ||
-      //   !tables.maxp ||
-      //   !tables.post
-      // ) {
-      //   // No major tables: throwing everything at `CFFFont`.
-      //   cffFile = new Stream(tables["CFF "].data);
-      //   cff = new CFFFont(cffFile, properties);
-      //
-      //   adjustWidths(properties);
-      //
-      //   return this.convert(name, cff, properties);
-      // }
+      if (
+        (header.version === "OTTO" && !isComposite) ||
+        !tables.head ||
+        !tables.hhea ||
+        !tables.maxp ||
+        !tables.post
+      ) {
+        // No major tables: throwing everything at `CFFFont`.
+        cffFile = new Stream(tables["CFF "].data);
+        cff = new CFFFont(cffFile, properties);
+
+        adjustWidths(properties);
+
+        return this.convert(name, cff, properties);
+      }
 
       delete tables.glyf;
       delete tables.loca;
@@ -2673,45 +2677,46 @@ class Font {
       writeUint32(tables.maxp.data, 0, version);
     }
 
-    // if (properties.scaleFactors?.length === numGlyphs && isTrueType) {
-    //   const { scaleFactors } = properties;
-    //   const isGlyphLocationsLong = int16(
-    //     tables.head.data[50],
-    //     tables.head.data[51]
-    //   );
-    //
-    //   const glyphs = new GlyfTable({
-    //     glyfTable: tables.glyf.data,
-    //     isGlyphLocationsLong,
-    //     locaTable: tables.loca.data,
-    //     numGlyphs,
-    //   });
-    //   glyphs.scale(scaleFactors);
-    //
-    //   const { glyf, loca, isLocationLong } = glyphs.write();
-    //   tables.glyf.data = glyf;
-    //   tables.loca.data = loca;
-    //
-    //   if (isLocationLong !== !!isGlyphLocationsLong) {
-    //     tables.head.data[50] = 0;
-    //     tables.head.data[51] = isLocationLong ? 1 : 0;
-    //   }
-    //
-    //   const metrics = tables.hmtx.data;
-    //
-    //   for (let i = 0; i < numGlyphs; i++) {
-    //     const j = 4 * i;
-    //     const advanceWidth = Math.round(
-    //       scaleFactors[i] * int16(metrics[j], metrics[j + 1])
-    //     );
-    //     metrics[j] = (advanceWidth >> 8) & 0xff;
-    //     metrics[j + 1] = advanceWidth & 0xff;
-    //     const lsb = Math.round(
-    //       scaleFactors[i] * signedInt16(metrics[j + 2], metrics[j + 3])
-    //     );
-    //     writeSignedInt16(metrics, j + 2, lsb);
-    //   }
-    // }
+    if (properties.scaleFactors?.length === numGlyphs && isTrueType) {
+      const { scaleFactors } = properties;
+      const isGlyphLocationsLong = int16(
+        tables.head.data[50],
+        tables.head.data[51]
+      );
+
+      zxlog("fonts.js get glyphs", tables)
+      const glyphs = new GlyfTable({
+        glyfTable: tables.glyf.data,
+        isGlyphLocationsLong,
+        locaTable: tables.loca.data,
+        numGlyphs,
+      });
+      glyphs.scale(scaleFactors);
+
+      const { glyf, loca, isLocationLong } = glyphs.write();
+      tables.glyf.data = glyf;
+      tables.loca.data = loca;
+
+      if (isLocationLong !== !!isGlyphLocationsLong) {
+        tables.head.data[50] = 0;
+        tables.head.data[51] = isLocationLong ? 1 : 0;
+      }
+
+      const metrics = tables.hmtx.data;
+
+      for (let i = 0; i < numGlyphs; i++) {
+        const j = 4 * i;
+        const advanceWidth = Math.round(
+          scaleFactors[i] * int16(metrics[j], metrics[j + 1])
+        );
+        metrics[j] = (advanceWidth >> 8) & 0xff;
+        metrics[j + 1] = advanceWidth & 0xff;
+        const lsb = Math.round(
+          scaleFactors[i] * signedInt16(metrics[j + 2], metrics[j + 3])
+        );
+        writeSignedInt16(metrics, j + 2, lsb);
+      }
+    }
 
     // Glyph 0 is duplicated and appended.
     let numGlyphsOut = numGlyphs + 1;
@@ -2830,13 +2835,13 @@ class Font {
 
     // The 'post' table has glyphs names.
     if (tables.post) {
-      readPostScriptTable(tables.post, numGlyphs);
+      readPostScriptTable(tables.post, properties, numGlyphs);
     }
 
     // The original 'post' table is not needed, replace it.
     tables.post = {
       tag: "post",
-      data: createPostTable({fixedPitch: true}),
+      data: createPostTable(properties),
     };
 
     const charCodeToGlyphId = [];
@@ -2844,6 +2849,166 @@ class Font {
     // Helper function to try to skip mapping of empty glyphs.
     function hasGlyph(glyphId) {
       return !missingGlyphs[glyphId];
+    }
+
+    if (properties.composite) {
+      const cidToGidMap = properties.cidToGidMap || [];
+      const isCidToGidMapEmpty = cidToGidMap.length === 0;
+
+      properties.cMap.forEach(function (charCode, cid) {
+        if (typeof cid === "string") {
+          cid = convertCidString(charCode, cid, /* shouldThrow = */ true);
+        }
+        if (cid > 0xffff) {
+          throw new FormatError("Max size of CID is 65,535");
+        }
+        let glyphId = -1;
+        if (isCidToGidMapEmpty) {
+          glyphId = cid;
+        } else if (cidToGidMap[cid] !== undefined) {
+          glyphId = cidToGidMap[cid];
+        }
+
+        if (glyphId >= 0 && glyphId < numGlyphs && hasGlyph(glyphId)) {
+          charCodeToGlyphId[charCode] = glyphId;
+        }
+      });
+    } else {
+      // Most of the following logic in this code branch is based on the
+      // 9.6.6.4 of the PDF spec.
+      const cmapTable = readCmapTable(
+        tables.cmap,
+        font,
+        this.isSymbolicFont,
+        properties.hasEncoding
+      );
+      const cmapPlatformId = cmapTable.platformId;
+      const cmapEncodingId = cmapTable.encodingId;
+      const cmapMappings = cmapTable.mappings;
+      let baseEncoding = [],
+        forcePostTable = false;
+      if (
+        properties.hasEncoding &&
+        (properties.baseEncodingName === "MacRomanEncoding" ||
+          properties.baseEncodingName === "WinAnsiEncoding")
+      ) {
+        baseEncoding = getEncoding(properties.baseEncodingName);
+      }
+
+      // If the font has an encoding and is not symbolic then follow the rules
+      // in section 9.6.6.4 of the spec on how to map 3,1 and 1,0 cmaps.
+      if (
+        properties.hasEncoding &&
+        !this.isSymbolicFont &&
+        ((cmapPlatformId === 3 && cmapEncodingId === 1) ||
+          (cmapPlatformId === 1 && cmapEncodingId === 0))
+      ) {
+        const glyphsUnicodeMap = getGlyphsUnicode();
+        for (let charCode = 0; charCode < 256; charCode++) {
+          let glyphName;
+          if (this.differences[charCode] !== undefined) {
+            glyphName = this.differences[charCode];
+          } else if (baseEncoding.length && baseEncoding[charCode] !== "") {
+            glyphName = baseEncoding[charCode];
+          } else {
+            glyphName = StandardEncoding[charCode];
+          }
+          if (!glyphName) {
+            continue;
+          }
+          // Ensure that non-standard glyph names are resolved to valid ones.
+          const standardGlyphName = recoverGlyphName(
+            glyphName,
+            glyphsUnicodeMap
+          );
+
+          let unicodeOrCharCode;
+          if (cmapPlatformId === 3 && cmapEncodingId === 1) {
+            unicodeOrCharCode = glyphsUnicodeMap[standardGlyphName];
+          } else if (cmapPlatformId === 1 && cmapEncodingId === 0) {
+            // TODO: the encoding needs to be updated with mac os table.
+            unicodeOrCharCode = MacRomanEncoding.indexOf(standardGlyphName);
+          }
+
+          if (unicodeOrCharCode === undefined) {
+            // Not a valid glyph name, fallback to using the /ToUnicode map
+            // when no post-table exists (fixes issue13316_reduced.pdf).
+            if (
+              !properties.glyphNames &&
+              properties.hasIncludedToUnicodeMap &&
+              !(this.toUnicode instanceof IdentityToUnicodeMap)
+            ) {
+              const unicode = this.toUnicode.get(charCode);
+              if (unicode) {
+                unicodeOrCharCode = unicode.codePointAt(0);
+              }
+            }
+
+            if (unicodeOrCharCode === undefined) {
+              continue; // No valid glyph mapping found.
+            }
+          }
+
+          for (const mapping of cmapMappings) {
+            if (mapping.charCode !== unicodeOrCharCode) {
+              continue;
+            }
+            charCodeToGlyphId[charCode] = mapping.glyphId;
+            break;
+          }
+        }
+      } else if (cmapPlatformId === 0) {
+        // Default Unicode semantics, use the charcodes as is.
+        for (const mapping of cmapMappings) {
+          charCodeToGlyphId[mapping.charCode] = mapping.glyphId;
+        }
+        // Always prefer the BaseEncoding/Differences arrays, when they exist
+        // (fixes issue13433.pdf).
+        forcePostTable = true;
+      } else {
+        // When there is only a (1, 0) cmap table, the char code is a single
+        // byte and it is used directly as the char code.
+
+        // When a (3, 0) cmap table is present, it is used instead but the
+        // spec has special rules for char codes in the range of 0xF000 to
+        // 0xF0FF and it says the (3, 0) table should map the values from
+        // the (1, 0) table by prepending 0xF0 to the char codes. To reverse
+        // this, the upper bits of the char code are cleared, but only for the
+        // special range since some PDFs have char codes outside of this range
+        // (e.g. 0x2013) which when masked would overwrite other values in the
+        // cmap.
+        for (const mapping of cmapMappings) {
+          let charCode = mapping.charCode;
+          if (
+            cmapPlatformId === 3 &&
+            charCode >= 0xf000 &&
+            charCode <= 0xf0ff
+          ) {
+            charCode &= 0xff;
+          }
+          charCodeToGlyphId[charCode] = mapping.glyphId;
+        }
+      }
+
+      // Last, try to map any missing charcodes using the post table.
+      if (
+        properties.glyphNames &&
+        (baseEncoding.length || this.differences.length)
+      ) {
+        for (let i = 0; i < 256; ++i) {
+          if (!forcePostTable && charCodeToGlyphId[i] !== undefined) {
+            continue;
+          }
+          const glyphName = this.differences[i] || baseEncoding[i];
+          if (!glyphName) {
+            continue;
+          }
+          const glyphId = properties.glyphNames.indexOf(glyphName);
+          if (glyphId > 0 && hasGlyph(glyphId)) {
+            charCodeToGlyphId[i] = glyphId;
+          }
+        }
+      }
     }
 
     if (charCodeToGlyphId.length === 0) {
@@ -2860,31 +3025,54 @@ class Font {
       glyphZeroId = 0;
     }
 
-    // Converting glyphs and ids into font's cmap table
-    // debugger
+    // When `cssFontInfo` is set, the font is used to render text in the HTML
+    // view (e.g. with Xfa) so nothing must be moved in the private use area.
+    if (!properties.cssFontInfo) {
+      // Converting glyphs and ids into font's cmap table
       const newMapping = adjustMapping(
-      charCodeToGlyphId,
-      hasGlyph,
-      glyphZeroId
-    );
-    this.toFontChar = newMapping.toFontChar;
-    tables.cmap = {
-      tag: "cmap",
-      data: createCmapTable(
-        newMapping.charCodeToGlyphId,
-        newMapping.toUnicodeExtraMap,
-        numGlyphsOut
-      ),
-    };
-
-    if (!tables["OS/2"] || !validateOS2Table(tables["OS/2"], font)) {
-      tables["OS/2"] = {
-        tag: "OS/2",
-        data: createOS2Table(
+        charCodeToGlyphId,
+        hasGlyph,
+        glyphZeroId,
+        this.toUnicode
+      );
+      this.toFontChar = newMapping.toFontChar;
+      tables.cmap = {
+        tag: "cmap",
+        data: createCmapTable(
           newMapping.charCodeToGlyphId,
-          metricsOverride
+          newMapping.toUnicodeExtraMap,
+          numGlyphsOut
         ),
       };
+
+      if (!tables["OS/2"] || !validateOS2Table(tables["OS/2"], font)) {
+        tables["OS/2"] = {
+          tag: "OS/2",
+          data: createOS2Table(
+            properties,
+            newMapping.charCodeToGlyphId,
+            metricsOverride
+          ),
+        };
+      }
+    }
+
+    if (!isTrueType) {
+      try {
+        // Trying to repair CFF file
+        cffFile = new Stream(tables["CFF "].data);
+        const parser = new CFFParser(
+          cffFile,
+          properties,
+          SEAC_ANALYSIS_ENABLED
+        );
+        cff = parser.parse();
+        cff.duplicateFirstGlyph();
+        const compiler = new CFFCompiler(cff);
+        tables["CFF "].data = compiler.compile();
+      } catch {
+        warn("Failed to compile font " + properties.loadedName);
+      }
     }
 
     // Re-creating 'name' table
@@ -2899,10 +3087,16 @@ class Font {
 
       tables.name.data = createNameTable(name, namePrototype);
       this.psName = namePrototype[0][6] || null;
+
+      if (!properties.composite) {
+        // For TrueType fonts that do not include `ToUnicode` or `Encoding`
+        // data, attempt to use the name-table to improve text selection.
+        adjustTrueTypeToUnicode(properties, this.isSymbolicFont, nameRecords);
+      }
     }
 
     const builder = new OpenTypeFileBuilder(header.version);
-    // debugger
+    if ( name === "TACTGM+NimbusRomNo9L-Medi" ) debugger
     for (const tableTag in tables) {
       builder.addTable(tableTag, tables[tableTag].data);
     }
