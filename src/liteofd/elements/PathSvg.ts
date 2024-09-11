@@ -202,9 +202,10 @@ export class PathSvg extends BaseSvg {
 		if (lineWidthStr) {
 			let lineWidth = convertToDpi(parseFloat(lineWidthStr))
 			pathStyle = `stroke-width: ${lineWidth}px;`
+			// 如果有宽度，那么就添加stroke的颜色
+			pathStyle += this.#addStrokeColor(nodeData)
 		}
-		// 如果有宽度，那么就添加stroke的颜色
-		pathStyle += this.#addStrokeColor(nodeData)
+	
 
 		return pathStyle
 	}

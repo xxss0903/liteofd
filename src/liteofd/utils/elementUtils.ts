@@ -78,6 +78,28 @@ const extractTextToCharArray = (textStr: string, deltaXList: any[], deltaYList: 
 }
 
 /**
+ * 将HTML实体转换为对应的字符
+ * @param text 包含HTML实体的文本
+ * @return 转换后的文本
+ */
+const decodeHtmlEntities = (text: string): string => {
+  const entities: { [key: string]: string } = {
+    '&lt;': '<',
+    '&gt;': '>',
+    '&amp;': '&',
+    '&quot;': '"',
+    '&apos;': "'",
+    '&#x20;': ' ',
+    '&#x0020;': ' '
+  };
+  
+  return text.replace(/&[^;]+;/g, (entity) => {
+    return entities[entity] || entity;
+  });
+}
+
+
+/**
  * 根据textcode来创建显示字符串的tspan
  * @param nodeData 文本的textCode标签
  * @param node 文本的textCode标签
@@ -96,7 +118,7 @@ export const createTextSpan = (nodeData: XmlData, textCodeData: XmlData, textNod
 
 	let textCode = parser.findValueByTagName(textCodeData, OFD_KEY.TextCode)
 	let textStr = textCode.value.toString()
-	textStr = textStr.replace(/&#x20;/g, ' ');
+	textStr = decodeHtmlEntities(textStr)
 	// 根据node的deltax和deltay进行创建字符位置
 	let deltaX = getDeltaList(textCode, AttributeKey.DeltaX)
 	let deltaY = getDeltaList(textCode, AttributeKey.DeltaY)
