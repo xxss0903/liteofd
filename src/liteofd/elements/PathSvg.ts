@@ -67,9 +67,9 @@ export class PathSvg extends BaseSvg {
 				case 'B':
 					pathD += `C${point.x1} ${point.y1} ${point.x2} ${point.y2} ${point.x3} ${point.y3} `
 					break
-				case 'C':
-					pathD += `Z`
-					break
+				// case 'C':
+				// 	pathD += `Z`
+				// 	break
 				case 'M': // 移动到
 					pathD += `M${point.x} ${point.y} `
 					break
@@ -94,11 +94,9 @@ export class PathSvg extends BaseSvg {
 				case 'v': // 相对垂直线
 				pathD += `v${point.dy} `
 				break
-				// case 'C': // 三次贝塞尔曲线
-				// pathD += `C${point.x1} ${point.y1} ${point.x2} ${point.y2} ${point.x} ${point.y} `
-				// break
-				case 'c': // 相对三次贝塞尔曲线
-				pathD += `c${point.dx1} ${point.dy1} ${point.dx2} ${point.dy2} ${point.dx} ${point.dy} `
+				case 'C': // 三次贝塞尔曲线
+				case 'c': // 三次贝塞尔曲线
+					pathD += `C${point.x1} ${point.y1} ${point.x2} ${point.y2} ${point.x} ${point.y} `
 				break
 				case 'S': // 平滑三次贝塞尔曲线
 					if ('x2' in point && 'y2' in point) {
@@ -204,9 +202,9 @@ export class PathSvg extends BaseSvg {
 		if (lineWidthStr) {
 			let lineWidth = convertToDpi(parseFloat(lineWidthStr))
 			pathStyle = `stroke-width: ${lineWidth}px;`
-			// 如果有宽度，那么就添加stroke的颜色
-			pathStyle += this.#addStrokeColor(nodeData)
 		}
+		// 如果有宽度，那么就添加stroke的颜色
+		pathStyle += this.#addStrokeColor(nodeData)
 
 		return pathStyle
 	}
@@ -453,6 +451,8 @@ export class PathSvg extends BaseSvg {
 				pathStyle += this.#addFilLColor(drawParamNode)
 				// 添加线宽度和线条颜色
 				pathStyle += this.#addStrokeWidth(drawParamNode)
+				// 如果有宽度，那么就添加stroke的颜色
+				pathStyle += this.#addStrokeColor(drawParamNode)
 				return pathStyle
 			}
 		}

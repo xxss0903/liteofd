@@ -78,16 +78,23 @@ export const convertPathAbbreviatedDatatoPoint = (abbreviatedData: string) => {
 		  break;
 		case 'C':
 		case 'c':
-		  pointList.push({
-			'type': command,
-			'x1': parseFloat(array[i + 1]),
-			'y1': parseFloat(array[i + 2]),
-			'x2': parseFloat(array[i + 3]),
-			'y2': parseFloat(array[i + 4]),
-			'x': parseFloat(array[i + 5]),
-			'y': parseFloat(array[i + 6])
-		  });
-		  i += 7;
+		  if (array[i + 1] === undefined || array[i + 1] === null || isNaN(parseFloat(array[i + 1]))) {
+			pointList.push({
+			  'type': 'Z'
+			});
+			i += 1;
+		  } else {
+			pointList.push({
+			  'type': command,
+			  'x1': parseFloat(array[i + 1]),
+			  'y1': parseFloat(array[i + 2]),
+			  'x2': parseFloat(array[i + 3]),
+			  'y2': parseFloat(array[i + 4]),
+			  'x': parseFloat(array[i + 5]),
+			  'y': parseFloat(array[i + 6])
+			});
+			i += 7;
+		  }
 		  break;
 		case 'S':
 		case 's':
