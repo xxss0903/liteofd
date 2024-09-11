@@ -1,10 +1,10 @@
-LiteOfd 类方法说明文档
+# LiteOfd 类方法说明文档
 
-1. 简介
+## 1. 简介
 
 LiteOfd 是一个用于处理 OFD（Open Fixed-layout Document）文件的轻量级库。它提供了渲染 OFD 数据和解析 OFD 文件的功能，使开发者能够轻松地在 Web 应用中展示和操作 OFD 文档。
 
-2. 安装
+## 2. 安装
 
 目前，LiteOfd 库尚未发布到 npm。您可以通过以下方式将其集成到您的项目中：
 
@@ -12,9 +12,9 @@ LiteOfd 是一个用于处理 OFD（Open Fixed-layout Document）文件的轻量
 - 复制 src/liteofd 目录到您的项目中
 - 在您的项目中引入 LiteOfd 类
 
-3. 使用方法
+## 3. 使用方法
 
-3.1 renderOfd()
+### 3.1 renderOfd()
 
 描述：渲染OFD文档，使用默认的渲染方式。
 
@@ -26,7 +26,7 @@ const liteOfd = new LiteOfd();
 const renderedDiv = liteOfd.renderOfd();
 document.body.appendChild(renderedDiv);
 
-3.2 renderOfdWithCustomDiv(customDiv: HTMLDivElement, pageWrapStyle: string | null = null)
+### 3.2 renderOfdWithCustomDiv(customDiv: HTMLDivElement, pageWrapStyle: string | null = null)
 
 描述：使用自定义的div来渲染OFD文档。
 
@@ -44,7 +44,7 @@ const pageStyle = "background-color: #f0f0f0; margin: 10px;";
 const renderedDiv = liteOfd.renderOfdWithCustomDiv(customDiv, pageStyle);
 document.body.appendChild(renderedDiv);
 
-3.3 getCurrentPageIndex()
+### 3.3 getCurrentPageIndex()
 
 描述：获取当前页面的索引。
 
@@ -56,7 +56,7 @@ const liteOfd = new LiteOfd();
 const currentPage = liteOfd.getCurrentPageIndex();
 console.log(`当前页面索引：${currentPage}`);
 
-3.4 nextPage()
+### 3.4 nextPage()
 
 描述：跳转到下一页。
 
@@ -64,7 +64,7 @@ console.log(`当前页面索引：${currentPage}`);
 const liteOfd = new LiteOfd();
 liteOfd.nextPage();
 
-3.5 prevPage()
+### 3.5 prevPage()
 
 描述：跳转到上一页。
 
@@ -72,7 +72,7 @@ liteOfd.nextPage();
 const liteOfd = new LiteOfd();
 liteOfd.prevPage();
 
-3.6 scrollToPage(pageIndex: number)
+### 3.6 scrollToPage(pageIndex: number)
 
 描述：滚动到指定页面。
 
