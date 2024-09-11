@@ -91,14 +91,13 @@ export const convertPathAbbreviatedDatatoPoint = (abbreviatedData: string) => {
 		  break;
 		case 'S':
 		case 's':
-		  pointList.push({
-			'type': command,
-			'x2': parseFloat(array[i + 1]),
-			'y2': parseFloat(array[i + 2]),
-			'x': parseFloat(array[i + 3]),
-			'y': parseFloat(array[i + 4])
-		  });
-		  i += 5;
+			pointList.push({
+				'type': command,
+				'x': parseFloat(array[i + 1]),
+				'y': parseFloat(array[i + 2]),
+			  });
+		  console.log("command s is #2", command, pointList)
+		  i += 3;
 		  break;
 		case 'Q':
 		case 'q':
@@ -281,7 +280,36 @@ export const calPathPoint = function (abbreviatedPoint: any) {
 		  currentY = point.y;
 		  pointList.push(point);
 		  break;
-		case 'S':
+		  case 'S':
+			if ('x2' in point && 'y2' in point) {
+			  point.x2 = convertToDpi(point.x2);
+			  point.y2 = convertToDpi(point.y2);
+			  point.x = convertToDpi(point.x);
+			  point.y = convertToDpi(point.y);
+			} else {
+			  // 处理只有2个坐标的情况
+			  point.x = convertToDpi(point.x);
+			  point.y = convertToDpi(point.y);
+			}
+			currentX = point.x;
+			currentY = point.y;
+			pointList.push(point);
+			break;
+		  case 's':
+			if ('x2' in point && 'y2' in point) {
+			  point.x2 = convertToDpi(point.x2) + currentX;
+			  point.y2 = convertToDpi(point.y2) + currentY;
+			  point.x = convertToDpi(point.x) + currentX;
+			  point.y = convertToDpi(point.y) + currentY;
+			} else {
+			  // 处理只有2个坐标的情况
+			  point.x = convertToDpi(point.x) + currentX;
+			  point.y = convertToDpi(point.y) + currentY;
+			}
+			currentX = point.x;
+			currentY = point.y;
+			pointList.push(point);
+			break;
 		case 'Q':
 		  point.x1 = convertToDpi(point.x1);
 		  point.y1 = convertToDpi(point.y1);
@@ -291,7 +319,6 @@ export const calPathPoint = function (abbreviatedPoint: any) {
 		  currentY = point.y;
 		  pointList.push(point);
 		  break;
-		case 's':
 		case 'q':
 		  point.x1 = convertToDpi(point.x1) + currentX;
 		  point.y1 = convertToDpi(point.y1) + currentY;

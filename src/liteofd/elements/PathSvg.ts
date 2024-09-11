@@ -59,6 +59,10 @@ export class PathSvg extends BaseSvg {
 		// path的路径
 		let pathD = ""
 		for (const point of points) {
+			if (point.type === 'S' || point.type === 's') {
+				console.log("point", point)
+				// debugger
+			}
 			switch (point.type) {
 				case 'B':
 					pathD += `C${point.x1} ${point.y1} ${point.x2} ${point.y2} ${point.x3} ${point.y3} `
@@ -97,11 +101,19 @@ export class PathSvg extends BaseSvg {
 				pathD += `c${point.dx1} ${point.dy1} ${point.dx2} ${point.dy2} ${point.dx} ${point.dy} `
 				break
 				case 'S': // 平滑三次贝塞尔曲线
-				pathD += `S${point.x2} ${point.y2} ${point.x} ${point.y} `
+					if ('x2' in point && 'y2' in point) {
+						pathD += `S${point.x2} ${point.y2} ${point.x} ${point.y} `
+					} else {
+						pathD += `S${point.x} ${point.y} `
+					}
 				break
 				case 's': // 相对平滑三次贝塞尔曲线
-				pathD += `s${point.dx2} ${point.dy2} ${point.dx} ${point.dy} `
-				break
+				if ('x2' in point && 'y2' in point) {
+					pathD += `s${point.x2} ${point.y2} ${point.x} ${point.y} `
+				} else {
+					pathD += `s${point.x} ${point.y} `
+				}
+			break
 				case 'Q': // 二次贝塞尔曲线
 				pathD += `Q${point.x1} ${point.y1} ${point.x} ${point.y} `
 				break
@@ -126,7 +138,19 @@ export class PathSvg extends BaseSvg {
 				break
 			}
 		}
-		pathSvg.setAttribute('d', pathD)
+		if (pathD.startsWith('S')) {
+			// 如果pathD是以S开头且只包含一个坐标值，则将S修改为M
+			const match = pathD.match(/^S(\d+(?:\.\d+)?\s+\d+(?:\.\d+)?)/);
+			if (match) {
+				pathD = `M${match[1]} ${pathD.slice(match[0].length)}`;
+			}
+		} else if (!pathD.startsWith('M')) {
+			// 如果pathD不是以M开头，则添加M移动到初始点
+			// 假设初始点为(0,0)，您可能需要根据实际情况调整这个值
+			pathD = `M0 0 ${pathD}`;
+		}
+		console.log("render pathD", pathD)
+		pathSvg.setAttribute('d', pathD);
 	}
 
 	#addDashPattern(nodeData: XmlData) {
