@@ -208,15 +208,36 @@ export const normalizeFontName = (fontName: string): string => {
 		fontName = fontName.split(',')[0].trim();
 	}
 
+	// 定义标准字体名称列表
+	const standardFonts = [
+		'Times-Roman', 'Times-Bold', 'Times-Italic', 'Times-BoldItalic',
+		'Helvetica', 'Helvetica-Bold', 'Helvetica-Oblique', 'Helvetica-BoldOblique',
+		'Courier', 'Courier-Bold', 'Courier-Oblique', 'Courier-BoldOblique',
+		'Symbol', 'ZapfDingbats'
+	];
+
+	// 如果是标准字体,直接返回
+	if (standardFonts.includes(fontName)) {
+		return fontName;
+	}
+
+	// 只保留第一个连字符前的名称
+	fontName = fontName.split('-')[0];
+
 	// 处理带有样式和数字的字体名称,但保留常见的样式后缀
 	const commonStyles = ['Bold', 'Italic', 'Medium', 'Light', 'Regular', 'Heavy', 'Black', 'Thin', 'Condensed', 'Expanded'];
 	const parts = fontName.split(/\s+/);
-	const baseName = parts.filter((part, index) => {
-		// 保留第一个部分、常见样式和带连字符的样式,过滤掉重复的部分和数字
-		return index === 0 || 
-			   commonStyles.some(style => part === style || part.endsWith(`-${style}`)) || 
-			   (!parts.slice(0, index).includes(part) && isNaN(Number(part)));
-	}).join(' ');
+	
+	// 保留基本名称和常见样式
+	const uniqueParts = parts.filter((part, index) => 
+		index === 0 || commonStyles.includes(part)
+	);
 
-	return baseName || fontName;
+	// 如果处理后没有任何部分,返回原始名称
+	if (uniqueParts.length === 0) {
+		return fontName;
+	}
+
+	// 重新组合字体名称
+	return uniqueParts.join(' ');
 }

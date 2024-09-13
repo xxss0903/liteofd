@@ -205,7 +205,7 @@ export const loadSingleFont = async (fontFile: any, fontData: XmlData) => {
 			await loadDefaultFont(fontName);
 		} else {
 			let fontBytes = await fontFile.async("uint8array");
-			await loadFontByArrayBuffer(fontName, fontBytes);
+			// await loadFontByArrayBuffer(fontName, fontBytes);
 		}
 	} catch (e) {
 		console.error("加载字体出错", e);
