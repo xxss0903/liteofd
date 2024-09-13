@@ -107,7 +107,7 @@ export const parseOFDFiles = async (zipData: any) => {
 			let annotePath = `${RootDocPath}/${annotationsObj.value}`
 			let annoteRes = await parser.parseXmlByFileName(ofdFiles, annotePath)
 			ofdDocument.annots = annoteRes
-			await loadAnnots(ofdFiles, ofdDocument, annoteRes)			
+			await loadAnnots(ofdFiles, ofdDocument, annoteRes)
 		}
 	}
 
@@ -155,8 +155,8 @@ export const parseOFDSignatures = async (ofdDocument: OfdDocument, ofdData: XmlD
 
 /**
  * 解析注释数据
- * @param ofdDocument 
- * @param annoteRes 
+ * @param ofdDocument
+ * @param annoteRes
  */
 const loadAnnots = async (ofdFiles: any, ofdDocument: OfdDocument, annoteRes: XmlData) => {
 	console.log("annoteRes", annoteRes, ofdDocument.pages)
@@ -192,3 +192,31 @@ const loadAnnots = async (ofdFiles: any, ofdDocument: OfdDocument, annoteRes: Xm
 
 }
 
+/**
+ * 将字体名称规整化
+ * @param fontName
+ */
+export const normalizeFontName = (fontName: string): string => {
+	// 处理带有前缀的字体名称
+	const prefixMatch = fontName.match(/^[A-Z]+\+(.+)$/);
+	if (prefixMatch) {
+		fontName = prefixMatch[1];
+	}
+
+	// 处理逗号分隔的字体名称
+	if (fontName.includes(',')) {
+		fontName = fontName.split(',')[0].trim();
+	}
+
+	// 处理带有样式和数字的字体名称,但保留常见的样式后缀
+	const commonStyles = ['Bold', 'Italic', 'Medium', 'Light', 'Regular', 'Heavy', 'Black', 'Thin', 'Condensed', 'Expanded'];
+	const parts = fontName.split(/\s+/);
+	const baseName = parts.filter((part, index) => {
+		// 保留第一个部分、常见样式和带连字符的样式,过滤掉重复的部分和数字
+		return index === 0 || 
+			   commonStyles.some(style => part === style || part.endsWith(`-${style}`)) || 
+			   (!parts.slice(0, index).includes(part) && isNaN(Number(part)));
+	}).join(' ');
+
+	return baseName || fontName;
+}

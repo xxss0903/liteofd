@@ -10,6 +10,7 @@ import { Font } from "./font/fonts.js"
 import { XmlData } from "./ofdData"
 import * as parser from "./parser"
 import { AttributeKey } from "./attrType"
+import { normalizeFontName } from "./utils/ofdUtils"
 
 /**
  * 判断是否为衬线字体
@@ -187,6 +188,7 @@ const loadFontByArrayBuffer = async (fontName: string, fontBytes: any) => {
 		});
 }
 
+
 /**
  * 加载单个字体
  * @param fontFile 字体文件
@@ -194,17 +196,19 @@ const loadFontByArrayBuffer = async (fontName: string, fontBytes: any) => {
  */
 export const loadSingleFont = async (fontFile: any, fontData: XmlData) => {
 	try {
-		let fontName =  parser.findAttributeValueByKey(fontData, AttributeKey.FontName)
-		console.log("fontName", fontName)
-		if(isDefaultFont(fontName)) {
-			await loadDefaultFont(fontName)
-		} else {
-			let fontBytes = await fontFile.async("uint8array")
-			await loadFontByArrayBuffer(fontName, fontBytes)
-		}
+		let fontName = parser.findAttributeValueByKey(fontData, AttributeKey.FontName);
+		// 规整字体名称
+		fontName = normalizeFontName(fontName);
+		console.log("规整后的字体名称", fontName);
 
+		if (isDefaultFont(fontName)) {
+			await loadDefaultFont(fontName);
+		} else {
+			let fontBytes = await fontFile.async("uint8array");
+			await loadFontByArrayBuffer(fontName, fontBytes);
+		}
 	} catch (e) {
-		console.error("load font err", e)
+		console.error("加载字体出错", e);
 	}
 }
 
@@ -246,8 +250,8 @@ export const loadDefaultFont = async (fontName: string) => {
 		return;
 	}
 	try {
-		// 构建字体文件路径
-		const fontPath = `./src/liteofd/assets/${fontName}.otf`;
+		// 修改字体文件路径
+		const fontPath = `assets/${fontName}.otf`;
 		await loadOTFFont(fontName, fontPath)
 	} catch (error) {
 		console.error(`加载字体 ${fontName} 时出错:`, error);

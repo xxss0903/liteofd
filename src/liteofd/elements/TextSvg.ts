@@ -6,6 +6,7 @@ import { convertToBox, convertToDpi } from "../utils/utils"
 import { createTextSpan, getCTM, getFontSize, parseColor } from "../utils/elementUtils"
 import { OfdDocument } from "../ofdDocument"
 import { CommonFont } from "../utils/commonFont"
+import { normalizeFontName } from "../utils/ofdUtils"
 
 /**
  * 文本组件
@@ -62,9 +63,11 @@ export class TextSvg extends BaseSvg {
 					if (standardFont) {
 						this.textStyle += `font-family: ${standardFont};`
 					} else {
+						fontName = normalizeFontName(fontName)
 						this.textStyle += `font-family: ${fontName};`
 					}
 				} else if (fontFamily) {
+					fontFamily = normalizeFontName(fontFamily)
 					this.textStyle += `font-family: ${fontFamily};`
 				}
 			}
