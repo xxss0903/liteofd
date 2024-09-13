@@ -1,4 +1,4 @@
-import { ToUnicodeMap } from "./to_unicode_map"
+import { ToUnicodeMap } from "./to_unicode_map.js"
 
 export const differences = () => {
   return [
