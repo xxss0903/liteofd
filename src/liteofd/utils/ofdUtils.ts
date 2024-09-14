@@ -32,7 +32,7 @@ const loadOFDFonts = async (files: any, fonts: XmlData) => {
 				let realFontName = fontName || familyName
 				console.log("realFontName", realFontName)
 				if(realFontName && isDefaultFont(realFontName)) {
-					await loadDefaultFont(realFontName)
+					// await loadDefaultFont(realFontName)
 				}
 			}
 		}
@@ -227,9 +227,9 @@ export const normalizeFontName = (fontName: string): string => {
 	// 处理带有样式和数字的字体名称,但保留常见的样式后缀
 	const commonStyles = ['Bold', 'Italic', 'Medium', 'Light', 'Regular', 'Heavy', 'Black', 'Thin', 'Condensed', 'Expanded'];
 	const parts = fontName.split(/\s+/);
-	
+
 	// 保留基本名称和常见样式
-	const uniqueParts = parts.filter((part, index) => 
+	const uniqueParts = parts.filter((part, index) =>
 		index === 0 || commonStyles.includes(part)
 	);
 

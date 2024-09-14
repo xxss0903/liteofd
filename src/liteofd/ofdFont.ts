@@ -202,7 +202,7 @@ export const loadSingleFont = async (fontFile: any, fontData: XmlData) => {
 		console.log("规整后的字体名称", fontName);
 
 		if (isDefaultFont(fontName)) {
-			await loadDefaultFont(fontName);
+			// await loadDefaultFont(fontName);
 		} else {
 			let fontBytes = await fontFile.async("uint8array");
 			// await loadFontByArrayBuffer(fontName, fontBytes);
