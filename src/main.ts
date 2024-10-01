@@ -159,7 +159,7 @@ export function minus() {
 
 export function firstPage() {
   console.log('第一页');
-  liteOfd.scrollToPage(1)
+  liteOfd.goToPage(1)
 }
 
 export function prePage() {
@@ -174,7 +174,7 @@ export function nextPage() {
 
 export function lastPage() {
   console.log('最后一页');
-  liteOfd.scrollToPage(liteOfd.getTotalPages())
+  liteOfd.goToPage(liteOfd.totalPages)
 }
 
 export function resetZoom() {
@@ -182,12 +182,12 @@ export function resetZoom() {
   liteOfd.resetZoom();
 }
 function updatePageInfo() {
-  const totalPages = liteOfd.getTotalPages();
+  const totalPages = liteOfd.totalPages;
   console.log(`当前页面: /${totalPages}`);
   // 更新 UI 显示当前页面和总页数
   const pageInfoElement = document.querySelector('.page-info') as HTMLElement;
   if (pageInfoElement) {
-    pageInfoElement.textContent = `${liteOfd.getCurrentPageIndex()} / ${totalPages}`;
+    pageInfoElement.textContent = `${liteOfd.currentPage} / ${totalPages}`;
   }
 }
 
@@ -198,12 +198,12 @@ export function searchKeyword() {
     const keyword = searchInput.value;
     console.log('搜索关键词:', keyword);
     // 在这里添加搜索逻辑
-    liteOfd.searchText(keyword);
+    liteOfd.search(keyword);
   } else {
     console.error('未找到搜索输入框');
   }
 
-  let content = liteOfd.getContentText(null)
+  let content = liteOfd.getContent()
   console.log("get content", content)
 }
 
