@@ -70,6 +70,21 @@ body {
   display: block; /* 当添加 'show' 类时显示大纲 */
 }
 
+.ofdtools {
+  width: 200px;
+  min-width: 200px;
+  border-right: 1px solid #ccc;
+  padding: 10px;
+  overflow-y: auto;
+  padding-top: 120px;
+  background-color: aqua;
+  display: none; /* 默认隐藏大纲 */
+}
+
+.ofdtools.show {
+  display: block; /* 当添加 'show' 类时显示大纲 */
+}
+
 .content {
   padding: 12px;
   flex: 1;
@@ -78,6 +93,12 @@ body {
   height: calc(100vh - 60px); /* 减去工具栏的高度 */
   transition: margin-left 0.3s ease; /* 添加过渡效果 */
 }
+
+.content.with-tools {
+  margin-right: 200px; /* 当显示大纲时，为内容添加左边距 */
+}
+
+
 
 .content.with-outlines {
   margin-left: 200px; /* 当显示大纲时，为内容添加左边距 */

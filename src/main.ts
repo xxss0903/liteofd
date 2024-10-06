@@ -51,7 +51,7 @@ function initOfdEventListeners() {
     displaySignatureDetails(nodeData, sealObject);
   });
 
-  // 添加点击��他地方关闭弹窗的监听器
+  // 添加点击他地方关闭弹窗的监听器
   document.addEventListener('click', (event) => {
     const detailsContainer = document.getElementById('signature-details');
     const overlay = document.getElementById('overlay');
@@ -123,7 +123,7 @@ function parseOfdFile(file: File) {
     liteOfd.parse(file).then((data: OfdDocument) => {
     console.log('解析OFD文件成功:', data);
     updatePageInfo()
-      let temp = liteOfd.render(null, 'background-color: white')
+      let temp = liteOfd.render(null, 'background-color: white; margin-top: 12px;')
       appContent.appendChild(temp)
 	  initOfdEventListeners(); // 在渲染完成后初始化事件监听器
     // 添加大纲
@@ -218,6 +218,42 @@ addOfdPageChangeListener();
 
 
 
+
+
+export function toggleOutlines() {
+  const outlinesElement = document.getElementById('outlines');
+  const contentElement = document.getElementById('content');
+  
+  if (outlinesElement && contentElement) {
+    outlinesElement.classList.toggle('show');
+    contentElement.classList.toggle('with-outlines');
+  }
+}
+
+// 添加新的函数来处理工具按钮点击
+export function openToolsMenu() {
+  console.log('切换工具菜单');
+  const ofdtoolsElement = document.getElementById('ofdtools');
+  const contentElement = document.getElementById('content');
+  
+  if (ofdtoolsElement && contentElement) {
+    ofdtoolsElement.classList.toggle('show');
+    contentElement.classList.toggle('with-tools');
+  }
+}
+
+// 示例工具函数
+export function someToolFunction() {
+  console.log('执行工具1');
+  // 实现工具1的功能
+}
+
+export function anotherToolFunction() {
+  console.log('执行工具2');
+  // 实现工具2的功能
+}
+
+
 // 将函数添加到window对象
 Object.assign(window, {
   resetZoom,
@@ -232,15 +268,8 @@ Object.assign(window, {
   updatePageInfo,
   searchKeyword,
   lastPage,
-  toggleOutlines  // 添加 toggleOutlines 到这里
+  toggleOutlines,  // 添加 toggleOutlines 到这里
+  openToolsMenu,
+  someToolFunction,
+  anotherToolFunction
 });
-
-export function toggleOutlines() {
-  const outlinesElement = document.getElementById('outlines');
-  const contentElement = document.getElementById('content');
-  
-  if (outlinesElement && contentElement) {
-    outlinesElement.classList.toggle('show');
-    contentElement.classList.toggle('with-outlines');
-  }
-}
