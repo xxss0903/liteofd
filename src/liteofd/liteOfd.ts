@@ -13,7 +13,7 @@ export default class LiteOfd {
   private ofdDocument: OfdDocument
   private ofdRender: OfdRender | null = null
   private currentScale: number = 1
-
+  
   constructor() {
     this.ofdDocument = new OfdDocument()
   }
@@ -117,7 +117,7 @@ export default class LiteOfd {
    */
   async parse(file: string | File | ArrayBuffer): Promise<OfdDocument> {
     try {
-      this.ofdDocument = await parser.parseOFDFile(file)
+      this.ofdDocument = await parser.parseOFDFile(file).promise
       return this.ofdDocument
     } catch (e) {
       console.error("解析文件错误", e)

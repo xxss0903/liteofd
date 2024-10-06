@@ -1,12 +1,11 @@
 import './style.css'
 import LiteOfd from "./liteofd/liteOfd"
-import PromiseCapability from './liteofd/promiseCapability';
-import { OfdDocument } from './liteofd/ofdDocument';
 import { XmlData } from './liteofd/ofdData';
 import * as parser from './liteofd/parser'
 import { AttributeKey, OFD_KEY } from './liteofd/attrType';
+import {OfdDocument} from "./liteofd/ofdDocument.ts";
 
-const appContent = document.getElementById('content') as HTMLElement
+const appContent = document.getElementById('content') as HTMLDivElement
 
 const liteOfd = new LiteOfd()
 
@@ -121,12 +120,11 @@ function renderOutlines(outlines: XmlData) {
 
 function parseOfdFile(file: File) {
 	appContent.innerHTML = ''
-  let ofdPromise = liteOfd.parseFile(file) as PromiseCapability<OfdDocument>
-  ofdPromise.promise.then((data: OfdDocument) => {
+    liteOfd.parse(file).then((data: OfdDocument) => {
     console.log('解析OFD文件成功:', data);
     updatePageInfo()
-	  const ofdDiv = liteOfd.renderOfd()
-	  appContent.appendChild(ofdDiv)
+      let temp = liteOfd.render(null, 'background-color: white')
+      appContent.appendChild(temp)
 	  initOfdEventListeners(); // 在渲染完成后初始化事件监听器
     // 添加大纲
     renderOutlines(data.outlines);
