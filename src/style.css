@@ -71,8 +71,8 @@ body {
 }
 
 .ofdtools {
-  width: 200px;
-  min-width: 200px;
+  width: 400px;
+  min-width: 400px;
   border-right: 1px solid #ccc;
   padding: 10px;
   overflow-y: auto;
@@ -88,6 +88,7 @@ body {
 .content {
   padding: 12px;
   flex: 1;
+  width: 800px;
   background-color: #f5f5f5;
   margin-top: 80px; /* 调整这个值以匹配工具栏的高度 */
   height: calc(100vh - 60px); /* 减去工具栏的高度 */
@@ -95,7 +96,7 @@ body {
 }
 
 .content.with-tools {
-  margin-right: 200px; /* 当显示大纲时，为内容添加左边距 */
+  margin-right: 10px; /* 当显示大纲时，为内容添加左边距 */
 }
 
 

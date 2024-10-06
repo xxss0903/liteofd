@@ -4,6 +4,7 @@ import { XmlData } from './liteofd/ofdData';
 import * as parser from './liteofd/parser'
 import { AttributeKey, OFD_KEY } from './liteofd/attrType';
 import {OfdDocument} from "./liteofd/ofdDocument.ts";
+import { OfdTools } from './liteofd/ofdtools.ts';
 
 const appContent = document.getElementById('content') as HTMLDivElement
 
@@ -215,11 +216,6 @@ export function addOfdPageChangeListener() {
 // 在初始化时调用此函数
 addOfdPageChangeListener();
 
-
-
-
-
-
 export function toggleOutlines() {
   const outlinesElement = document.getElementById('outlines');
   const contentElement = document.getElementById('content');
@@ -242,6 +238,8 @@ export function openToolsMenu() {
   }
 }
 
+let ofdTools: OfdTools
+
 // 示例工具函数
 export function someToolFunction() {
   console.log('执行工具1');
@@ -249,6 +247,106 @@ export function someToolFunction() {
 }
 
 export function anotherToolFunction() {
+  console.log('执行工具2');
+  // 实现工具2的功能
+}
+
+export function showOfdStructure() {
+  console.log('显示OFD结构');
+  if (!ofdTools) {
+    ofdTools = new OfdTools(liteOfd.getOfdDocument());
+  }
+  if (!ofdTools) {
+    console.error('OFD工具初始化失败');
+    return;
+  }
+
+  const structure = ofdTools.getOfdStructure();
+  if (!structure) {
+    console.error('无法获取OFD结构');
+    return;
+  }
+
+  const displayElement = document.getElementById('ofdStructureDisplay');
+  if (!displayElement) {
+    console.error('无法找到显示元素');
+    return;
+  }
+
+  // 清空现有内容
+  displayElement.innerHTML = '';
+
+  // 创建树状结构
+  const tree = document.createElement('ul');
+  tree.className = 'ofd-structure-tree';
+
+  // 递归函数来创建树节点
+  function createTreeNode(obj: any, parentElement: HTMLElement) {
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        const li = document.createElement('li');
+        const span = document.createElement('span');
+        span.textContent = key;
+        li.appendChild(span);
+
+        if (typeof obj[key] === 'object' && obj[key] !== null) {
+          const subUl = document.createElement('ul');
+          li.appendChild(subUl);
+          createTreeNode(obj[key], subUl);
+        } else {
+          span.textContent += `: ${obj[key]}`;
+        }
+
+        parentElement.appendChild(li);
+      }
+    }
+  }
+
+  createTreeNode(structure, tree);
+  displayElement.appendChild(tree);
+
+  // 添加简单的样式
+  const style = document.createElement('style');
+  style.textContent = `
+    .ofd-structure-tree ul {
+      list-style-type: none;
+      padding-left: 20px;
+    }
+    .ofd-structure-tree li {
+      margin: 5px 0;
+    }
+    .ofd-structure-tree span {
+      cursor: pointer;
+    }
+  `;
+  document.head.appendChild(style);
+
+  // 添加折叠/展开功能
+  tree.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement;
+    if (target.tagName === 'SPAN') {
+      const li = target.parentElement;
+      const ul = li?.querySelector('ul');
+      if (ul) {
+        ul.style.display = ul.style.display === 'none' ? 'block' : 'none';
+      }
+    }
+  });
+
+  console.log('OFD结构已显示');
+}
+
+export function showSignatures() {
+  console.log('执行工具2');
+  // 实现工具2的功能
+}
+
+export function showAnnotations() {
+  console.log('执行工具2');
+  // 实现工具2的功能
+}
+
+export function showAttachments() {
   console.log('执行工具2');
   // 实现工具2的功能
 }
@@ -271,5 +369,9 @@ Object.assign(window, {
   toggleOutlines,  // 添加 toggleOutlines 到这里
   openToolsMenu,
   someToolFunction,
-  anotherToolFunction
+  anotherToolFunction,
+  showOfdStructure,
+  showSignatures,
+  showAnnotations,
+  showAttachments
 });

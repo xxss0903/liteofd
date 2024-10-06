@@ -157,4 +157,15 @@ export default class LiteOfd {
   executeAction(action: XmlData): void {
     ofdActions.executeAction(this, this.ofdDocument, action)
   }
+
+  /**
+   * 获取OFD文档对象
+   * @returns OfdDocument 当前的OFD文档对象
+   */
+  getOfdDocument(): OfdDocument {
+    if (!this.ofdDocument) {
+      throw new Error('OFD文档尚未解析，请先调用parse方法');
+    }
+    return this.ofdDocument;
+  }
 }
