@@ -31,6 +31,17 @@ export default class LiteOfd {
   }
 
   /**
+   * 渲染对应页面
+   * @param pageIndex 页面位置 
+   */
+  renderPage(pageIndex: number, pageWrapStyle?: string){
+    this.ofdRender = new OfdRender(this.ofdDocument)
+    const containerDiv = document.createElement('div')
+    this.ofdRender.renderOfdWithPageIndexWithScale(pageIndex, containerDiv, pageWrapStyle, 2)
+    return containerDiv
+  }
+
+  /**
    * 获取当前页码
    */
   get currentPage(): number {

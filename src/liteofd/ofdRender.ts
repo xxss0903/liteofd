@@ -54,6 +54,15 @@ export class OfdRender {
 		return this.scrollContainer
 	}
 
+	renderOfdWithPageIndexWithScale(pageIndex: number, customDiv: HTMLDivElement, pageWrapStyle: string | null = null, scale: number) {
+		setPageScal(scale)
+		this.renderOfdWithPageIndex(pageIndex, customDiv, pageWrapStyle)
+	}
+
+	renderOfdWithPageIndex(pageIndex: number, customDiv: HTMLDivElement, pageWrapStyle: string | null = null) {
+		this.#renderPage(pageIndex, customDiv, pageWrapStyle)
+	}
+
 	changeScale(scale: number){
 		setPageScal(scale)
 	}
@@ -92,22 +101,26 @@ export class OfdRender {
 	#renderPages(rootContainer: HTMLDivElement, wrapStyle: string | null) {
 		try {
 			for (let i = 0; i < this.pages.length; i++) {
-				let pageData = this.pages[i]
-				let pageContainer = new OfdPageContainer(this.ofdDocument, pageData, rootContainer)
-				// 为每个页面容器添加一个独特的ID
-				const pageId = `ofd-page-${i + 1}`;
-				let pageView = pageContainer.getPageElement()
-				pageView.setAttribute(AttributeKey.ID, pageId);
-				if (wrapStyle) {
-					let tempStyle = pageView.getAttribute("style") || ""
-					tempStyle += wrapStyle
-					pageView.setAttribute("style", tempStyle)
-				}
-				rootContainer!.appendChild(pageView)
+				this.#renderPage(i, rootContainer, wrapStyle);
 			}
 		} catch (error) {
 			console.log("render error", error)
 		}
+	}
+
+	#renderPage(pageIndex: number, rootContainer: HTMLDivElement, wrapStyle: string | null = null) {	
+		let pageData = this.pages[pageIndex]
+		let pageContainer = new OfdPageContainer(this.ofdDocument, pageData, rootContainer)
+		// 为每个页面容器添加一个独特的ID
+		const pageId = `ofd-page-${pageIndex + 1}`;
+		let pageView = pageContainer.getPageElement()
+		pageView.setAttribute(AttributeKey.ID, pageId);
+		if (wrapStyle) {
+			let tempStyle = pageView.getAttribute("style") || ""
+			tempStyle += wrapStyle
+			pageView.setAttribute("style", tempStyle)
+		}
+		rootContainer!.appendChild(pageView)
 	}
 
 	/**
