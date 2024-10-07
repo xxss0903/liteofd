@@ -62,14 +62,7 @@
       <div class="content-wrapper">
         <div id="outlines" class="outlines"></div>
         <div id="content" class="content"></div>
-        <div id="ofdtools" class="ofdtools">
-        <h3>OFD工具</h3>
-        <button class="tool-bar-btn" onclick="showOfdStructure()">显示OFD结构</button>
-        <button class="tool-bar-btn" onclick="showSignatures()">显示签名信息</button>
-        <button class="tool-bar-btn" onclick="showAnnotations()">显示注释</button>
-        <button class="tool-bar-btn" onclick="showAttachments()">显示附件</button>
-        <div id="ofdStructureDisplay"></div>
-        </div>
+        <iframe id="ofdtools" class="ofdtools" src="tools.html" style="display: none; width: 1200px; border: none;"></iframe>
       </div>
       <div id="overlay" class="overlay"></div>
       <div id="signature-details" class="signature-details"></div>

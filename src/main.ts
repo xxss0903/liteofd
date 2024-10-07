@@ -4,7 +4,8 @@ import { XmlData } from './liteofd/ofdData';
 import * as parser from './liteofd/parser'
 import { AttributeKey, OFD_KEY } from './liteofd/attrType';
 import {OfdDocument} from "./liteofd/ofdDocument.ts";
-import { OfdTools } from './liteofd/ofdtools.ts';
+import { OfdTools } from './liteofd/ofdtools';
+import { ChildProcess } from 'child_process';
 
 const appContent = document.getElementById('content') as HTMLDivElement
 
@@ -124,11 +125,16 @@ function parseOfdFile(file: File) {
     liteOfd.parse(file).then((data: OfdDocument) => {
     console.log('解析OFD文件成功:', data);
     updatePageInfo()
-      let temp = liteOfd.render(null, 'background-color: white; margin-top: 12px;')
+      let temp = liteOfd.render(undefined, 'background-color: white; margin-top: 12px;')
       appContent.appendChild(temp)
 	  initOfdEventListeners(); // 在渲染完成后初始化事件监听器
     // 添加大纲
     renderOutlines(data.outlines);
+    
+    // 初始化 OfdTools
+    ofdTools = new OfdTools(data);
+    // 将 ofdTools 添加到 window 对象，使其可以从 iframe 中访问
+    (window as any).ofdTools = ofdTools;
   }).catch((error) => {
     console.error('解析OFD文件失败:', error);
     alert('解析OFD文件失败，请检查文件是否正确');
@@ -208,7 +214,7 @@ export function searchKeyword() {
 
 export function addOfdPageChangeListener() {
   console.log('添加OFD页面变化监听器');
-  window.addEventListener('ofdPageChange', (event: CustomEvent) => {
+  window.addEventListener('ofdPageChange', (event: Event) => {
     updatePageInfo();
   });
 }
@@ -229,12 +235,17 @@ export function toggleOutlines() {
 // 添加新的函数来处理工具按钮点击
 export function openToolsMenu() {
   console.log('切换工具菜单');
-  const ofdtoolsElement = document.getElementById('ofdtools');
+  const ofdtoolsElement = document.getElementById('ofdtools') as HTMLIFrameElement;
   const contentElement = document.getElementById('content');
   
   if (ofdtoolsElement && contentElement) {
-    ofdtoolsElement.classList.toggle('show');
-    contentElement.classList.toggle('with-tools');
+    if (ofdtoolsElement.style.display === 'none') {
+      ofdtoolsElement.style.display = 'block';
+      contentElement.style.width = 'calc(100% - 300px)';
+    } else {
+      ofdtoolsElement.style.display = 'none';
+      contentElement.style.width = '100%';
+    }
   }
 }
 
@@ -250,107 +261,6 @@ export function anotherToolFunction() {
   console.log('执行工具2');
   // 实现工具2的功能
 }
-
-export function showOfdStructure() {
-  console.log('显示OFD结构');
-  if (!ofdTools) {
-    ofdTools = new OfdTools(liteOfd.getOfdDocument());
-  }
-  if (!ofdTools) {
-    console.error('OFD工具初始化失败');
-    return;
-  }
-
-  const structure = ofdTools.getOfdStructure();
-  if (!structure) {
-    console.error('无法获取OFD结构');
-    return;
-  }
-
-  const displayElement = document.getElementById('ofdStructureDisplay');
-  if (!displayElement) {
-    console.error('无法找到显示元素');
-    return;
-  }
-
-  // 清空现有内容
-  displayElement.innerHTML = '';
-
-  // 创建树状结构
-  const tree = document.createElement('ul');
-  tree.className = 'ofd-structure-tree';
-
-  // 递归函数来创建树节点
-  function createTreeNode(obj: any, parentElement: HTMLElement) {
-    for (const key in obj) {
-      if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        const li = document.createElement('li');
-        const span = document.createElement('span');
-        span.textContent = key;
-        li.appendChild(span);
-
-        if (typeof obj[key] === 'object' && obj[key] !== null) {
-          const subUl = document.createElement('ul');
-          li.appendChild(subUl);
-          createTreeNode(obj[key], subUl);
-        } else {
-          span.textContent += `: ${obj[key]}`;
-        }
-
-        parentElement.appendChild(li);
-      }
-    }
-  }
-
-  createTreeNode(structure, tree);
-  displayElement.appendChild(tree);
-
-  // 添加简单的样式
-  const style = document.createElement('style');
-  style.textContent = `
-    .ofd-structure-tree ul {
-      list-style-type: none;
-      padding-left: 20px;
-    }
-    .ofd-structure-tree li {
-      margin: 5px 0;
-    }
-    .ofd-structure-tree span {
-      cursor: pointer;
-    }
-  `;
-  document.head.appendChild(style);
-
-  // 添加折叠/展开功能
-  tree.addEventListener('click', (event) => {
-    const target = event.target as HTMLElement;
-    if (target.tagName === 'SPAN') {
-      const li = target.parentElement;
-      const ul = li?.querySelector('ul');
-      if (ul) {
-        ul.style.display = ul.style.display === 'none' ? 'block' : 'none';
-      }
-    }
-  });
-
-  console.log('OFD结构已显示');
-}
-
-export function showSignatures() {
-  console.log('执行工具2');
-  // 实现工具2的功能
-}
-
-export function showAnnotations() {
-  console.log('执行工具2');
-  // 实现工具2的功能
-}
-
-export function showAttachments() {
-  console.log('执行工具2');
-  // 实现工具2的功能
-}
-
 
 // 将函数添加到window对象
 Object.assign(window, {
@@ -369,9 +279,5 @@ Object.assign(window, {
   toggleOutlines,  // 添加 toggleOutlines 到这里
   openToolsMenu,
   someToolFunction,
-  anotherToolFunction,
-  showOfdStructure,
-  showSignatures,
-  showAnnotations,
-  showAttachments
+  anotherToolFunction
 });

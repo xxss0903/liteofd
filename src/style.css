@@ -70,13 +70,18 @@ body {
   display: block; /* 当添加 'show' 类时显示大纲 */
 }
 
+.ofdStructureDisplay {
+  overflow: auto;
+  height: 70vh;
+}
+
 .ofdtools {
   width: 400px;
   min-width: 400px;
   border-right: 1px solid #ccc;
   padding: 10px;
   overflow-y: auto;
-  padding-top: 120px;
+  padding-top: 80px;
   background-color: aqua;
   display: none; /* 默认隐藏大纲 */
 }

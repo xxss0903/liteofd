@@ -11,27 +11,33 @@ export class OfdTools {
     this.ofdDocument = ofdDocument
   }
 
-
   // 获取OFD文档结构
-  getOfdStructure(): any {
-    if (!this.ofdDocument) {
-      console.error('OFD文档未加载');
-      return null;
-    }
-
-    // 创建一个对象来存储OFD文档的结构
-    const structure = {
-      documentData: this.ofdDocument.documentData,
-      pages: this.ofdDocument.pages,
-      outlines: this.ofdDocument.outlines,
-      signatures: this.ofdDocument.signatures,
-      publicRes: this.ofdDocument.publicRes,
-      documentRes: this.ofdDocument.documentRes,
-      annots: this.ofdDocument.annots
-    };
-
-    console.log('OFD文档结构:', structure);
-    return structure;
+  getOfdStructure(file: File): any {
+    // 实现获取结构的逻辑，可能需要重新解析文件
   }
 
+  // 显示OFD结构
+  public showOfdStructure(file: File): void {
+    console.log('显示OFD结构');
+    const structure = this.getOfdStructure(file);
+    // 实现显示结构的逻辑
+  }
+
+  // 显示签名信息
+  public showSignatures(file: File): void {
+    console.log('显示签名信息');
+    // 实现显示签名信息的逻辑
+  }
+
+  // 显示注释
+  public showAnnotations(file: File): void {
+    console.log('显示注释');
+    // 实现显示注释的逻辑
+  }
+
+  // 显示附件
+  public showAttachments(file: File): void {
+    console.log('显示附件');
+    // 实现显示附件的逻辑
+  }
 }

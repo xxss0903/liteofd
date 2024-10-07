@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OFD 工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .tools-bar {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            align-items: center;
+        }
+        .tool-bar-btn {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+        }
+        .tool-bar-btn:hover {
+            background-color: #45a049;
+        }
+        .file-input-wrapper {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+        #selectedFileName {
+            margin-left: 10px;
+            font-style: italic;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+        #ofdStructureDisplay {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .ofd-structure-tree ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        .ofd-structure-tree li {
+            margin: 5px 0;
+        }
+        .ofd-structure-tree span {
+            cursor: pointer;
+            color: #333;
+        }
+        .ofd-structure-tree span:hover {
+            color: #4CAF50;
+        }
+        .tools-content {
+            display: flex;
+            flex-direction: row;
+        }
+        .ofd-structure-display {
+            width: 30%;
+        }
+        .ofd-preview {
+            width: 70%;
+        }   
+    </style>
+</head>
+<body>
+    <div class="tools-bar">
+        <div class="file-input-wrapper">
+            <input type="file" id="ofdFileInput" accept=".ofd" style="display: none;">
+            <button class="tool-bar-btn" onclick="selectOfdFile()">选择 OFD 文件</button>
+            <span id="selectedFileName"></span>
+        </div>
+        <button class="tool-bar-btn" onclick="showOfdStructure()">显示OFD结构</button>
+        <button class="tool-bar-btn" onclick="showSignatures()">显示签名信息</button>
+        <button class="tool-bar-btn" onclick="showAnnotations()">显示注释</button>
+        <button class="tool-bar-btn" onclick="showAttachments()">显示附件</button>
+    </div>
+    <div class="tools-content">
+        <div id="ofdStructureDisplay" class="ofd-structure-display"></div>
+        <div id="ofdPreview" class="ofd-preview"></div>
+    </div>
+    <script type="module" src="/src/tools.ts"></script>
+</body>
+</html>
