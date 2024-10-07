@@ -1,6 +1,8 @@
+import { AttributeKey, OFD_KEY } from './liteofd/attrType';
 import LiteOfd from './liteofd/liteOfd';
 import { XmlData } from './liteofd/ofdData';
 import { OfdDocument } from './liteofd/ofdDocument';
+import { findAttributeValueByKey, findValueByTagName } from './liteofd/parser';
 
 let selectedFile: File | null = null;
 
@@ -54,44 +56,71 @@ function handleFileChange(event: Event) {
     }
 }
 
-// 渲染数组的树形结构
-function renderTreeView(data: any, parentElement: HTMLElement) {
-  const ul = document.createElement('ul');
-  ul.className = 'tree-view';
-
-  for (const key in data) {
-    if (Object.prototype.hasOwnProperty.call(data, key)) {
-      const li = document.createElement('li');
-      li.className = 'tree-item';
-
-      const span = document.createElement('span');
-      span.textContent = key;
-      li.appendChild(span);
-
-      if (typeof data[key] === 'object' && data[key] !== null) {
-        renderTreeView(data[key], li);
-      } else {
-        span.textContent += `: ${data[key]}`;
-      }
-
-      ul.appendChild(li);
-    }
-  }
-
-  parentElement.appendChild(ul);
-}
-
-// 使用示例
-function showTreeStructure(data: any[]) {
-  const container = document.createElement('div');
-  if (container) {
-    container.innerHTML = '';
-    renderTreeView(data, container);
-    return container
-  }
-}
-
 let previewEle;
+
+function getFontMap(page: XmlData, index: number, pageItem: HTMLElement) {
+     // 展示字体
+     const textObject = findValueByTagName(page, OFD_KEY.TextObject)
+     console.log("textObject :", textObject)
+     console.log("document :", ofdDocument)
+     const fontRes = findValueByTagName(ofdDocument!!.publicRes, OFD_KEY.Font)
+     console.log("fontRes :", fontRes)
+     const fontMap = new Map<string, XmlData>()
+     textObject?.children.forEach((child: XmlData) => {
+         const font = findAttributeValueByKey(child, AttributeKey.FONT)
+         fontRes?.children.forEach((fontChild: XmlData) => {
+            const fontID = findAttributeValueByKey(fontChild, AttributeKey.ID)
+            console.log("fontNameID :", fontID)
+            if(fontID === font) {
+                console.log("fontChild :", fontChild)
+                fontMap.set(font, fontChild)
+            }
+         })
+     })
+ 
+     // 创建字体组件
+     const fontComponent = document.createElement('div');
+     fontComponent.className = 'font-component';
+     
+     // 创建字体树
+     const fontTree = document.createElement('ul');
+     fontTree.className = 'font-tree';
+     
+     // 将fontMap中的fontID和fontName进行树形展示
+     fontMap.forEach((fontChild: XmlData, fontID: string) => {
+        const fontName = findAttributeValueByKey(fontChild, AttributeKey.FontName)
+        const fontItem = document.createElement('li');
+        fontItem.className = 'font-item';
+        
+        const fontHeader = document.createElement('span');
+        fontHeader.textContent = `${fontID} : ${fontName}`;
+        fontItem.appendChild(fontHeader);
+        
+        fontItem.addEventListener('click', (event) => {
+            event.stopPropagation(); // 阻止事件冒泡到pageItem
+            
+            console.log(`点击了字体: ${fontID} - ${fontName}`);
+            // 在这里可以添加更多的点击事件处理逻辑
+        });
+        
+        fontTree.appendChild(fontItem);
+     })
+     
+     // 将字体树添加到字体组件
+     fontComponent.appendChild(fontTree);
+     
+     // 将字体组件添加到pageItem
+     pageItem.appendChild(fontComponent);
+     
+     console.log("fontMap :", fontMap)
+     
+     return fontComponent;
+}
+
+// 展示页面中的元素
+function togglePageItem(page: XmlData, index: number, pageItem: HTMLElement) {
+    getFontMap(page, index, pageItem)
+}
 
 // 渲染ofd的对应页面
 function renderOfdPage(pageIndex: number){
@@ -109,11 +138,13 @@ function renderPageTreeView(pages: XmlData[]) {
     if (container) {
         container.innerHTML = '';
         pages.forEach((page, index) => {
+            // 页面元素
             const pageItem = document.createElement('li');
             pageItem.textContent = `第 ${index + 1} 页`;
             pageItem.className = 'tree-item';
             pageItem.addEventListener('click', () => {
                 renderOfdPage(index)
+                togglePageItem(page, index, pageItem)
             });
 
             container.appendChild(pageItem);
@@ -122,6 +153,7 @@ function renderPageTreeView(pages: XmlData[]) {
     }
 }
 
+let ofdDocument: OfdDocument | null = null
 
 // 显示OFD结构
 export function showOfdStructure(data: OfdDocument) {
@@ -134,6 +166,7 @@ export function showOfdStructure(data: OfdDocument) {
         return;
     }
     console.log('OFD 文件结构:', data);
+    ofdDocument = data
     // 将data中的pages显示为树形结构，pages是数组，每个数组元素是一个XmlData
     const ofdStructureDisplay = document.getElementById('ofdStructureDisplay') as HTMLDivElement;
     if (ofdStructureDisplay) {
@@ -170,6 +203,14 @@ export function showAttachments() {
     }
 }
 
+// 添加文件选择事件监听器
+document.addEventListener('DOMContentLoaded', () => {
+    const fileInput = document.getElementById('ofdFileInput');
+    if (fileInput) {
+        fileInput.addEventListener('change', handleFileChange);
+    }
+});
+
 // 将函数添加到 window 对象，使其可以从 HTML 中直接调用
 Object.assign(window, {
     selectOfdFile,
@@ -177,12 +218,4 @@ Object.assign(window, {
     showSignatures,
     showAnnotations,
     showAttachments
-});
-
-// 添加文件选择事件监听器
-document.addEventListener('DOMContentLoaded', () => {
-    const fileInput = document.getElementById('ofdFileInput');
-    if (fileInput) {
-        fileInput.addEventListener('change', handleFileChange);
-    }
 });
