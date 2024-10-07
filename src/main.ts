@@ -219,9 +219,6 @@ export function addOfdPageChangeListener() {
   });
 }
 
-// 在初始化时调用此函数
-addOfdPageChangeListener();
-
 export function toggleOutlines() {
   const outlinesElement = document.getElementById('outlines');
   const contentElement = document.getElementById('content');
@@ -250,6 +247,21 @@ export function openToolsMenu() {
 }
 
 let ofdTools: OfdTools
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('文档加载完成');
+  initializeApp();
+});
+
+function initializeApp() {
+  // 在这里放置所有需要在文档加载完成后执行的初始化代码
+  addOfdPageChangeListener();
+  initOfdEventListeners();
+  // 可以添加其他初始化函数
+  openToolsMenu()
+}
+
 
 // 将函数添加到window对象
 Object.assign(window, {
