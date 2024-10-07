@@ -108,18 +108,43 @@ function getFontMap(page: XmlData, index: number, pageItem: HTMLElement) {
      
      // 将字体树添加到字体组件
      fontComponent.appendChild(fontTree);
-     
-     // 将字体组件添加到pageItem
-     pageItem.appendChild(fontComponent);
-     
      console.log("fontMap :", fontMap)
      
      return fontComponent;
 }
 
+function getFontContainer(page: XmlData, index: number, pageItem: HTMLElement) {
+    const fontWrapper = getFontMap(page, index, pageItem);
+    fontWrapper.className = 'font-wrapper';
+    // 创建字体组件容器
+    const fontContainer = document.createElement('div');
+    fontContainer.className = 'font-container';
+
+    // 创建字体标题
+    const fontTitle = document.createElement('span');
+    fontTitle.textContent = '字体';
+    fontTitle.className = 'font-title';
+
+    // 将字体标题和字体组件添加到容器中
+    fontContainer.appendChild(fontTitle);
+    fontContainer.appendChild(fontWrapper);
+
+    // 将字体容器添加到页面项目中
+    pageItem.appendChild(fontContainer);
+
+    // 添加切换显示/隐藏的功能
+    fontTitle.addEventListener('click', (event) => {
+        event.stopPropagation(); // 阻止事件冒泡
+        fontWrapper.style.display = fontWrapper.style.display === 'none' ? 'block' : 'none';
+    });
+
+    // 默认隐藏字体组件
+    fontWrapper.style.display = 'none';
+}
+
 // 展示页面中的元素
 function togglePageItem(page: XmlData, index: number, pageItem: HTMLElement) {
-    getFontMap(page, index, pageItem)
+    getFontContainer(page, index, pageItem)
 }
 
 // 渲染ofd的对应页面
