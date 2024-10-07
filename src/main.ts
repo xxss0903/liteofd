@@ -251,17 +251,6 @@ export function openToolsMenu() {
 
 let ofdTools: OfdTools
 
-// 示例工具函数
-export function someToolFunction() {
-  console.log('执行工具1');
-  // 实现工具1的功能
-}
-
-export function anotherToolFunction() {
-  console.log('执行工具2');
-  // 实现工具2的功能
-}
-
 // 将函数添加到window对象
 Object.assign(window, {
   resetZoom,
@@ -278,6 +267,4 @@ Object.assign(window, {
   lastPage,
   toggleOutlines,  // 添加 toggleOutlines 到这里
   openToolsMenu,
-  someToolFunction,
-  anotherToolFunction
 });
