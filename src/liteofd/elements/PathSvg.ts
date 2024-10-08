@@ -219,11 +219,9 @@ export class PathSvg extends BaseSvg {
 		let strokeColorObj = parser.findValueByTagName(nodeData, OFD_KEY.StrokeColor)
 		let strokeColorBoolean = parser.findAttributeValueByKey(nodeData, AttributeKey.Stroke)
 		let strokeColorStr = strokeColorObj && parser.findAttributeValueByKey(strokeColorObj, AttributeKey.Value)
-		console.log("strokeColorStr", nodeData, strokeColorObj, strokeColorStr)
 		if (strokeColorBoolean && JSON.parse(strokeColorBoolean)) {
 			if (strokeColorStr) {
 				let fillColorValue = parseColor(strokeColorStr)
-				console.log("strokeColor fillcolorValue", fillColorValue)
 				pathStyle += `stroke: ${fillColorValue};`
 			}
 		} else if(showDefaultStrokeColor) {

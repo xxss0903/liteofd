@@ -225,7 +225,7 @@ export const normalizeFontName = (fontName: string): string => {
 	fontName = fontName.split('-')[0];
 
 	// 处理带有样式和数字的字体名称,但保留常见的样式后缀
-	const commonStyles = ['Bold', 'Italic', 'Medium', 'Light', 'Regular', 'Heavy', 'Black', 'Thin', 'Condensed', 'Expanded'];
+	const commonStyles = ['Bold', 'Italic', 'Medium', 'Light', 'Regular', 'Heavy', 'Black', 'Thin', 'Condensed', 'Expanded', 'Medi', 'Regu', 'MediItal', 'ReguItal'];
 	const parts = fontName.split(/\s+/);
 
 	// 保留基本名称和常见样式

@@ -70,9 +70,9 @@ function getFontMap(page: XmlData, index: number, pageItem: HTMLElement) {
          const font = findAttributeValueByKey(child, AttributeKey.FONT)
          fontRes?.children.forEach((fontChild: XmlData) => {
             const fontID = findAttributeValueByKey(fontChild, AttributeKey.ID)
-            console.log("fontNameID :", fontID)
+            // console.log("fontNameID :", fontID)
             if(fontID === font) {
-                console.log("fontChild :", fontChild)
+                // console.log("fontChild :", fontChild)
                 fontMap.set(font, fontChild)
             }
          })

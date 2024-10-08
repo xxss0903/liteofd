@@ -30,6 +30,8 @@ export const AttributeKey = {
 	VScale: "VScale", // 字体的纵向压缩
 	WScale: "WScale", // 字体的宽度
 	Weight: "Weight", // 字体粗细
+	Bold: "Bold", // 字体粗细
+	Italic: "Italic", // 字体斜体
 	PageRef: "PageRef", // 签章的页面引用
 	Clip: "Clip", // 裁剪
 	Title: "Title", // 大纲的标题
