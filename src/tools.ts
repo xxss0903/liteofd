@@ -100,7 +100,8 @@ function getFontMap(page: XmlData, index: number, pageItem: HTMLElement) {
             event.stopPropagation(); // 阻止事件冒泡到pageItem
             
             console.log(`点击了字体: ${fontID} - ${fontName}`);
-            // 在这里可以添加更多的点击事件处理逻辑
+            // 预览字体
+            previewFont(fontID, fontName)
         });
         
         fontTree.appendChild(fontItem);
@@ -112,6 +113,49 @@ function getFontMap(page: XmlData, index: number, pageItem: HTMLElement) {
      
      return fontComponent;
 }
+
+
+// 预览字体，在ofd-preview中展示字体的样式显示
+function previewFont(fontID: string, fontName: string) {
+    const fontWrapper = document.createElement('div');
+    fontWrapper.className = 'font-wrapper';
+
+    const fontContainer = document.createElement('div');
+    fontContainer.className = 'font-container';
+    // 设置字体样式
+    const fontStyle = document.createElement('style');
+    fontStyle.textContent = `
+        @font-face {
+            font-family: '${fontName}';
+            src: local('${fontName}');
+        }
+    `;
+    document.head.appendChild(fontStyle);
+
+    // 创建预览文本
+    const previewText = document.createElement('p');
+    previewText.textContent = '这是一段使用该字体的预览文本 This is a preview text using this font';
+    previewText.style.fontFamily = `'${fontName}', sans-serif`;
+    previewText.style.fontSize = '16px';
+    previewText.style.marginTop = '10px';
+
+    fontContainer.appendChild(previewText);
+
+    // 添加字体信息
+    const fontInfo = document.createElement('p');
+    fontInfo.textContent = `字体ID: ${fontID}, 字体名称: ${fontName}`;
+    fontInfo.style.fontSize = '14px';
+    fontInfo.style.color = '#666';
+    fontInfo.style.marginTop = '5px';
+
+    fontContainer.appendChild(fontInfo);
+    fontWrapper.appendChild(fontContainer);
+
+    if (previewEle) {
+        previewEle.appendChild(fontWrapper);
+    }
+}
+
 
 function getFontContainer(page: XmlData, index: number, pageItem: HTMLElement) {
     const fontWrapper = getFontMap(page, index, pageItem);
