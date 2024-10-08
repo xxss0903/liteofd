@@ -202,10 +202,10 @@ export const loadSingleFont = async (fontFile: any, fontData: XmlData) => {
 		console.log("规整后的字体名称", fontName);
 
 		if (isDefaultFont(fontName)) {
-			// await loadDefaultFont(fontName);
+			await loadDefaultFont(fontName);
 		} else {
 			let fontBytes = await fontFile.async("uint8array");
-			// await loadFontByArrayBuffer(fontName, fontBytes);
+			await loadFontByArrayBuffer(fontName, fontBytes);
 		}
 	} catch (e) {
 		console.error("加载字体出错", e);
@@ -259,6 +259,16 @@ export const loadDefaultFont = async (fontName: string) => {
 	}
 }
 
+export const loadLocalDefaultFont = async (fontName: string, fontPath: string) => {
+	try {
+		console.log('load local font', fontName, fontPath)
+		await loadOTFFont(fontName, fontPath)
+	} catch (error) {
+		console.error(`加载字体 ${fontName} 时出错:`, error);
+		throw error;
+	}
+}
+
 /**
  * 加载 OTF 字体并添加到 @font-face
  * @param {string} fontName 字体名称
@@ -278,7 +288,8 @@ export async function loadOTFFont(fontName: string, fontPath: string) {
 	  const fontData = await response.arrayBuffer();
 	  const font = new FontFace(fontName, fontData);
 	  // 加载字体
-	  await font.load();
+	  let loadRes = await font.load();
+	  console.log("load font res", loadRes)
       // 将字体添加到 document.fonts
 	  document.fonts.add(font);
 	} catch (error) {
