@@ -147,7 +147,7 @@ export class PathSvg extends BaseSvg {
 			// 假设初始点为(0,0)，您可能需要根据实际情况调整这个值
 			pathD = `M0 0 ${pathD}`;
 		}
-		console.log("render pathD", pathD)
+		// console.log("render pathD", pathD)
 		pathSvg.setAttribute('d', pathD);
 	}
 
@@ -196,16 +196,15 @@ export class PathSvg extends BaseSvg {
      * @param nodeData XML数据节点
      * @returns 描边宽度的样式字符串
      */
-	#addStrokeWidth(nodeData: XmlData) {
+	#addStrokeWidth(nodeData: XmlData, showDefaultStrokeColor: boolean) {
 		let pathStyle = ""
 		let lineWidthStr = parser.findAttributeValueByKey(nodeData, AttributeKey.LineWidth)
 		if (lineWidthStr) {
 			let lineWidth = convertToDpi(parseFloat(lineWidthStr))
 			pathStyle = `stroke-width: ${lineWidth}px;`
-			// 如果有宽度，那么就添加stroke的颜色
-			pathStyle += this.#addStrokeColor(nodeData)
 		}
-	
+		// 如果有宽度，那么就添加stroke的颜色
+		pathStyle += this.#addStrokeColor(nodeData, showDefaultStrokeColor)
 
 		return pathStyle
 	}
@@ -215,17 +214,19 @@ export class PathSvg extends BaseSvg {
 	 * @param nodeData XML数据节点
 	 * @returns 描边颜色的样式字符串
 	 */
-	#addStrokeColor(nodeData: XmlData) {
+	#addStrokeColor(nodeData: XmlData, showDefaultStrokeColor: boolean) {
 		let pathStyle = ""
 		let strokeColorObj = parser.findValueByTagName(nodeData, OFD_KEY.StrokeColor)
 		let strokeColorBoolean = parser.findAttributeValueByKey(nodeData, AttributeKey.Stroke)
 		let strokeColorStr = strokeColorObj && parser.findAttributeValueByKey(strokeColorObj, AttributeKey.Value)
+		console.log("strokeColorStr", nodeData, strokeColorObj, strokeColorStr)
 		if (strokeColorBoolean && JSON.parse(strokeColorBoolean)) {
 			if (strokeColorStr) {
 				let fillColorValue = parseColor(strokeColorStr)
+				console.log("strokeColor fillcolorValue", fillColorValue)
 				pathStyle += `stroke: ${fillColorValue};`
 			}
-		} else {
+		} else if(showDefaultStrokeColor) {
 			if (strokeColorStr) {
 				let fillColorValue = parseColor(strokeColorStr)
 				pathStyle += `stroke: ${fillColorValue};`
@@ -396,7 +397,7 @@ export class PathSvg extends BaseSvg {
 			pathStyle += this.#addFilLColor(nodeData)
 		}
 		// 添加线宽度和线条颜色
-		pathStyle += this.#addStrokeWidth(this.nodeData)
+		pathStyle += this.#addStrokeWidth(nodeData, true)
 
 		pathSvg.setAttribute("style", pathStyle)
 		return pathSvg
@@ -451,9 +452,9 @@ export class PathSvg extends BaseSvg {
 				// 填充颜色
 				pathStyle += this.#addFilLColor(drawParamNode)
 				// 添加线宽度和线条颜色
-				pathStyle += this.#addStrokeWidth(drawParamNode)
+				pathStyle += this.#addStrokeWidth(drawParamNode, true)
 				// 如果有宽度，那么就添加stroke的颜色
-				pathStyle += this.#addStrokeColor(drawParamNode)
+				// pathStyle += this.#addStrokeColor(drawParamNode, false)
 				return pathStyle
 			}
 		}
