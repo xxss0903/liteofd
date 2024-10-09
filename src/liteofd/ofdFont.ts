@@ -224,78 +224,96 @@ export const loadLocalDefaultFonts = async () => {
 			const fontPath = `assets/simsun.ttf`;
 			await loadLocalDefaultFont("SimSun", fontPath)
 			loadedFonts.set("SimSun", true)
-		} else if(!loadedFonts.has("NSimSun")) {	
-			const fontPath = `assets/Nsimsun.ttf`;
+		} 
+		if(!loadedFonts.has("NSimSun")) {	
+			const fontPath = `assets/NSimSun.ttf`;
 			await loadLocalDefaultFont("NSimSun", fontPath)
 			loadedFonts.set("NSimSun", true)
-		}  else if(!loadedFonts.has("SimHei")) {	
+		}  
+		if(!loadedFonts.has("SimHei")) {	
 			const fontPath = `assets/simhei.ttf`;
 			await loadLocalDefaultFont("SimHei", fontPath)
 			loadedFonts.set("SimHei", true)
-		} else if(!loadedFonts.has("SimKai")) {	
+		} 
+		if(!loadedFonts.has("SimKai")) {	
 			const fontPath = `assets/simkai.ttf`;
 			await loadLocalDefaultFont("SimKai", fontPath)
 			loadedFonts.set("SimKai", true)
-		} else if(!loadedFonts.has("SimFang")) {	
-			const fontPath = `assets/SIMFANG.TTF`;
+		} 
+		if(!loadedFonts.has("SimFang")) {	
+			const fontPath = `assets/SimFang.ttf`;
 			await loadLocalDefaultFont("SimFang", fontPath)
 			loadedFonts.set("SimFang", true)
-		}else if(!loadedFonts.has("Courier")) {	
+		}
+		if(!loadedFonts.has("Courier")) {	
 			const fontPath = `assets/Courier.otf`;
 			await loadLocalDefaultFont("Courier", fontPath)
 			loadedFonts.set("Courier", true)
-		}  else if(!loadedFonts.has("Courier-Bold")) {	
+		}  
+		if(!loadedFonts.has("Courier-Bold")) {	
 			const fontPath = `assets/Courier-Bold.otf`;
 			await loadLocalDefaultFont("Courier-Bold", fontPath)
 			loadedFonts.set("Courier-Bold", true)
-		} else if(!loadedFonts.has("Courier-BoldOblique")) {	
+		} 
+		if(!loadedFonts.has("Courier-BoldOblique")) {	
 			const fontPath = `assets/Courier-BoldOblique.otf`;
 			await loadLocalDefaultFont("Courier-BoldOblique", fontPath)
 			loadedFonts.set("Courier-BoldOblique", true)
-		} else if(!loadedFonts.has("FangSong_GB2312")) {	
-			const fontPath = `assets/FangSong_GB2312.ttf`;
+		} 
+		if(!loadedFonts.has("FangSong_GB2312")) {	
+			const fontPath = `assets/FangSong_GB2312.otf`;
 			await loadLocalDefaultFont("FangSong_GB2312", fontPath)
 			loadedFonts.set("FangSong_GB2312", true)
-		} else if(!loadedFonts.has("Helvetica-Bold")) {	
+		} 
+		if(!loadedFonts.has("Helvetica-Bold")) {	
 			const fontPath = `assets/Helvetica-Bold.otf`;
 			await loadLocalDefaultFont("Helvetica-Bold", fontPath)
 			loadedFonts.set("Helvetica-Bold", true)
-		} else if(!loadedFonts.has("Helvetica")) {	
+		} 
+		if(!loadedFonts.has("Helvetica")) {	
 			const fontPath = `assets/Helvetica.otf`;
 			await loadLocalDefaultFont("Helvetica", fontPath)
 			loadedFonts.set("Helvetica", true)
-		} else if(!loadedFonts.has("Helvetica-Oblique")) {	
-			const fontPath = `assets/Helvetica-Oblique.otf`;
+		} 
+		if(!loadedFonts.has("Helvetica-Oblique")) {	
+			const fontPath = `assets/Helvetica-Oblique.ttf`;
 			await loadLocalDefaultFont("Helvetica-Oblique", fontPath)
 			loadedFonts.set("Helvetica-Oblique", true)
-		} else if(!loadedFonts.has("Helvetica-BoldOblique")) {	
-			const fontPath = `assets/Helvetica-BoldOblique.otf`;
-			await loadLocalDefaultFont("Helvetica-BoldOblique", fontPath)
-			loadedFonts.set("Helvetica-BoldOblique", true)
-		}else if(!loadedFonts.has("Times-Roman")) {	
+		} 
+		if(!loadedFonts.has("Helvetica-Bold-Oblique")) {	
+			const fontPath = `assets/Helvetica-Bold-Oblique.ttf`;
+			await loadLocalDefaultFont("Helvetica-Bold-Oblique", fontPath)
+			loadedFonts.set("Helvetica-Bold-Oblique", true)
+		}
+		if(!loadedFonts.has("Times-Roman")) {	
 			const fontPath = `assets/Times-Roman.otf`;
 			await loadLocalDefaultFont("Times-Roman", fontPath)
 			loadedFonts.set("Times-Roman", true)
-		} else if(!loadedFonts.has("Times-Bold")) {	
+		} 
+		if(!loadedFonts.has("Times-Bold")) {	
 			const fontPath = `assets/Times-Bold.otf`;
 			await loadLocalDefaultFont("Times-Bold", fontPath)
 			loadedFonts.set("Times-Bold", true)
-		} else if(!loadedFonts.has("Times-Italic")) {	
+		} 
+		if(!loadedFonts.has("Times-Italic")) {	
 			const fontPath = `assets/Times-Italic.otf`;
 			await loadLocalDefaultFont("Times-Italic", fontPath)
 			loadedFonts.set("Times-Italic", true)	
-		} else if(!loadedFonts.has("Times-BoldItalic")) {	
+		} 
+		if(!loadedFonts.has("Times-BoldItalic")) {	
 			const fontPath = `assets/Times-BoldItalic.otf`;
 			await loadLocalDefaultFont("Times-BoldItalic", fontPath)
 			loadedFonts.set("Times-BoldItalic", true)
-		} else if(!loadedFonts.has("ZapfDingbats")) {	
+		} 
+		if(!loadedFonts.has("ZapfDingbats")) {	
 			const fontPath = `assets/ZapfDingbats.otf`;
 			await loadLocalDefaultFont("ZapfDingbats", fontPath)
 			loadedFonts.set("ZapfDingbats", true)
-		} else if(!loadedFonts.has("Symbol")) {	
-			const fontPath = `assets/Symbol.otf`;
-			await loadLocalDefaultFont("Symbol", fontPath)
-			loadedFonts.set("Symbol", true)
+		} 
+		if(!loadedFonts.has("xbst")) {	
+			const fontPath = `assets/xbst.ttf`;
+			await loadLocalDefaultFont("xbst", fontPath)
+			loadedFonts.set("xbst", true)
 		}
 	} catch (e) {
 		console.error("加载本地字体出错", e);
@@ -355,7 +373,6 @@ export const loadLocalDefaultFont = async (fontName: string, fontPath: string) =
 		await loadOTFFont(fontName, fontPath)
 	} catch (error) {
 		console.error(`加载字体 ${fontName} 时出错:`, error);
-		throw error;
 	}
 }
 
@@ -379,7 +396,7 @@ export async function loadOTFFont(fontName: string, fontPath: string) {
 	  const font = new FontFace(fontName, fontData);
 	  // 加载字体
 	  let loadRes = await font.load();
-	  console.log("load font res", loadRes)
+	  console.log("load font res", fontName, loadRes)
       // 将字体添加到 document.fonts
 	  document.fonts.add(font);
 	} catch (error) {
