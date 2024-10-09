@@ -177,18 +177,20 @@ const loadFontByArrayBuffer = async (fontName: string, fontBytes: any) => {
 	let fontLoader = new FontLoader({
 		loadedName: fontName
 	});
-	fontLoader
-		.bind(fontFaceObj)
-		.then(res => {
-			// console.log("load font res", res)
-		})
-		.catch((error) => {
-			// console.log("load font err", error)
-		})
-		.finally(() => {
-			// 加载字体完成
-			// console.log("load font finish", fontData, fontName)
-		});
+	let loadRes = await fontLoader.bind(fontFaceObj)
+	console.log("load font res", loadRes)
+	// fontLoader
+	// 	.bind(fontFaceObj)
+	// 	.then(res => {
+	// 		console.log("load font res", res)
+	// 	})
+	// 	.catch((error) => {
+	// 		console.log("load font err", error)
+	// 	})
+	// 	.finally(() => {
+	// 		// 加载字体完成
+	// 		console.log("load font finish", fontName)
+	// 	});
 }
 
 

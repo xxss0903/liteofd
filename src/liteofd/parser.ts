@@ -354,18 +354,13 @@ export const setAttributeToNode = (node: XmlData, key: string, value: string) =>
  * 根据id查找节点，可能是单节点，可能多节点
  */
 export const findNodeByAttributeKeyValue = (targetValue: any, attrKey: string, node: XmlData): XmlData | undefined => {
-	if(targetValue == '16') {
-		console.log("find node by attr value:", node, attrKey, targetValue)
-	}
 	let nodeID = findFirstAttributeValueByKey(node, attrKey)
 	if (nodeID === targetValue) {
-		console.log("return nodeid and targetvalue result ", nodeID, targetValue, node)
 		return node
 	} else {
 		for (let i = 0; i < node.children.length; i++) {
 			let tempNode = node.children[i]
 			let res = findNodeByAttributeKeyValue(targetValue, attrKey, tempNode)
-			console.log("find every font item", tempNode, res)
 			if (res) {
 				return res
 			}
@@ -376,7 +371,6 @@ export const findNodeByAttributeKeyValue = (targetValue: any, attrKey: string, n
 
 export const parseOFDFile = (file: string | File | ArrayBuffer): PromiseCapability<OfdDocument> => {
 	try {
-		console.log("parseOFDFile", file)
 		let promiseCap = new PromiseCapability<OfdDocument>()
 		// 判断file是文件还是二进制数据
 		file instanceof File || file instanceof ArrayBuffer
