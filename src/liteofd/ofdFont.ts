@@ -12,6 +12,9 @@ import * as parser from "./parser"
 import { AttributeKey } from "./attrType"
 import { normalizeFontName } from "./utils/ofdUtils"
 
+// 全局变量，表示已经加载的字体
+export const loadedFonts = new Map()
+
 /**
  * 判断是否为衬线字体
  * @param baseFontName 字体名称
@@ -209,6 +212,93 @@ export const loadSingleFont = async (fontFile: any, fontData: XmlData) => {
 		}
 	} catch (e) {
 		console.error("加载字体出错", e);
+	}
+}
+
+/**
+ * 加载本地的默认字体，比如simSun等，加载到一个全局变量的map中表示已经加载
+ */
+export const loadLocalDefaultFonts = async () => {
+	try {
+		if(!loadedFonts.has("SimSun")) {
+			const fontPath = `assets/simsun.ttf`;
+			await loadLocalDefaultFont("SimSun", fontPath)
+			loadedFonts.set("SimSun", true)
+		} else if(!loadedFonts.has("NSimSun")) {	
+			const fontPath = `assets/Nsimsun.ttf`;
+			await loadLocalDefaultFont("NSimSun", fontPath)
+			loadedFonts.set("NSimSun", true)
+		}  else if(!loadedFonts.has("SimHei")) {	
+			const fontPath = `assets/simhei.ttf`;
+			await loadLocalDefaultFont("SimHei", fontPath)
+			loadedFonts.set("SimHei", true)
+		} else if(!loadedFonts.has("SimKai")) {	
+			const fontPath = `assets/simkai.ttf`;
+			await loadLocalDefaultFont("SimKai", fontPath)
+			loadedFonts.set("SimKai", true)
+		} else if(!loadedFonts.has("SimFang")) {	
+			const fontPath = `assets/SIMFANG.TTF`;
+			await loadLocalDefaultFont("SimFang", fontPath)
+			loadedFonts.set("SimFang", true)
+		}else if(!loadedFonts.has("Courier")) {	
+			const fontPath = `assets/Courier.otf`;
+			await loadLocalDefaultFont("Courier", fontPath)
+			loadedFonts.set("Courier", true)
+		}  else if(!loadedFonts.has("Courier-Bold")) {	
+			const fontPath = `assets/Courier-Bold.otf`;
+			await loadLocalDefaultFont("Courier-Bold", fontPath)
+			loadedFonts.set("Courier-Bold", true)
+		} else if(!loadedFonts.has("Courier-BoldOblique")) {	
+			const fontPath = `assets/Courier-BoldOblique.otf`;
+			await loadLocalDefaultFont("Courier-BoldOblique", fontPath)
+			loadedFonts.set("Courier-BoldOblique", true)
+		} else if(!loadedFonts.has("FangSong_GB2312")) {	
+			const fontPath = `assets/FangSong_GB2312.ttf`;
+			await loadLocalDefaultFont("FangSong_GB2312", fontPath)
+			loadedFonts.set("FangSong_GB2312", true)
+		} else if(!loadedFonts.has("Helvetica-Bold")) {	
+			const fontPath = `assets/Helvetica-Bold.otf`;
+			await loadLocalDefaultFont("Helvetica-Bold", fontPath)
+			loadedFonts.set("Helvetica-Bold", true)
+		} else if(!loadedFonts.has("Helvetica")) {	
+			const fontPath = `assets/Helvetica.otf`;
+			await loadLocalDefaultFont("Helvetica", fontPath)
+			loadedFonts.set("Helvetica", true)
+		} else if(!loadedFonts.has("Helvetica-Oblique")) {	
+			const fontPath = `assets/Helvetica-Oblique.otf`;
+			await loadLocalDefaultFont("Helvetica-Oblique", fontPath)
+			loadedFonts.set("Helvetica-Oblique", true)
+		} else if(!loadedFonts.has("Helvetica-BoldOblique")) {	
+			const fontPath = `assets/Helvetica-BoldOblique.otf`;
+			await loadLocalDefaultFont("Helvetica-BoldOblique", fontPath)
+			loadedFonts.set("Helvetica-BoldOblique", true)
+		}else if(!loadedFonts.has("Times-Roman")) {	
+			const fontPath = `assets/Times-Roman.otf`;
+			await loadLocalDefaultFont("Times-Roman", fontPath)
+			loadedFonts.set("Times-Roman", true)
+		} else if(!loadedFonts.has("Times-Bold")) {	
+			const fontPath = `assets/Times-Bold.otf`;
+			await loadLocalDefaultFont("Times-Bold", fontPath)
+			loadedFonts.set("Times-Bold", true)
+		} else if(!loadedFonts.has("Times-Italic")) {	
+			const fontPath = `assets/Times-Italic.otf`;
+			await loadLocalDefaultFont("Times-Italic", fontPath)
+			loadedFonts.set("Times-Italic", true)	
+		} else if(!loadedFonts.has("Times-BoldItalic")) {	
+			const fontPath = `assets/Times-BoldItalic.otf`;
+			await loadLocalDefaultFont("Times-BoldItalic", fontPath)
+			loadedFonts.set("Times-BoldItalic", true)
+		} else if(!loadedFonts.has("ZapfDingbats")) {	
+			const fontPath = `assets/ZapfDingbats.otf`;
+			await loadLocalDefaultFont("ZapfDingbats", fontPath)
+			loadedFonts.set("ZapfDingbats", true)
+		} else if(!loadedFonts.has("Symbol")) {	
+			const fontPath = `assets/Symbol.otf`;
+			await loadLocalDefaultFont("Symbol", fontPath)
+			loadedFonts.set("Symbol", true)
+		}
+	} catch (e) {
+		console.error("加载本地字体出错", e);
 	}
 }
 
