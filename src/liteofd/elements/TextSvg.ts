@@ -52,8 +52,10 @@ export class TextSvg extends BaseSvg {
 		// 查找textobject的字体的id
 		let fontID = parser.findAttributeValueByKey(node, AttributeKey.FONT)
 		if (fontID) {
+			let ofdFontList = parser.findValueByTagName(this.ofdDocument.publicRes, OFD_KEY.Font)
 			// 根据字体id查找对应publicres的font数据
-			let findedFont = parser.findNodeByAttributeKeyValue(fontID, AttributeKey.ID, this.ofdDocument.publicRes)
+			let findedFont = parser.findNodeByAttributeKeyValue(fontID, AttributeKey.ID, ofdFontList!!)
+			console.log("find text font ", findedFont)
 			if (findedFont) {
 				// 添加字体内容
 				let fontName = parser.findAttributeValueByKey(findedFont, AttributeKey.FontName)
@@ -71,20 +73,22 @@ export class TextSvg extends BaseSvg {
 					this.textStyle += `font-family: ${fontFamily};`
 				}
 
+				// 去掉publicres中关于字体的粗细的值的显示，只使用字体文件中的字体渲染
 				// 添加字体粗细
-				let fontWeight = parser.findAttributeValueByKey(findedFont, AttributeKey.Weight)
-				if (fontWeight) {
-					this.textStyle += `font-weight: ${fontWeight};`
-				}
-				let fontBold = parser.findAttributeValueByKey(findedFont, AttributeKey.Bold)
-				if (fontBold) {
-					this.textStyle += `font-weight: bold;`
-				}
-				// 添加字体斜体
-				let fontItalic = parser.findAttributeValueByKey(findedFont, AttributeKey.Italic)
-				if (fontItalic) {
-					this.textStyle += `font-style: italic;`
-				}
+				// let fontWeight = parser.findAttributeValueByKey(findedFont, AttributeKey.Weight)
+				// if (fontWeight) {
+				// 	this.textStyle += `font-weight: ${fontWeight};`
+				// }
+				// let fontBold = parser.findAttributeValueByKey(findedFont, AttributeKey.Bold)
+				// if (fontBold) {
+				// 	this.textStyle += `font-weight: bold;`
+				// }
+				// // 添加字体斜体
+				// let fontItalic = parser.findAttributeValueByKey(findedFont, AttributeKey.Italic)
+				// console.log("font italic:", fontID, findedFont, fontItalic, node)
+				// if (fontItalic) {
+				// 	this.textStyle += `font-style: italic;`
+				// }
 			}
 		}
 	}
@@ -195,31 +199,31 @@ export class TextSvg extends BaseSvg {
 	}
 
 	#addDrawParam(nodeData: XmlData) {
-		let drawParamID = parser.findAttributeValueByKey(nodeData, AttributeKey.DrawParam)
-		console.log("add text draw params", drawParamID)
-		if (drawParamID) {
-			let drawParamNode = parser.findNodeByAttributeKeyValue(drawParamID, AttributeKey.ID, this.ofdDocument.publicRes)
-			if (drawParamNode) {
-				// 填充颜色
-				this.#addFillColor(drawParamNode)
-				// 添加线宽度和线条颜色
-				this.#addStrokeColor(drawParamNode)
-				console.log("textsvg drawParamNode", drawParamNode)
-				// 添加字体粗细
-				let fontWeight = parser.findAttributeValueByKey(drawParamNode, AttributeKey.Weight)
-				if (fontWeight) {
-					this.textStyle += `font-weight: ${fontWeight};`
-				}
-				let fontBold = parser.findAttributeValueByKey(drawParamNode, AttributeKey.Bold)
-				if (fontBold) {
-					this.textStyle += `font-weight: bold;`
-				}
-				// 添加字体斜体
-				let fontItalic = parser.findAttributeValueByKey(drawParamNode, AttributeKey.Italic)
-				if (fontItalic) {
-					this.textStyle += `font-style: italic;`
-				}
-			}
-		}
+		// let drawParamID = parser.findAttributeValueByKey(nodeData, AttributeKey.DrawParam)
+		// console.log("add text draw params", drawParamID)
+		// if (drawParamID) {
+		// 	let drawParamNode = parser.findNodeByAttributeKeyValue(drawParamID, AttributeKey.ID, this.ofdDocument.publicRes)
+		// 	if (drawParamNode) {
+		// 		// 填充颜色
+		// 		this.#addFillColor(drawParamNode)
+		// 		// 添加线宽度和线条颜色
+		// 		this.#addStrokeColor(drawParamNode)
+		// 		console.log("textsvg drawParamNode", drawParamNode)
+		// 		// 添加字体粗细
+		// 		let fontWeight = parser.findAttributeValueByKey(drawParamNode, AttributeKey.Weight)
+		// 		if (fontWeight) {
+		// 			this.textStyle += `font-weight: ${fontWeight};`
+		// 		}
+		// 		let fontBold = parser.findAttributeValueByKey(drawParamNode, AttributeKey.Bold)
+		// 		if (fontBold) {
+		// 			this.textStyle += `font-weight: bold;`
+		// 		}
+		// 		// 添加字体斜体
+		// 		let fontItalic = parser.findAttributeValueByKey(drawParamNode, AttributeKey.Italic)
+		// 		if (fontItalic) {
+		// 			this.textStyle += `font-style: italic;`
+		// 		}
+		// 	}
+		// }
 	}
 }

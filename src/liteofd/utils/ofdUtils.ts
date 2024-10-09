@@ -198,15 +198,15 @@ const loadAnnots = async (ofdFiles: any, ofdDocument: OfdDocument, annoteRes: Xm
  */
 export const normalizeFontName = (fontName: string): string => {
 	// 处理带有前缀的字体名称
-	const prefixMatch = fontName.match(/^[A-Z]+\+(.+)$/);
-	if (prefixMatch) {
-		fontName = prefixMatch[1];
-	}
+	// const prefixMatch = fontName.match(/^[A-Z]+\+(.+)$/);
+	// if (prefixMatch) {
+	// 	fontName = prefixMatch[1];
+	// }
 
 	// 处理逗号分隔的字体名称
-	if (fontName.includes(',')) {
-		fontName = fontName.split(',')[0].trim();
-	}
+	// if (fontName.includes(',')) {
+	// 	fontName = fontName.split(',')[0].trim();
+	// }
 
 	// 定义标准字体名称列表
 	const standardFonts = [
@@ -222,7 +222,7 @@ export const normalizeFontName = (fontName: string): string => {
 	}
 
 	// 只保留第一个连字符前的名称
-	fontName = fontName.split('-')[0];
+	// fontName = fontName.split('-')[0];
 
 	// 处理带有样式和数字的字体名称,但保留常见的样式后缀
 	const commonStyles = ['Bold', 'Italic', 'Medium', 'Light', 'Regular', 'Heavy', 'Black', 'Thin', 'Condensed', 'Expanded', 'Medi', 'Regu', 'MediItal', 'ReguItal'];

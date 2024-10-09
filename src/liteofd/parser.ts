@@ -326,6 +326,23 @@ export const findAttributeValueByKey = (xmlData:XmlData, key: string): string =>
 	}
 }
 
+// 查找第一层的node的属性值，不深入children进行查找
+export const findFirstAttributeValueByKey = (xmlData:XmlData, key: string): string => {
+	let findKey = key
+	if (!findKey.startsWith("@_")) {
+		findKey = `@_${key}`
+	}
+	let attrsMap = xmlData.attrsMap
+	if (attrsMap && attrsMap.size > 0) {
+		for (let i = 0; i < attrsMap.size; i++) {
+			if(attrsMap.has(findKey)){
+				return attrsMap.get(findKey)
+			}
+		}
+	}
+}
+
+
 export const setAttributeToNode = (node: XmlData, key: string, value: string) => {
 	if (!key.startsWith("@_")) {
 		key = `@_${key}`
@@ -337,19 +354,23 @@ export const setAttributeToNode = (node: XmlData, key: string, value: string) =>
  * 根据id查找节点，可能是单节点，可能多节点
  */
 export const findNodeByAttributeKeyValue = (targetValue: any, attrKey: string, node: XmlData): XmlData | undefined => {
-	let nodeID = findAttributeValueByKey(node, AttributeKey.ID)
+	if(targetValue == '16') {
+		console.log("find node by attr value:", node, attrKey, targetValue)
+	}
+	let nodeID = findFirstAttributeValueByKey(node, attrKey)
 	if (nodeID === targetValue) {
+		console.log("return nodeid and targetvalue result ", nodeID, targetValue, node)
 		return node
 	} else {
 		for (let i = 0; i < node.children.length; i++) {
 			let tempNode = node.children[i]
 			let res = findNodeByAttributeKeyValue(targetValue, attrKey, tempNode)
+			console.log("find every font item", tempNode, res)
 			if (res) {
 				return res
 			}
 		}
 	}
-	return undefined
 }
 
 
