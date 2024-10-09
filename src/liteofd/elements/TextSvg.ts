@@ -198,6 +198,7 @@ export class TextSvg extends BaseSvg {
 		}
 	}
 
+	// 字体文件中暂时去掉drawParam的渲染
 	#addDrawParam(nodeData: XmlData) {
 		// let drawParamID = parser.findAttributeValueByKey(nodeData, AttributeKey.DrawParam)
 		// console.log("add text draw params", drawParamID)
