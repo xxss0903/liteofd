@@ -317,6 +317,11 @@ export const loadLocalDefaultFonts = async () => {
 			await loadLocalDefaultFont("xbst", fontPath)
 			loadedFonts.set("xbst", true)
 		}
+		if(!loadedFonts.has("ArialMT")) {	
+			const fontPath = `assets/ArialMT.ttf`;
+			await loadLocalDefaultFont("ArialMT", fontPath)
+			loadedFonts.set("ArialMT", true)
+		}
 	} catch (e) {
 		console.error("加载本地字体出错", e);
 	}
