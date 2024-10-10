@@ -211,6 +211,7 @@ export const loadSingleFont = async (fontFile: any, fontData: XmlData) => {
 		} else {
 			let fontBytes = await fontFile.async("uint8array");
 			await loadFontByArrayBuffer(fontName, fontBytes);
+			loadedFonts.set(fontName, true)
 		}
 	} catch (e) {
 		console.error("加载字体出错", e);
@@ -222,6 +223,7 @@ export const loadSingleFont = async (fontFile: any, fontData: XmlData) => {
  */
 export const loadLocalDefaultFonts = async () => {
 	try {
+		loadedFonts.clear()
 		if(!loadedFonts.has("SimSun")) {
 			const fontPath = `assets/simsun.ttf`;
 			await loadLocalDefaultFont("SimSun", fontPath)

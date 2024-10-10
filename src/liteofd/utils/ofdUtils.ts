@@ -4,7 +4,7 @@ import { getOFDFilePath } from "./elementUtils"
 import { RootDocPath } from "../parser"
 import { OfdDocument } from "../ofdDocument"
 import { XmlData } from "../ofdData"
-import { isDefaultFont, loadDefaultFont, loadSingleFont } from "../ofdFont"
+import { isDefaultFont, loadDefaultFont, loadedFonts, loadSingleFont } from "../ofdFont"
 
 const fontDefaultDir = "/Doc_0/Res"
 /**
@@ -30,6 +30,7 @@ const loadOFDFonts = async (files: any, fonts: XmlData) => {
 				}
 			} else {
 				let realFontName = fontName || familyName
+				realFontName = convertNonStandardFont(realFontName)
 				console.log("realFontName", realFontName)
 				if(realFontName && isDefaultFont(realFontName)) {
 					// await loadDefaultFont(realFontName)
@@ -192,25 +193,17 @@ const loadAnnots = async (ofdFiles: any, ofdDocument: OfdDocument, annoteRes: Xm
 
 }
 
+
 /**
- * 将字体名称规整化
- * @param fontName
+ * 将非标准字体转换为标准字体
+ * @param fontName 
+ * @returns 
  */
-export const normalizeFontName = (fontName: string): string => {
+export const convertNonStandardFont = (fontName: string): string => {
 	// 处理带有前缀的字体名称
-	const prefixMatch = fontName.match(/^[A-Z]+\+(.+)$/);
-	if (prefixMatch) {
-		fontName = prefixMatch[1];
-	}
-
-	// 处理逗号分隔的字体名称
-	if (fontName.includes(',')) {
-		fontName = fontName.split(',')[0].trim();
-	}
-
-	// 处理分号分隔的字体名称
-	if (fontName.includes(';')) {
-		fontName = fontName.split(';')[0].trim();
+	console.log("convert fontName", fontName, loadedFonts)
+	if(loadedFonts.has(fontName)) {
+		return fontName
 	}
 	// 定义非标准字体到标准字体的映射
 	const fontMapping: { [key: string]: string } = {
@@ -234,6 +227,31 @@ export const normalizeFontName = (fontName: string): string => {
 	if (fontMapping[fontName]) {
 		fontName = fontMapping[fontName];
 	}
+	return fontName;
+}
+
+
+/**
+ * 将字体名称规整化
+ * @param fontName 
+ * @returns 
+ */
+export const normalizeFontName = (fontName: string): string => {
+	const prefixMatch = fontName.match(/^[A-Z]+\+(.+)$/);
+	if (prefixMatch) {
+		fontName = prefixMatch[1];
+	}
+
+	// 处理逗号分隔的字体名称
+	if (fontName.includes(',')) {
+		fontName = fontName.split(',')[0].trim();
+	}
+
+	// 处理分号分隔的字体名称
+	if (fontName.includes(';')) {
+		fontName = fontName.split(';')[0].trim();
+	}
+	
 
 	// 定义标准字体名称列表
 	const standardFonts = [
@@ -249,19 +267,20 @@ export const normalizeFontName = (fontName: string): string => {
 	}
 
 	// 处理带有样式和数字的字体名称,但保留常见的样式后缀
-	const commonStyles = ['Bold', 'Italic', 'Medium', 'Light', 'Regular', 'Heavy', 'Black', 'Thin', 'Condensed', 'Expanded', 'Medi', 'Regu', 'MediItal', 'ReguItal'];
-	const parts = fontName.split(/[-\s]+/);
+	// const commonStyles = ['Bold', 'Italic', 'Medium', 'Light', 'Regular', 'Heavy', 'Black', 'Thin', 'Condensed', 'Expanded', 'Medi', 'Regu', 'MediItal', 'ReguItal'];
+	// const parts = fontName.split(/[-\s]+/);
 
-	// 保留基本名称和常见样式
-	const uniqueParts = parts.filter((part, index) =>
-		index === 0 || commonStyles.includes(part)
-	);
+	// // 保留基本名称和常见样式
+	// const uniqueParts = parts.filter((part, index) =>
+	// 	index === 0 || commonStyles.includes(part)
+	// );
 
-	// 如果处理后没有任何部分,返回原始名称
-	if (uniqueParts.length === 0) {
-		return fontName;
-	}
+	// // 如果处理后没有任何部分,返回原始名称
+	// if (uniqueParts.length === 0) {
+	// 	return fontName;
+	// }
 
-	// 重新组合字体名称
-	return uniqueParts.join(' ');
+	// // 重新组合字体名称
+	// return uniqueParts.join('-');
+	return fontName
 }
