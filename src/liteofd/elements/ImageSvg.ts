@@ -96,7 +96,17 @@ export class ImageSvg extends BaseSvg {
 		this.#addCTM(this.nodeData, eleSvg)
 		// svg下面添加path
 		this.#addImageSvg(nodeData, eleSvg)
+		this.#addImageSvgStyle(nodeData, eleSvg)
 		svg.appendChild(eleSvg)
+	}
+
+	#addImageSvgStyle(nodeData: XmlData, eleSvg: SVGImageElement) {
+		let alpha = parser.findAttributeValueByKey(nodeData, AttributeKey.Alpha)
+		let imageStyle = ""
+		if (alpha && parseFloat(alpha) > 0) {
+			imageStyle += `opacity: ${parseFloat(alpha) / 255};`
+		}
+		eleSvg.setAttribute("style", imageStyle)
 	}
 
 	createContainerSvg(): SVGElement {
