@@ -105,26 +105,26 @@ export class TextSvg extends BaseSvg {
 		// 设置字体大小
 		let fontSize = getFontSize(nodeData)
 		this.textStyle = `font-size: ${fontSize}px;`
-
-		// 添加字体颜色
-		this.#addFillColor(nodeData)
-		// 添加stroke颜色
-		this.#addStrokeColor(nodeData)
-
-		// stroke宽度
-		let lineWidth = parser.findAttributeValueByKey(nodeData, AttributeKey.LineWidth)
-		if (lineWidth) {
-			let lineWidthValue = parseFloat(lineWidth)
-			this.textStyle += `stroke-width: ${convertToDpi(lineWidthValue)}px;`
-		} else {
-			this.textStyle += `stroke-width: 0;`
-		}
-
 		// 设置font-weight
 		let fontWeight = parser.findAttributeValueByKey(nodeData, AttributeKey.Weight)
 		if (fontWeight) {
 			this.textStyle += `font-weight: ${fontWeight};`
 		}
+		// 添加字体颜色
+		// this.#addFillColor(nodeData)
+		// // 添加stroke颜色
+		// this.#addStrokeColor(nodeData)
+
+		// stroke宽度
+		// let lineWidth = parser.findAttributeValueByKey(nodeData, AttributeKey.LineWidth)
+		// if (lineWidth) {
+		// 	let lineWidthValue = parseFloat(lineWidth)
+		// 	this.textStyle += `stroke-width: ${convertToDpi(lineWidthValue)}px;`
+		// } else {
+		// 	this.textStyle += `stroke-width: 0;`
+		// }
+
+	
 	}
 
 	#addStrokeColor(nodeData: XmlData) {
