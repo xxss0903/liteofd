@@ -212,6 +212,28 @@ export const normalizeFontName = (fontName: string): string => {
 	if (fontName.includes(';')) {
 		fontName = fontName.split(';')[0].trim();
 	}
+	// 定义非标准字体到标准字体的映射
+	const fontMapping: { [key: string]: string } = {
+		'Calibri': 'Helvetica',
+		'Calibri Bold': 'Helvetica-Bold',
+		'Calibri-Bold': 'Helvetica-Bold',
+		'Calibri BoldItalic': 'Helvetica-BoldOblique',
+		'Calibri-BoldItalic': 'Helvetica-BoldOblique',
+		'Calibri Italic': 'Helvetica-Oblique',
+		'Calibri-Italic': 'Helvetica-Oblique',
+		'ArialUnicodeMS': 'Helvetica',
+		'ArialUnicodeMS Bold': 'Helvetica-Bold',
+		'ArialUnicodeMS-Bold': 'Helvetica-Bold',
+		'ArialUnicodeMS BoldItalic': 'Helvetica-BoldOblique',
+		'ArialUnicodeMS-BoldItalic': 'Helvetica-BoldOblique',
+		'ArialUnicodeMS Italic': 'Helvetica-Oblique',
+		'ArialUnicodeMS-Italic': 'Helvetica-Oblique'
+	};
+
+	// 将非标准字体转换为标准字体
+	if (fontMapping[fontName]) {
+		fontName = fontMapping[fontName];
+	}
 
 	// 定义标准字体名称列表
 	const standardFonts = [
