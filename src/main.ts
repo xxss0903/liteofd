@@ -19,7 +19,7 @@ export function uploadFile() {
 export function handleFileChange(event: Event) {
   const fileInput = event.target as HTMLInputElement;
   const file = fileInput.files?.[0];
-  
+
   if (file) {
     if (file.name.toLowerCase().endsWith('.ofd')) {
       console.log('选中的 OFD 文件:', file.name);
@@ -37,7 +37,7 @@ export function handleFileChange(event: Event) {
         fileNameElement.textContent = '';
       }
     }
-    
+
     // 清除文件输入，允许选择相同的文件
     fileInput.value = '';
   }
@@ -130,7 +130,7 @@ function parseOfdFile(file: File) {
 	  initOfdEventListeners(); // 在渲染完成后初始化事件监听器
     // 添加大纲
     renderOutlines(data.outlines);
-    
+
     // 初始化 OfdTools
     ofdTools = new OfdTools(data);
     // 将 ofdTools 添加到 window 对象，使其可以从 iframe 中访问
@@ -222,7 +222,7 @@ export function addOfdPageChangeListener() {
 export function toggleOutlines() {
   const outlinesElement = document.getElementById('outlines');
   const contentElement = document.getElementById('content');
-  
+
   if (outlinesElement && contentElement) {
     outlinesElement.classList.toggle('show');
     contentElement.classList.toggle('with-outlines');
@@ -234,7 +234,7 @@ export function openToolsMenu() {
   console.log('切换工具菜单');
   const ofdtoolsElement = document.getElementById('ofdtools') as HTMLIFrameElement;
   const contentElement = document.getElementById('content');
-  
+
   if (ofdtoolsElement && contentElement) {
     if (ofdtoolsElement.style.display === 'none') {
       ofdtoolsElement.style.display = 'block';
@@ -259,7 +259,7 @@ function initializeApp() {
   addOfdPageChangeListener();
   initOfdEventListeners();
   // 可以添加其他初始化函数
-  openToolsMenu()
+  // openToolsMenu()
 }
 
 

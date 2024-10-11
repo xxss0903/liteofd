@@ -2,9 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="public/assets/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>LiteOFD</title>
 	</head>
   <body>
     <div id="app" class="app-container">
@@ -19,13 +19,13 @@
             保存
           </button>
         </div>
-        
+
         <div class="tool-bar-group">
           <button class="tool-bar-btn" onclick="minus()">缩小</button>
           <button class="tool-bar-btn" onclick="plus()">放大</button>
           <button class="tool-bar-btn" onclick="resetZoom()">还原</button>
         </div>
-        
+
         <div class="tool-bar-group">
           <button class="tool-bar-btn" onclick="firstPage()">
             <i class="fas fa-step-backward">第一页</i>
@@ -41,14 +41,14 @@
             <i class="fas fa-step-forward">最后页</i>
           </button>
         </div>
-        
+
         <div class="tool-bar-group search-container">
           <input type="text" id="searchInput" placeholder="输入搜索关键词">
           <button class="tool-bar-btn search-btn" id="searchButton" onclick="searchKeyword()">
             搜索
           </button>
         </div>
-        
+
         <div class="tool-bar-group">
           <button class="tool-bar-btn" onclick="toggleOutlines()">
             显示/隐藏大纲
