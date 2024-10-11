@@ -280,14 +280,14 @@ export const loadLocalDefaultFonts = async () => {
 			loadedFonts.set("Helvetica", true)
 		} 
 		if(!loadedFonts.has("Helvetica-Oblique")) {	
-			const fontPath = `assets/Helvetica-Oblique.ttf`;
+			const fontPath = `assets/Helvetica-Oblique.otf`;
 			await loadLocalDefaultFont("Helvetica-Oblique", fontPath)
 			loadedFonts.set("Helvetica-Oblique", true)
 		} 
-		if(!loadedFonts.has("Helvetica-Bold-Oblique")) {	
-			const fontPath = `assets/Helvetica-Bold-Oblique.ttf`;
-			await loadLocalDefaultFont("Helvetica-Bold-Oblique", fontPath)
-			loadedFonts.set("Helvetica-Bold-Oblique", true)
+		if(!loadedFonts.has("Helvetica-BoldOblique")) {	
+			const fontPath = `assets/Helvetica-BoldOblique.ttf`;
+			await loadLocalDefaultFont("Helvetica-BoldOblique", fontPath)
+			loadedFonts.set("Helvetica-BoldOblique", true)
 		}
 		if(!loadedFonts.has("Times-Roman")) {	
 			const fontPath = `assets/Times-Roman.otf`;
