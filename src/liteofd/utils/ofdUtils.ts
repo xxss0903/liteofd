@@ -266,6 +266,11 @@ export const normalizeFontName = (fontName: string): string => {
 		return fontName;
 	}
 
+	// 处理重复名称的情况
+	const parts = fontName.split('-');
+	const uniqueParts = [...new Set(parts)].filter(part => isNaN(Number(part)));
+	fontName = uniqueParts.join('-');
+
 	// 处理带有样式和数字的字体名称,但保留常见的样式后缀
 	// const commonStyles = ['Bold', 'Italic', 'Medium', 'Light', 'Regular', 'Heavy', 'Black', 'Thin', 'Condensed', 'Expanded', 'Medi', 'Regu', 'MediItal', 'ReguItal'];
 	// const parts = fontName.split(/[-\s]+/);
