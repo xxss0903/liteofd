@@ -77,20 +77,20 @@ export class TextSvg extends BaseSvg {
 
 				// 去掉publicres中关于字体的粗细的值的显示，只使用字体文件中的字体渲染
 				// 添加字体粗细
-				// let fontWeight = parser.findAttributeValueByKey(findedFont, AttributeKey.Weight)
-				// if (fontWeight) {
-				// 	this.textStyle += `font-weight: ${fontWeight};`
-				// }
-				// let fontBold = parser.findAttributeValueByKey(findedFont, AttributeKey.Bold)
-				// if (fontBold) {
-				// 	this.textStyle += `font-weight: bold;`
-				// }
-				// // 添加字体斜体
-				// let fontItalic = parser.findAttributeValueByKey(findedFont, AttributeKey.Italic)
-				// console.log("font italic:", fontID, findedFont, fontItalic, node)
-				// if (fontItalic) {
-				// 	this.textStyle += `font-style: italic;`
-				// }
+				let fontWeight = parser.findAttributeValueByKey(findedFont, AttributeKey.Weight)
+				if (fontWeight) {
+					this.textStyle += `font-weight: ${fontWeight};`
+				}
+				let fontBold = parser.findAttributeValueByKey(findedFont, AttributeKey.Bold)
+				if (fontBold) {
+					this.textStyle += `font-weight: bold;`
+				}
+				// 添加字体斜体
+				let fontItalic = parser.findAttributeValueByKey(findedFont, AttributeKey.Italic)
+				console.log("font italic:", fontID, findedFont, fontItalic, node)
+				if (fontItalic) {
+					this.textStyle += `font-style: italic;`
+				}
 			}
 		}
 	}
@@ -113,18 +113,18 @@ export class TextSvg extends BaseSvg {
 			this.textStyle += `font-weight: ${fontWeight};`
 		}
 		// 添加字体颜色
-		// this.#addFillColor(nodeData)
-		// // 添加stroke颜色
-		// this.#addStrokeColor(nodeData)
+		this.#addFillColor(nodeData)
+		// 添加stroke颜色
+		this.#addStrokeColor(nodeData)
 
 		// stroke宽度
-		// let lineWidth = parser.findAttributeValueByKey(nodeData, AttributeKey.LineWidth)
-		// if (lineWidth) {
-		// 	let lineWidthValue = parseFloat(lineWidth)
-		// 	this.textStyle += `stroke-width: ${convertToDpi(lineWidthValue)}px;`
-		// } else {
-		// 	this.textStyle += `stroke-width: 0;`
-		// }
+		let lineWidth = parser.findAttributeValueByKey(nodeData, AttributeKey.LineWidth)
+		if (lineWidth) {
+			let lineWidthValue = parseFloat(lineWidth)
+			this.textStyle += `stroke-width: ${convertToDpi(lineWidthValue)}px;`
+		} else {
+			this.textStyle += `stroke-width: 0;`
+		}
 
 	
 	}
@@ -202,31 +202,31 @@ export class TextSvg extends BaseSvg {
 
 	// 字体文件中暂时去掉drawParam的渲染
 	#addDrawParam(nodeData: XmlData) {
-		// let drawParamID = parser.findAttributeValueByKey(nodeData, AttributeKey.DrawParam)
-		// console.log("add text draw params", drawParamID)
-		// if (drawParamID) {
-		// 	let drawParamNode = parser.findNodeByAttributeKeyValue(drawParamID, AttributeKey.ID, this.ofdDocument.publicRes)
-		// 	if (drawParamNode) {
-		// 		// 填充颜色
-		// 		this.#addFillColor(drawParamNode)
-		// 		// 添加线宽度和线条颜色
-		// 		this.#addStrokeColor(drawParamNode)
-		// 		console.log("textsvg drawParamNode", drawParamNode)
-		// 		// 添加字体粗细
-		// 		let fontWeight = parser.findAttributeValueByKey(drawParamNode, AttributeKey.Weight)
-		// 		if (fontWeight) {
-		// 			this.textStyle += `font-weight: ${fontWeight};`
-		// 		}
-		// 		let fontBold = parser.findAttributeValueByKey(drawParamNode, AttributeKey.Bold)
-		// 		if (fontBold) {
-		// 			this.textStyle += `font-weight: bold;`
-		// 		}
-		// 		// 添加字体斜体
-		// 		let fontItalic = parser.findAttributeValueByKey(drawParamNode, AttributeKey.Italic)
-		// 		if (fontItalic) {
-		// 			this.textStyle += `font-style: italic;`
-		// 		}
-		// 	}
-		// }
+		let drawParamID = parser.findAttributeValueByKey(nodeData, AttributeKey.DrawParam)
+		console.log("add text draw params", drawParamID)
+		if (drawParamID) {
+			let drawParamNode = parser.findNodeByAttributeKeyValue(drawParamID, AttributeKey.ID, this.ofdDocument.publicRes)
+			if (drawParamNode) {
+				// 填充颜色
+				this.#addFillColor(drawParamNode)
+				// 添加线宽度和线条颜色
+				this.#addStrokeColor(drawParamNode)
+				console.log("textsvg drawParamNode", drawParamNode)
+				// 添加字体粗细
+				let fontWeight = parser.findAttributeValueByKey(drawParamNode, AttributeKey.Weight)
+				if (fontWeight) {
+					this.textStyle += `font-weight: ${fontWeight};`
+				}
+				let fontBold = parser.findAttributeValueByKey(drawParamNode, AttributeKey.Bold)
+				if (fontBold) {
+					this.textStyle += `font-weight: bold;`
+				}
+				// 添加字体斜体
+				let fontItalic = parser.findAttributeValueByKey(drawParamNode, AttributeKey.Italic)
+				if (fontItalic) {
+					this.textStyle += `font-style: italic;`
+				}
+			}
+		}
 	}
 }
