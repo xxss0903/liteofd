@@ -1,0 +1,70 @@
+body { margin: 0; }
+
+.gray {
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  -ms-filter: grayscale(100%);
+  -o-filter: grayscale(100%);
+  filter: grayscale(100%);
+  filter: gray;
+}
+
+.textLayer {
+  position: absolute;
+  text-align: initial;
+  inset: 0;
+  overflow: hidden;
+  opacity: 1;
+  line-height: 1;
+  text-size-adjust: none;
+  forced-color-adjust: none;
+  transform-origin: 0 0;
+  align-content: end;
+
+:is(span, br) {
+  color: transparent;
+  white-space: pre;
+  cursor: text;
+  transform-origin: 0 0;
+}
+
+.highlight {
+  --highlight-bg-color: rgb(180 0 170 / 0.25);
+  --highlight-selected-bg-color: rgb(0 100 0 / 0.25);
+  --highlight-backdrop-filter: none;
+  --highlight-selected-backdrop-filter: none;
+}
+}
+
+.textLayer::selection {
+  background: rgba(0 0 255 / 0.25);
+  color: transparent;
+  align-content: end;
+}
+
+.selectNone::selection {
+  background: rgba(0 0 255 / 0.25);
+  color: transparent;
+}
+
+.highLighting {
+  background-color: rgb(0 100 0 / 0.25);
+  backdrop-filter: none;
+}
+
+.selectHighLight {
+  touch-action: none;
+  margin: -1px;
+  padding: 1px;
+  background-color: rgb(0 100 0 / 0.25);;
+  backdrop-filter: none;
+  border-radius: 4px;
+}
+
+.selectHighLight::selection {
+  background: rgba(0 0 255 / 0.25);
+  color: transparent;
+}
+
+.page-container {
+}

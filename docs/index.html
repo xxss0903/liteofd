@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LiteOFD</title>
+    <style>
+      @font-face {
+        font-family: 'Times-Bold';
+        src: url('assets/Times-Bold.otf');
+      }
+    </style>
+
+		<script type="module" crossorigin src="assets/index-cWtm7I5v.js"></script>
+		<link rel="stylesheet" crossorigin href="assets/index-DP76rKlg.css">
+	</head>
+  <body>
+    <div id="app" class="app-container">
+      <div class="tool-bar">
+        <div class="tool-bar-group">
+          <input type="file" id="fileInput" accept=".ofd" style="display: none;" onchange="handleFileChange(event)">
+          <button class="tool-bar-btn upload-icon" onclick="uploadFile()">
+            上传
+          </button>
+          <span id="selectedFileName" class="selected-file-name"></span>
+          <button class="tool-bar-btn btn-save" onclick="handleSaveOFD()">
+            保存
+          </button>
+        </div>
+
+        <div class="tool-bar-group">
+          <button class="tool-bar-btn" onclick="minus()">缩小</button>
+          <button class="tool-bar-btn" onclick="plus()">放大</button>
+          <button class="tool-bar-btn" onclick="resetZoom()">还原</button>
+        </div>
+
+        <div class="tool-bar-group">
+          <button class="tool-bar-btn" onclick="firstPage()">
+            <i class="fas fa-step-backward">第一页</i>
+          </button>
+          <button class="tool-bar-btn" onclick="prePage()">
+            <i class="fas fa-caret-left">上一页</i>
+          </button>
+          <span class="page-info"></span>
+          <button class="tool-bar-btn" onclick="nextPage()">
+            <i class="fas fa-caret-right">下一页</i>
+          </button>
+          <button class="tool-bar-btn" onclick="lastPage()">
+            <i class="fas fa-step-forward">最后页</i>
+          </button>
+        </div>
+
+        <div class="tool-bar-group search-container">
+          <input type="text" id="searchInput" placeholder="输入搜索关键词">
+          <button class="tool-bar-btn search-btn" id="searchButton" onclick="searchKeyword()">
+            搜索
+          </button>
+        </div>
+
+        <div class="tool-bar-group">
+          <button class="tool-bar-btn" onclick="toggleOutlines()">
+            显示/隐藏大纲
+          </button>
+        </div>
+      </div>
+      <div class="content-wrapper">
+        <div id="outlines" class="outlines"></div>
+        <div id="content" class="content"></div>
+        <iframe id="ofdtools" class="ofdtools" src="tools.html" style="display: none; width: 1200px; border: none;"></iframe>
+      </div>
+      <div id="overlay" class="overlay"></div>
+      <div id="signature-details" class="signature-details"></div>
+    </div>
+
+  </body>
+</html>
