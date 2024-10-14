@@ -2,17 +2,32 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="logo.svg" />
+    <link rel="icon" type="image/svg+xml" href="./assets/logo-DUjmY-0p.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LiteOFD</title>
     <style>
       @font-face {
         font-family: 'Times-Bold';
-        src: url('./assets/Times-Bold.otf');
+        src: url('./assets/Times-Bold-SsrNQBCi.otf');
+      }
+      @font-face {
+        font-family: 'NSimSun';
+        src: url('./assets/Nsimsun-cXRvCkmd.ttf');
+      }
+      @font-face {
+        font-family: 'FangSong_GB2312';
+        src: url('./assets/FangSong_GB2312-CpBdDyuD.otf');
+      }
+      @font-face {
+        font-family: 'SimFang';
+        src: url('./assets/SIMFANG-CwNyEwdc.TTF');
+      }
+      @font-face {
+        font-family: 'ArialMT';
+        src: url('./assets/ArialMT-DyOflV0j.ttf');
       }
     </style>
-
-		<script type="module" crossorigin src="./assets/index-cWtm7I5v.js"></script>
+		<script type="module" crossorigin src="./assets/index-Bnhl8MCu.js"></script>
 		<link rel="stylesheet" crossorigin href="./assets/index-DP76rKlg.css">
 	</head>
   <body>
@@ -62,7 +77,16 @@
           <button class="tool-bar-btn" onclick="toggleOutlines()">
             显示/隐藏大纲
           </button>
+          <!-- 在工具栏中的适当位置添加这个按钮 -->
+<!--          <button class="tool-bar-btn" onclick="openToolsMenu()" title="工具">-->
+<!--            <i class="fas fa-tools"></i> 工具-->
+<!--          </button>-->
         </div>
+      </div>
+      <div class="content-wrapper">
+        <div id="outlines" class="outlines"></div>
+        <div id="content" class="content"></div>
+<!--        <iframe id="ofdtools" class="ofdtools" src="tools.html" style="display: none; width: 1200px; border: none;"></iframe>-->
       </div>
       <div id="overlay" class="overlay"></div>
       <div id="signature-details" class="signature-details"></div>
