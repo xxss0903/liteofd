@@ -19,6 +19,11 @@ LiteOfd 是一个用于处理 OFD（Open Fixed-layout Document）文件的轻量
 该图片展示了使用LiteOfd库渲染OFD文档的效果。您可以看到文档内容被准确地呈现,包括文本、图形和布局等元素。
 
 ## 1.2 基础使用示例
+使用npm安装
+```bash
+npm install liteofd
+```
+
 步骤是将OFD文档解析之后调用渲染方法，然后将渲染结果添加到显示组件中
 ```Typescript
 function parseOfdFile(file: File) {

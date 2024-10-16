@@ -1,8 +1,18 @@
 {
   "name": "liteofd",
-  "private": true,
-  "version": "0.0.0",
+  "private": false,
+  "version": "0.0.8",
+  "description": "A lightweight OFD parsing and rendering library",
+  "keywords": ["liteofd.js", "ofd", "liteofd", "ofd render", "ofd viewer", "ofd 渲染", "ofd 预览", "ofd 查看器", "pdf", "pdf 渲染", "pdf 预览", "pdf 查看器"],
   "type": "module",
+  "main": "src/liteOfd.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xxss0903/liteofd.git"
+  },
+  "homepage": "https://github.com/xxss0903/liteofd",
+  "author": "xxss0903",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "vite build --mode production",
