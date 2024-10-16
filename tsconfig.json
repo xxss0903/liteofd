@@ -23,5 +23,5 @@
     "ignoreDeprecations":"5.0",
     "noImplicitAny": false
   },
-  "include": ["src"]
+  "include": ["src", "index.ts"]
 }
