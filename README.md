@@ -25,7 +25,10 @@ npm install liteofd
 
 步骤是将OFD文档解析之后调用渲染方法，然后将渲染结果添加到显示组件中
 ```Typescript
+import { LiteOfd } from 'liteofd'
+
 function parseOfdFile(file: File) {
+  const liteOfd = new LiteOfd()
   let appContent = getElementById("ofd-content")
 	appContent.innerHTML = ''
     liteOfd.parse(file).then((data: OfdDocument) => {
