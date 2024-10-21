@@ -1,7 +1,7 @@
 {
   "name": "liteofd",
   "private": false,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A lightweight OFD parsing and rendering library",
   "keywords": ["liteofd.js", "ofd", "liteofd", "ofd render", "ofd viewer", "ofd 渲染", "ofd 预览", "ofd 查看器", "pdf", "pdf 渲染", "pdf 预览", "pdf 查看器"],
   "type": "module",
