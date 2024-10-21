@@ -9,13 +9,13 @@ export default defineConfig({
   build: {
     lib: {
       // Could also be a dictionary or array of multiple entry points
-      entry: resolve(__dirname, 'src/liteofd/liteOfd.ts'),
+      entry: resolve(__dirname, 'index.ts'),
       name: 'liteOfd',
       // the proper extensions will be added
-      fileName: 'lite-ofd',
+      fileName: 'liteofd',
     },
     outDir: 'dist', // 输出目录
-    assetsDir: '', // 将静态资源目录设置为空字符串
+    assetsDir: 'assets', // 将静态资源目录设置为 'assets'
     minify: 'terser', // 混淆器
     terserOptions: {
       compress: {
