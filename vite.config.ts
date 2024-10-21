@@ -12,9 +12,9 @@ export default defineConfig({
       entry: resolve(__dirname, 'index.ts'),
       name: 'liteOfd',
       // the proper extensions will be added
-      fileName: 'liteofd',
+      fileName: 'index',
     },
-    outDir: 'dist', // 输出目录
+    outDir: '', // 输出目录
     assetsDir: 'assets', // 将静态资源目录设置为 'assets'
     minify: 'terser', // 混淆器
     terserOptions: {
