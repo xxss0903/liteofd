@@ -15,7 +15,7 @@ export default defineConfig({
       fileName: 'lite-ofd',
     },
     outDir: 'dist', // 输出目录
-    assetsDir: 'assets', // 静态资源目录
+    assetsDir: '', // 将静态资源目录设置为空字符串
     minify: 'terser', // 混淆器
     terserOptions: {
       compress: {
@@ -24,7 +24,29 @@ export default defineConfig({
       }
     },
     rollupOptions: {
+      external: ['@lapo/asn1js', 'fast-xml-parser', 'js-md5', 'js-sha1', 'jsrsasign', 'jsrsasign-util', 'jszip', 'jszip-utils', 'sm-crypto', 'xmlbuilder2'],
+      output: {
+        globals: {
+          '@lapo/asn1js': 'ASN1',
+          'fast-xml-parser': 'fastXmlParser',
+          'js-md5': 'md5',
+          'js-sha1': 'sha1',
+          'jsrsasign': 'jsrsasign',
+          'jsrsasign-util': 'jsrsasignUtil',
+          'jszip': 'JSZip',
+          'jszip-utils': 'JSZipUtils',
+          'sm-crypto': 'smCrypto',
+          'xmlbuilder2': 'xmlbuilder2'
+        },
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name && (assetInfo.name.endsWith('.ttf') || assetInfo.name.endsWith('.otf'))) {
+            return 'assets/fonts/[name][extname]';
+          }
+          return 'assets/[name]-[hash][extname]';
+        },
+      }
     },
+    emptyOutDir: false
   },
 
   // 服务器选项
@@ -46,4 +68,6 @@ export default defineConfig({
   plugins: [
     // 这里可以添加 Vite 插件
   ],
+
+  publicDir: 'public'
 })
