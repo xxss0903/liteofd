@@ -8,13 +8,11 @@ export default defineConfig({
   // 构建配置
   build: {
     lib: {
-      // Could also be a dictionary or array of multiple entry points
-      entry: resolve(__dirname, 'index.ts'),
-      name: 'liteOfd',
-      // the proper extensions will be added
-      fileName: 'index',
+      entry: resolve(__dirname, 'src/index.ts'), // 修改入口文件路径
+      name: 'liteofd',
+      fileName: (format) => `liteofd.${format}.js` // 修改输出文件名
     },
-    outDir: '', // 输出目录
+    outDir: 'dist', // 将输出目录改为 'dist'
     assetsDir: 'assets', // 将静态资源目录设置为 'assets'
     minify: 'terser', // 混淆器
     terserOptions: {
@@ -24,10 +22,9 @@ export default defineConfig({
       }
     },
     rollupOptions: {
-      external: ['@lapo/asn1js', 'fast-xml-parser', 'js-md5', 'js-sha1', 'jsrsasign', 'jsrsasign-util', 'jszip', 'jszip-utils', 'sm-crypto', 'xmlbuilder2'],
+      external: ['fast-xml-parser', 'js-md5', 'js-sha1', 'jsrsasign', 'jsrsasign-util', 'jszip', 'jszip-utils', 'sm-crypto', 'xmlbuilder2'],
       output: {
         globals: {
-          '@lapo/asn1js': 'ASN1',
           'fast-xml-parser': 'fastXmlParser',
           'js-md5': 'md5',
           'js-sha1': 'sha1',
