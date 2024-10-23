@@ -1,0 +1,191 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f5f5f5;
+}
+
+.tool-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #e0e0e0;
+  z-index: 10000; /* 比弹窗和遮罩层更高的 z-index */
+}
+
+.tool-bar-group {
+  display: flex;
+  align-items: center;
+}
+
+.tool-bar-btn {
+  padding: 5px 10px;
+  margin: 0 2px;
+  background-color: #ffffff;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.tool-bar-btn:hover {
+  background-color: #e8e8e8;
+}
+
+.page-info {
+  margin: 0 10px;
+  font-size: 14px;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.outlines {
+  width: 200px;
+  min-width: 200px;
+  border-right: 1px solid #ccc;
+  padding: 10px;
+  overflow-y: auto;
+  padding-top: 120px;
+  display: none; /* 默认隐藏大纲 */
+}
+
+.outlines.show {
+  display: block; /* 当添加 'show' 类时显示大纲 */
+}
+
+.ofdStructureDisplay {
+  overflow: auto;
+  height: 70vh;
+}
+
+.ofdtools {
+  width: 400px;
+  min-width: 400px;
+  border-right: 1px solid #ccc;
+  padding: 10px;
+  overflow-y: auto;
+  padding-top: 80px;
+  background-color: aqua;
+  display: none; /* 默认隐藏大纲 */
+}
+
+.ofdtools.show {
+  display: block; /* 当添加 'show' 类时显示大纲 */
+}
+
+.content {
+  padding: 12px;
+  flex: 1;
+  width: 800px;
+  background-color: #f5f5f5;
+  margin-top: 80px; /* 调整这个值以匹配工具栏的高度 */
+  height: calc(100vh - 60px); /* 减去工具栏的高度 */
+  transition: margin-left 0.3s ease; /* 添加过渡效果 */
+}
+
+.content.with-tools {
+  margin-right: 10px; /* 当显示大纲时，为内容添加左边距 */
+}
+
+
+
+.content.with-outlines {
+  margin-left: 200px; /* 当显示大纲时，为内容添加左边距 */
+}
+
+/* 隐藏文件输入框 */
+#fileInput {
+  display: none;
+}
+
+.selected-file-name {
+  margin-left: 10px;
+  font-size: 14px;
+  color: #666;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998; /* 提高 z-index 值 */
+}
+
+.signature-details {
+  display: none;
+  position: fixed;
+  right: 20px;
+  top: 80px;
+  width: 300px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  font-size: 12px;
+  z-index: 9999; /* 提高 z-index 值，确保比遮罩层更高 */
+}
+
+.signature-details pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* 确保工具栏也在遮罩层之上 */
+.tool-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #e0e0e0;
+  z-index: 10000; /* 比弹窗和遮罩层更高的 z-index */
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+#searchInput {
+  margin-right: 5px;
+  padding: 5px;
+}
+
+.search-btn {
+  padding: 5px 10px;
+}
+
+/* ... 其他现有样式 ... */
