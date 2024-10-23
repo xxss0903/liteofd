@@ -1,17 +1,31 @@
 {
   "name": "liteofd",
   "private": false,
-  "version": "0.1.8",
+  "version": "0.2.3",
   "description": "A lightweight OFD parsing and rendering library",
-  "keywords": ["liteofd.js", "ofd", "liteofd", "ofd render", "ofd viewer", "ofd 渲染", "ofd 预览", "ofd 查看器", "pdf", "pdf 渲染", "pdf 预览", "pdf 查看器"],
+  "keywords": [
+    "liteofd.js",
+    "ofd",
+    "liteofd",
+    "ofd render",
+    "ofd viewer",
+    "ofd 渲染",
+    "ofd 预览",
+    "ofd 查看器",
+    "pdf",
+    "pdf 渲染",
+    "pdf 预览",
+    "pdf 查看器"
+  ],
   "type": "module",
-  "module": "dist/liteofd.es.js",
-  "main": "dist/liteofd.umd.js",
+  "module": "dist/index.mjs",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/liteofd.es.js",
-      "require": "./dist/liteofd.umd.js"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
     }
   },
   "repository": {
@@ -48,6 +62,7 @@
     "ts-loader": "^9.5.1",
     "typescript": "^5.6.2",
     "vite": "^5.4.2",
+    "vite-plugin-dts": "^4.2.4",
     "webpack": "^5.94.0",
     "webpack-cli": "^5.1.4"
   },

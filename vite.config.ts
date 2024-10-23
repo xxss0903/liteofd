@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
+import dts from 'vite-plugin-dts'
 
 export default defineConfig({
   // 基本公共路径
@@ -10,7 +11,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'), // 修改入口文件路径
       name: 'liteofd',
-      fileName: (format) => `liteofd.${format}.js` // 修改输出文件名
+      fileName: "index", // 修改输出文件名
     },
     outDir: 'dist', // 将输出目录改为 'dist'
     assetsDir: 'assets', // 将静态资源目录设置为 'assets'
@@ -63,6 +64,14 @@ export default defineConfig({
 
   // 插件
   plugins: [
+    dts({
+      rollupTypes: true,
+      insertTypesEntry: true,
+      outDir: 'dist',
+      // 添加以下配置
+      include: ['src/**/*.ts'],
+      exclude: ['src/**/*.spec.ts', 'src/**/*.test.ts'],
+    }),
     // 这里可以添加 Vite 插件
   ],
 
