@@ -21,7 +21,10 @@
 
     "suppressImplicitAnyIndexErrors": true,
     "ignoreDeprecations":"5.0",
-    "noImplicitAny": false
+    "noImplicitAny": false,
+
+    "declaration": true,
+    "declarationDir": "./src"
   },
   "include": ["src", "index.ts", "example/tools.ts", "example/main.ts"]
 }

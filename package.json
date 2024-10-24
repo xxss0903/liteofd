@@ -1,7 +1,7 @@
 {
   "name": "liteofd",
   "private": false,
-  "version": "0.2.3",
+  "version": "0.2.5",
   "description": "A lightweight OFD parsing and rendering library",
   "keywords": [
     "liteofd.js",
@@ -18,13 +18,13 @@
     "pdf 查看器"
   ],
   "type": "module",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     }
   },
@@ -37,9 +37,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --mode production",
+    "build-vite": "vite build --mode production",
     "preview": "vite preview",
-    "build-webpack": "webpack --mode production --config webpack.config.cjs"
+    "build": "webpack --mode production --config webpack.config.cjs"
   },
   "dependencies": {
     "fast-xml-parser": "^4.4.1",
