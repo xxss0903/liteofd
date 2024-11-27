@@ -225,12 +225,12 @@ export const loadLocalDefaultFonts = async () => {
 	try {
 		loadedFonts.clear()
 		if(!loadedFonts.has("SimSun")) {
-			const fontPath = `/assets/fonts/simsun.ttf`;
+			const fontPath = `./assets/fonts/simsun.ttf`;
 			await loadLocalDefaultFont("SimSun", fontPath)
 			loadedFonts.set("SimSun", true)
 		}
 		if(!loadedFonts.has("NSimSun")) {
-			const fontPath = `/assets/fonts/Nsimsun.ttf`;
+			const fontPath = `./assets/fonts/Nsimsun.ttf`;
 			await loadLocalDefaultFont("NSimSun", fontPath)
 			loadedFonts.set("NSimSun", true)
 		}

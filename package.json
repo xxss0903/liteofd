@@ -30,9 +30,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/xxss0903/liteofd"
+    "url": "https://github.com/SignitDoc/liteofd"
   },
-  "homepage": "https://github.com/xxss0903/liteofd",
+  "homepage": "https://github.com/SignitDoc/liteofd",
   "author": "xxss0903",
   "license": "MIT",
   "scripts": {
