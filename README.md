@@ -6,7 +6,7 @@
 
 LiteOfd 是一个用于处理 OFD（Open Fixed-layout Document）文件的轻量级库。它提供了解析、渲染和操作 OFD 文档的功能，使开发者能够在 Web 应用中轻松展示和操作 OFD 文档。<br>
 
-在线预览地址：![https://signitdoc.github.io/liteofd/](https://signitdoc.github.io/liteofd/)
+在线预览地址：[https://signitdoc.github.io/liteofd/](https://signitdoc.github.io/liteofd/)
 
 ## 1.1示例图片
 
