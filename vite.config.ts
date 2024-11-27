@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
+import dts from 'vite-plugin-dts'
 
 export default defineConfig({
   // 基本公共路径
@@ -8,14 +9,20 @@ export default defineConfig({
   // 构建配置
   build: {
     lib: {
-      // Could also be a dictionary or array of multiple entry points
-      entry: resolve(__dirname, 'src/liteofd/liteOfd.ts'),
-      name: 'liteOfd',
-      // the proper extensions will be added
-      fileName: 'lite-ofd',
+      entry: resolve(__dirname, 'src/index.ts'), // 修改入口文件路径
+      name: 'liteofd',
+      formats: ['es', 'cjs'],
+      fileName: (format) => {
+        if (format === 'es') {
+          return 'index.mjs';
+        }
+        else {
+          return 'index.js';
+        }
+      }, // 修改输出文件名
     },
-    outDir: 'dist', // 输出目录
-    assetsDir: 'assets', // 静态资源目录
+    outDir: 'dist', // 将输出目录改为 'dist'
+    assetsDir: 'assets', // 将静态资源目录设置为 'assets'
     minify: 'terser', // 混淆器
     terserOptions: {
       compress: {
@@ -24,7 +31,28 @@ export default defineConfig({
       }
     },
     rollupOptions: {
+      external: ['fast-xml-parser', 'js-md5', 'js-sha1', 'jsrsasign', 'jsrsasign-util', 'jszip', 'jszip-utils', 'sm-crypto', 'xmlbuilder2'],
+      output: {
+        globals: {
+          'fast-xml-parser': 'fastXmlParser',
+          'js-md5': 'md5',
+          'js-sha1': 'sha1',
+          'jsrsasign': 'jsrsasign',
+          'jsrsasign-util': 'jsrsasignUtil',
+          'jszip': 'JSZip',
+          'jszip-utils': 'JSZipUtils',
+          'sm-crypto': 'smCrypto',
+          'xmlbuilder2': 'xmlbuilder2'
+        },
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name && (assetInfo.name.endsWith('.ttf') || assetInfo.name.endsWith('.otf'))) {
+            return 'assets/fonts/[name][extname]';
+          }
+          return 'assets/[name]-[hash][extname]';
+        },
+      }
     },
+    emptyOutDir: false
   },
 
   // 服务器选项
@@ -44,6 +72,16 @@ export default defineConfig({
 
   // 插件
   plugins: [
+    dts({
+      rollupTypes: true,
+      insertTypesEntry: true,
+      outDir: 'dist',
+      // 添加以下配置
+      include: ['src/**/*.ts'],
+      exclude: ['src/**/*.spec.ts', 'src/**/*.test.ts'],
+    }),
     // 这里可以添加 Vite 插件
   ],
+
+  publicDir: 'public'
 })

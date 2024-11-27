@@ -1,5 +1,5 @@
-import { Hex } from "@lapo/asn1js/hex.js";
-import { ASN1 } from "@lapo/asn1js";
+import { Hex } from "../asn1js/hex.js";
+import { ASN1 } from "../asn1js/asn1";
 import {SES_Signature_Verify} from "./verify_signature_util";
 import { decodeBase64String } from "./utils"
 

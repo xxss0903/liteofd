@@ -1,10 +1,14 @@
 # LiteOfd 类方法说明文档
 
-版本：0.1.1
+版本：0.2.5
 
 ## 1. 简介
 
 LiteOfd 是一个用于处理 OFD（Open Fixed-layout Document）文件的轻量级库。它提供了解析、渲染和操作 OFD 文档的功能，使开发者能够在 Web 应用中轻松展示和操作 OFD 文档。<br>
+
+## 在线演示
+
+🔗 **Demo**: [https://signitdoc.github.io/liteofd/](https://signitdoc.github.io/liteofd/)
 
 ## 1.1示例图片
 
@@ -23,9 +27,14 @@ LiteOfd 是一个用于处理 OFD（Open Fixed-layout Document）文件的轻量
 npm install liteofd
 ```
 
+`注意：目前打包遇到问题，发布到npm之后字体文件因为无法正确加载导致渲染字体可能出现问题，所以建议源码引入。另外如果有人愿意贡献打包脚本，可以联系我。QQ：897761547，谢谢！或者帮忙修改打包脚本，提PR。`
+
 步骤是将OFD文档解析之后调用渲染方法，然后将渲染结果添加到显示组件中
 ```Typescript
+import { LiteOfd } from 'liteofd'
+
 function parseOfdFile(file: File) {
+  const liteOfd = new LiteOfd()
   let appContent = getElementById("ofd-content")
 	appContent.innerHTML = ''
     liteOfd.parse(file).then((data: OfdDocument) => {

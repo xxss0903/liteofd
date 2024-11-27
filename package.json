@@ -1,27 +1,47 @@
 {
   "name": "liteofd",
   "private": false,
-  "version": "0.1.1",
+  "version": "0.2.5",
   "description": "A lightweight OFD parsing and rendering library",
-  "keywords": ["liteofd.js", "ofd", "liteofd", "ofd render", "ofd viewer", "ofd 渲染", "ofd 预览", "ofd 查看器", "pdf", "pdf 渲染", "pdf 预览", "pdf 查看器"],
+  "keywords": [
+    "liteofd.js",
+    "ofd",
+    "liteofd",
+    "ofd render",
+    "ofd viewer",
+    "ofd 渲染",
+    "ofd 预览",
+    "ofd 查看器",
+    "pdf",
+    "pdf 渲染",
+    "pdf 预览",
+    "pdf 查看器"
+  ],
   "type": "module",
-  "module": "./index.ts",
-  "main": "./index.ts",
+  "module": "dist/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/xxss0903/liteofd.git"
+    "url": "https://github.com/SignitDoc/liteofd"
   },
-  "homepage": "https://github.com/xxss0903/liteofd",
+  "homepage": "https://github.com/SignitDoc/liteofd",
   "author": "xxss0903",
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --mode production",
+    "build-vite": "vite build --mode production",
     "preview": "vite preview",
-    "build-webpack": "webpack --mode production --config webpack.config.cjs"
+    "build": "webpack --mode production --config webpack.config.cjs"
   },
   "dependencies": {
-    "@lapo/asn1js": "file:./local_modules/@lapo/asn1js",
     "fast-xml-parser": "^4.4.1",
     "js-md5": "^0.7.3",
     "js-sha1": "^0.6.0",
@@ -42,7 +62,11 @@
     "ts-loader": "^9.5.1",
     "typescript": "^5.6.2",
     "vite": "^5.4.2",
+    "vite-plugin-dts": "^4.2.4",
     "webpack": "^5.94.0",
     "webpack-cli": "^5.1.4"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }

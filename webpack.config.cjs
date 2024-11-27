@@ -2,11 +2,11 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  entry: './src/main.ts',
+  entry: './src/index.ts',
   output: {
-    filename: 'liteofd-bundle.js',
+    filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
-    library: 'LiteOfd',
+    library: 'liteofd',
     libraryTarget: 'umd',
     globalObject: 'this'
   },
@@ -47,13 +47,16 @@ module.exports = {
       }
     ],
   },
+  mode: 'production',
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
   plugins: [
     new CopyWebpackPlugin({
       patterns: [
-        { from: 'public/assets', to: 'assets' }
+        { from: 'public/assets', to: 'assets' },
+        // 复制src/index.d.ts到dist目录
+        { from: 'src/index.d.ts', to: 'index.d.ts' }
       ],
     }),
   ],
